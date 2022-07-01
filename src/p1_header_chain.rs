@@ -40,13 +40,13 @@ impl Header {
         todo!("Exercise 1")
     }
 
-    // Create and return a valid child header.
+    /// Create and return a valid child header.
     fn child(&self) -> Self {
         todo!("Exercise 2")
     }
 
-    // Verify that all the given headers form a valid chain from this header to the tip.
-    // An "entire" chain can be verified by calling this method on a genesis header.
+    /// Verify that all the given headers form a valid chain from this header to the tip.
+    /// An "entire" chain can be verified by calling this method on a genesis header.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
         todo!("Exercise 3")
     }
@@ -64,9 +64,12 @@ fn build_valid_chain_length_5() -> Vec<Header> {
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
 /// 
-/// Notice that this is not totally trivial as our interface for creating
+/// This is totally trivial since we can construct arbitrary block.
+/// However, fro moutside this crate, it is not so trivial. Our interface for creating
 /// new blocks `genesis()` and `child()` makes it impossible to create arbitrary blocks.
-/// Nonetheless, it is still entirely possible to construct an invalid chain.
+///
+/// For this function, ONLY USE the the `genesis()` and `child()` methods to create blocks.
+/// The exercise is still possible.
 fn build_an_invalid_chain() -> Vec<Header> {
     todo!("Exercise 5")
 }
@@ -134,31 +137,38 @@ fn part_1_verify_three_blocks() {
 }
 
 #[test]
-fn cant_verify_invalid_chain() {
-    // Typically this test would construct an invalid chain and then
-    // assert that it does not verify. However doing that would give away
-    // the anser to exercise #6. So instead wwe use all student-written
-    // code for this test.
-    //
-    // Because of this decision, mistakes in student code could make this test
-    // give a false positive. Concretely, the code under test could fail to 
-    // generate an invalid chain to use as the test case.
+fn part_1_cant_verify_invalid_height() {
+    // This and following tests use the student's own verify function so as
+    // not to give away the solution to writing that function. 
     let g = Header::genesis();
-    let invalid_chain = build_an_invalid_chain();
+    let mut b1 = g.child();
+    b1.height = 10;
 
-    assert!(invalid_chain[0] == g);
-    assert!(g.verify_sub_chain(&invalid_chain[1..]))
+    assert!(g.verify_sub_chain(&vec![b1]))
 }
 
 #[test]
-fn verify_chain_length_five() {
-    // This test also chooses to use the student's own verify function.
+fn part_1_cant_verify_invalid_parent() {
+    // This test chooses to use the student's own verify function so as
+    // not to give away the solution to writing that function. 
+    let g = Header::genesis();
+    let mut b1 = g.child();
+    b1.parent = 10;
+
+    assert!(g.verify_sub_chain(&vec![b1]))
+}
+
+
+#[test]
+fn part_1_verify_chain_length_five() {
+    // This test chooses to use the student's own verify function.
+    // This should be relatively safe given that we have already tested that function.
     let chain = build_valid_chain_length_5();
     assert!(chain[0].verify_sub_chain(&chain[1..]))
 }
 
 #[test]
-fn verify_forked_chain() {
+fn part_1_verify_forked_chain() {
     let g = Header::genesis();
     let(c1, c2) = build_forked_chain();
 
@@ -167,6 +177,8 @@ fn verify_forked_chain() {
     assert_eq!(g, c2[0]);
 
     // Both chains are individually valid
+    assert!(g.verify_sub_chain(&c1[1..]));
+    assert!(g.verify_sub_chain(&c2[1..]));
 
     // The two chains are not identical
     // Question for students: I've only compared the last blocks here.
@@ -175,4 +187,12 @@ fn verify_forked_chain() {
     assert_ne!(c1.last(), c2.last());
 
 
+}
+
+#[test]
+fn part_1_invalid_chain_is_really_invalid() {
+    // This test chooses to use the student's own verify function.
+    // This should be relatively safe given that we have already tested that function.
+    let invalid_chain = build_an_invalid_chain();
+    assert!(g.verify_sub_chain(&invalid_chain[1..]))
 }
