@@ -90,18 +90,18 @@ fn part_2_genesis_block_parent() {
 fn part_2_genesis_block_extrinsic() {
     // Typically genesis blocks do not have any extrinsics.
     // In Substrate they never do. So our convention is to have the extrinsic be 0.
-    let g = Header::extrinsic();
-    assert!(g.parent == 0);
+    let g = Header::genesis();
+    assert!(g.extrinsic == 0);
 }
 
 #[test]
 fn part_2_genesis_block_state() {
-    let g = Header::state();
-    assert!(g.parent == 0);
+    let g = Header::genesis();
+    assert!(g.state == 0);
 }
 
 #[test]
-fn part_2_child_block_number() {
+fn part_2_child_block_height() {
     let g = Header::genesis();
     let b1 = g.child(0);
     assert!(b1.height == 1);
