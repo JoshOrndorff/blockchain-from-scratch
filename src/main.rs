@@ -6,15 +6,7 @@ fn main() {
     println!("Hello, world!");
 }
 
-
-// Overall Structure
-// Simple header chain
-// add consensus
-// add "payload" instead of extrinsic root
-// add simple state -- adder
-// contentious fork where one side only accepts even payloads and the other only accepts odd payloads
-// state root - now we want more complex state. We want to track the sum and the product and maybe a third thing 
-// batching and complete blocks
+// TODO write a fork choice rule somewhere?
 
 // Simple helper to do some hashing.
 fn hash<T: Hash>(t: &T) -> u64 {
