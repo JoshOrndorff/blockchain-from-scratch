@@ -88,7 +88,7 @@ fn build_an_invalid_chain() -> Vec<Header> {
 fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     todo!("Exercise 6")
 
-    // Exercise 7: After you ahve completed this task, look at how its test is written below.
+    // Exercise 7: After you have completed this task, look at how its test is written below.
     // There is a critical thinking question for you there.
 }
 
