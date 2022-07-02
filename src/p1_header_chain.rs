@@ -37,12 +37,24 @@ impl Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
-        todo!("Exercise 1")
+        Self {
+            parent: 0,
+            height: 0,
+            extrinsics_root: (),
+            state_root: (),
+            consensus_digest: (),
+        }
     }
 
     /// Create and return a valid child header.
     fn child(&self) -> Self {
-        todo!("Exercise 2")
+        Self {
+            parent: hash(self),
+            height: self.height + 1,
+            extrinsics_root: (),
+            state_root: (),
+            consensus_digest: (),
+        }
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -107,7 +119,7 @@ fn part_1_genesis_block_parent() {
 }
 
 #[test]
-fn part_1_child_block_number() {
+fn part_1_child_block_height() {
     let g = Header::genesis();
     let b1 = g.child();
     assert!(b1.height == 1);
