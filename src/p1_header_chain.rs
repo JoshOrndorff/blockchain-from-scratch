@@ -129,7 +129,7 @@ fn part_1_child_block_height() {
 fn part_1_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child();
-    assert!(g.parent == hash(&g));
+    assert!(b1.parent == hash(&g));
 }
 
 #[test]
