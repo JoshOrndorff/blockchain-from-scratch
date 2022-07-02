@@ -11,7 +11,7 @@
 
 /// In this section we will use suma nd product together to be our state. While this is only a doubling of state size
 /// remember that in real world blockchains, the state is often really really large.
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 struct State {
     sum: u64,
     product: u64,

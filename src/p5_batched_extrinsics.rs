@@ -4,7 +4,7 @@
 
 
 /// A much more realistic header
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 struct Header {
     parent: Hash,
     height: u64,
@@ -15,7 +15,7 @@ struct Header {
 }
 
 /// The most basic blockchain header possible. We learned its basic structure from lecture.
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 struct Block {
     header: Header,
     body: Vec<u64>,

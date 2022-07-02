@@ -16,7 +16,7 @@ type Hash = u64;
 /// The header is no expanded to contain an extrinsic and a state. Note that we are not
 /// using roots yet, but rather directly embedding some minimal extrinsic and state info
 /// into the header.
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 struct Header {
     parent: Hash,
     height: u64,

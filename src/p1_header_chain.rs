@@ -10,7 +10,7 @@ use crate::hash;
 type Hash = u64;
 
 /// The most basic blockchain header possible. We learned its basic structure from lecture.
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 struct Header {
     parent: Hash,
     height: u64,
