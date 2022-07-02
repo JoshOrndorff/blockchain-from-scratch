@@ -60,7 +60,20 @@ impl Header {
     /// Verify that all the given headers form a valid chain from this header to the tip.
     /// An "entire" chain can be verified by calling this method on a genesis header.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 3")
+        let mut tip = self;
+        for current in chain {
+            if hash(tip) != current.parent {
+                return false;
+            }
+
+            if tip.height + 1 != current.height {
+                return false;
+            }
+
+            tip = current;
+        }
+
+        return true
     }
 }
 
@@ -68,7 +81,21 @@ impl Header {
 
 /// Build and return a valid chain with exactly five blocks including the genesis block.
 fn build_valid_chain_length_5() -> Vec<Header> {
-    todo!("Exercise 4")
+    build_valid_chain(5)
+}
+
+fn build_valid_chain(len: u64) -> Vec<Header> {
+    let mut chain = vec![Header::genesis()];
+
+    for _ in [1..len] {
+        let next_block = chain
+            .last()
+            .expect("Chain created with genesis block; no blocks removed; chain still not empty; qed")
+            .child();
+        chain.push(next_block)
+    }
+
+    chain
 }
 
 
@@ -83,7 +110,13 @@ fn build_valid_chain_length_5() -> Vec<Header> {
 /// For this function, ONLY USE the the `genesis()` and `child()` methods to create blocks.
 /// The exercise is still possible.
 fn build_an_invalid_chain() -> Vec<Header> {
-    todo!("Exercise 5")
+    let g = Header::genesis();
+    let b1 = g.child();
+    let b2 = b1.child();
+
+    let evil_b1 = g.child();
+
+    vec![g, evil_b1, b2]
 }
 
 /// Build and return two header chains.
