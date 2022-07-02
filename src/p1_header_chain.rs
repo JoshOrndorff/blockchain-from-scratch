@@ -131,10 +131,20 @@ fn build_an_invalid_chain() -> Vec<Header> {
 /// 
 /// Side question: What is the fewest number of headers you could create to achieve this goal.
 fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
-    todo!("Exercise 6")
+    // This solution builds the chains from the example diagram
+    let g = Header::genesis();
+    let b1 = g.child();
+    let b2 = b1.child();
+    let b3 = b2.child();
+    let b4 = b3.child();
 
-    // Exercise 7: After you have completed this task, look at how its test is written below.
-    // There is a critical thinking question for you there.
+    let b3_prime = b2.child();
+    let b4_prime = b3_prime.child();
+
+    (
+        vec![g.clone(), b1.clone(), b2.clone(), b3, b4],
+        vec![g, b1, b2, b3_prime, b4_prime]
+    )
 }
 
 
