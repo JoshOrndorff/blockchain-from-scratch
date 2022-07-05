@@ -105,11 +105,13 @@ fn build_valid_chain(len: u64) -> Vec<Header> {
 fn build_an_invalid_chain() -> Vec<Header> {
     let g = Header::genesis();
     let b1 = g.child();
-    let b2 = b1.child();
+    let mut b2 = b1.child();
 
-    let evil_b1 = g.child();
+    // The chain is invalid if the block heights are not sequential.
+    // By changing the number, we invalidate block 2.
+    b2.height = 100;
 
-    vec![g, evil_b1, b2]
+    vec![g, b1, b2]
 }
 
 // To run these tests: `cargo test part_1`
