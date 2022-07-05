@@ -377,7 +377,7 @@ fn part_3_odd_chain_valid() {
     // we need to keep it that way. So add evens
     let b2 = b1.child(4);
 
-    assert!(g.verify_sub_chain_even(&vec![b1, b2]));
+    assert!(g.verify_sub_chain_odd(&vec![b1, b2]));
 }
 
 #[test]
@@ -385,7 +385,7 @@ fn part_3_odd_chain_invalid_first_block() {
     let g = Header::genesis();
     let b1 = g.child(2);
 
-    assert!(!g.verify_sub_chain_even(&vec![b1]));
+    assert!(!g.verify_sub_chain_odd(&vec![b1]));
 }
 
 #[test]
@@ -396,7 +396,7 @@ fn part_3_odd_chain_invalid_second_block() {
     // we need to keep it that way. Adding 3 makes the state 4 which is even
     let b2 = b1.child(3);
 
-    assert!(!g.verify_sub_chain_even(&vec![b1, b2]));
+    assert!(!g.verify_sub_chain_odd(&vec![b1, b2]));
 }
 
 #[test]
