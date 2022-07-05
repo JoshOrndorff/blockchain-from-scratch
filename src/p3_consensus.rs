@@ -82,6 +82,46 @@ impl Header {
         // Now we perform the consensus task, which, in this case, means we mine.
         // We'll create a helper function for solving the PoW
         let pow_nonce = solve_pow(&header);
+
+        // Finally we insert the consensus digest into the header and return it
+        header.consensus_digest = pow_nonce;
+        header
+
+        // When you were implementing the PoW mining, you probably noticed
+        // that we could have optimized a bit by returning the entire completed
+        // header rather than just the consensus digest. Very astute! I chose to
+        // follow this pre_header -> consensus_tasks -> post_header workflow
+        // because it also works for PoA / PoS.
+    }
+
+    /// Helper function to verify an individual child block
+    fn verify_child(&self, child: &Header) -> bool {
+        // Check the parent pointer
+        if hash(self) != child.parent {
+            return false;
+        }
+
+        // Check the height
+        if self.height + 1 != child.height {
+            return false;
+        }
+
+        // Check that the state has transitioned correctly
+        // Here we re-calculate the post state, and compare it
+        // to the post state that the block author found
+        let expected_state = self.state + child.extrinsic;
+        if expected_state != child.state {
+            return false;
+        }
+
+        // Check the Consensus tasks (PoW in this case)
+        // Like before, we will make a helper function to abstract
+        // the consensus tasks.
+        if !verify_pow(child) {
+            return false;
+        }
+
+        return true;
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -89,7 +129,19 @@ impl Header {
     /// In addition to all the rules we had before, we now need to check that the block hash
     /// is below a specific threshold.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 3")
+        // Terminating case
+        if chain.is_empty() {
+            return true;
+        }
+
+        // Check the immediate child
+        let next = &chain[0];
+        if !self.verify_child(next){
+            return false;
+        }
+
+        // Recurse to check the rest of the chain
+        next.verify_sub_chain(&chain[1..])
     }
 
     // After the blockchain ran for a while, a political rift formed in the community.
@@ -100,7 +152,18 @@ impl Header {
     /// Varify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE EVEN.
     fn verify_sub_chain_even(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 4")
+        // We use basically the same logic from `verify_sub_chain`
+        // with an additional check for even-ness
+        if chain.is_empty() {
+            return true;
+        }
+
+        let next = &chain[0];
+        if !self.verify_child(next) || next.state %2 != 0 {
+            return false;
+        }
+        
+        next.verify_sub_chain_even(&chain[1..])
     }
 
     /// Varify that the given headers form a valid chain.
@@ -111,14 +174,23 @@ impl Header {
 
 }
 
-/// This function tries sequential nonces until one that meets the threshold is found
+// The next two functions are consensus related. Here we are using PoW
+// so the functions do the mining, and check the threshold. Substrate achieves
+// pluggable consensus by abstracting this behavior behind traits
+
+/// Try sequential nonces until one that meets the threshold is found
 fn solve_pow(h: &Header) -> u64 {
     let mut trial_header = h.clone();
-    while hash(&trial_header) > THRESHOLD {
+    while !verify_pow(&trial_header) {
         trial_header.consensus_digest += 1;
     }
 
     trial_header.consensus_digest
+}
+
+/// Verify that the threshold is met on the given block
+fn verify_pow(h: &Header) -> bool {
+    hash(h) < THRESHOLD
 }
 
 //
@@ -126,7 +198,7 @@ fn solve_pow(h: &Header) -> u64 {
 /// Build and return two different chains with a common prefix.
 /// They should have the same genesis header.
 /// 
-/// Both chains should be valid according to the original vlidity rules.
+/// Both chains should be valid according to the original validity rules.
 /// The first chain should be valid only according tothe even rules.
 /// The second chain should be valid only according tothe odd rules.
 /// 
@@ -189,7 +261,7 @@ fn part_3_child_block_height() {
 fn part_3_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child(0);
-    assert!(g.parent == hash(&g));
+    assert!(b1.parent == hash(&g));
 }
 
 #[test]
