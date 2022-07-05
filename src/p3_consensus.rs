@@ -15,6 +15,10 @@ type Hash = u64;
 /// high so we aren't wasting time mining. I'll start with 1 in 100 blocks being valid.
 const THRESHOLD: u64 = u64::max_value() / 100;
 
+/// In this lesson we introduce the concept of a contentuous hard fork. The fork will happen at
+/// this block height.
+const FORK_HEIGHT: u64 = 2;
+
 /// The header is no expanded to contain an extrinsic and a state. Note that we are not
 /// using roots yet, but rather directly embedding some minimal extrinsic and state info
 /// into the header.
@@ -74,6 +78,7 @@ impl Header {
     }
 
     // After the blockchain ran for a while, a political rift formed in the community.
+    // (See the constant FORK_HEIGHT) which is set to 2 by default.
     // Most community members have become obsessed over the state of the blockchain.
     // On the one side, people believe that only blocks with even states should be valid.
     // On the other side, people bleieve in only blocks with odd states.
@@ -158,7 +163,7 @@ fn part_3_child_block_height() {
 fn part_3_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child(0);
-    assert!(g.parent == hash(&g));
+    assert!(b1.parent == hash(&g));
 }
 
 #[test]
@@ -239,50 +244,72 @@ fn part_3_cant_verify_invalid_pow() {
 
 #[test]
 fn part_3_even_chain_valid() {
-    let g = Header::genesis();
-    let b1 = g.child(2);
-    let b2 = b1.child(4);
+    let g = Header::genesis();     // 0
+    let b1 = g.child(2);  // 2
+    let b2 = b1.child(1); // 3
+    // It' all about the states, not the extrinsics. So once the state is even
+    // we need to keep it that way. So add evens
+    let b3 = b2.child(1); // 4
+    let b4 = b3.child(2); // 6
 
-    assert!(g.verify_sub_chain_even(&vec![b1, b2]));
+    assert!(g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_even_chain_invalid() {
-    let g = Header::genesis();
-    let b1 = g.child(1);
-    let b2 = b1.child(4);
+fn part_3_even_chain_invalid_first_block_after_fork() {
+    let g = Header::genesis();     // 0
+    let b1 = g.child(2);  // 2
+    let b2 = b1.child(1); // 3
+    let b3 = b2.child(2); // 5 - invalid
+    let b4 = b3.child(1); // 6
 
-    assert!(!g.verify_sub_chain_even(&vec![b1, b2]));
+    assert!(!g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+}
+
+#[test]
+fn part_3_even_chain_invalid_second_block_after_fork() {
+    let g = Header::genesis();     // 0
+    let b1 = g.child(2);  // 2
+    let b2 = b1.child(1); // 3
+    let b3 = b2.child(1); // 4
+    let b4 = b3.child(1); // 5 - invalid
+
+    assert!(!g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
 }
 
 #[test]
 fn part_3_odd_chain_valid() {
-    let g = Header::genesis();
-    let b1 = g.child(1);
+    let g = Header::genesis();     // 0
+    let b1 = g.child(2);  // 2
+    let b2 = b1.child(1); // 3
     // It' all about the states, not the extrinsics. So once the state is odd
     // we need to keep it that way. So add evens
-    let b2 = b1.child(4);
+    let b3 = b2.child(2); // 5
+    let b4 = b3.child(2); // 7
 
-    assert!(g.verify_sub_chain_odd(&vec![b1, b2]));
+    assert!(g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_odd_chain_invalid_first_block() {
-    let g = Header::genesis();
-    let b1 = g.child(2);
+fn part_3_odd_chain_invalid_first_block_after_fork() {
+    let g = Header::genesis();     // 0
+    let b1 = g.child(2);  // 2
+    let b2 = b1.child(1); // 3
+    let b3 = b2.child(1); // 4 - invalid
+    let b4 = b3.child(1); // 5
 
-    assert!(!g.verify_sub_chain_odd(&vec![b1]));
+    assert!(!g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_odd_chain_invalid_second_block() {
-    let g = Header::genesis();
-    let b1 = g.child(1);
-    // It' all about the states, not the extrinsics. So once the state is odd
-    // we need to keep it that way. Adding 3 makes the state 4 which is even
-    let b2 = b1.child(3);
+fn part_3_odd_chain_invalid_second_block_after_fork() {
+    let g = Header::genesis();     // 0
+    let b1 = g.child(2);  // 2
+    let b2 = b1.child(1); // 3
+    let b3 = b2.child(2); // 5
+    let b4 = b3.child(1); // 6 - invalid
 
-    assert!(!g.verify_sub_chain_odd(&vec![b1, b2]));
+    assert!(!g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
 }
 
 #[test]
@@ -292,16 +319,20 @@ fn part_3_verify_forked_chain() {
     let g = &prefix[0];
     let full_even_chain = [&prefix[1..], &even].concat();
     let full_odd_chain  = [&prefix[1..], &odd].concat();
+    for h in full_even_chain.iter().cloned() {
+        println!("{:?}: {:?}", h, hash(&h));
+    }
+    
 
     // Both chains are individually valid according to the original rules.
-    assert!(g.verify_sub_chain(&full_even_chain[1..]));
-    assert!(g.verify_sub_chain(&full_odd_chain[1..]));
+    assert!(g.verify_sub_chain(&full_even_chain[..]));
+    assert!(g.verify_sub_chain(&full_odd_chain[..]));
 
     // Only the even chain is valid according to the even rules
-    assert!(g.verify_sub_chain_even(&full_even_chain[1..]));
-    assert!(!g.verify_sub_chain_even(&full_odd_chain[1..]));
+    assert!(g.verify_sub_chain_even(&full_even_chain[..]));
+    assert!(!g.verify_sub_chain_even(&full_odd_chain[..]));
 
     // Only the odd chain is valid according to the odd rules
-    assert!(!g.verify_sub_chain_odd(&full_even_chain[1..]));
-    assert!(g.verify_sub_chain_odd(&full_odd_chain[1..]));
+    assert!(!g.verify_sub_chain_odd(&full_even_chain[..]));
+    assert!(g.verify_sub_chain_odd(&full_odd_chain[..]));
 }
