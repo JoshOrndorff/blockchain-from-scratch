@@ -57,12 +57,31 @@ impl Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
-        todo!("Exercise 1")
+        Self {
+            parent: 0,
+            height: 0,
+            extrinsic: 0,
+            state: 0,
+            consensus_digest: 0,
+        }
     }
 
     /// Create and return a valid child header.
     fn child(&self, extrinsic: u64) -> Self {
-        todo!("Exercise 2")
+        // When creating a new block, we need to perform some consensus tasks.
+        // We start by creating a complete header with everything _except_
+        // the consensus digest.
+        let mut header = Self {
+            parent: hash(self),
+            height: self.height + 1,
+            extrinsic,
+            state: self.state + extrinsic,
+            consensus_digest: 0,
+        };
+
+        // Now we perform the consensus task, which, in this case, means we mine.
+        // We'll create a helper function for solving the PoW
+        let pow_nonce = solve_pow(&header);
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -91,6 +110,18 @@ impl Header {
     }
 
 }
+
+/// This function tries sequential nonces until one that meets the threshold is found
+fn solve_pow(h: &Header) -> u64 {
+    let mut trial_header = h.clone();
+    while hash(&trial_header) > THRESHOLD {
+        trial_header.consensus_digest += 1;
+    }
+
+    trial_header.consensus_digest
+}
+
+//
 
 /// Build and return two different chains with a common prefix.
 /// They should have the same genesis header.
