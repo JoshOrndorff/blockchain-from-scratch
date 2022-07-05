@@ -164,7 +164,11 @@ impl Header {
         }
 
         let next = &chain[0];
-        if !self.verify_child(next) || next.state %2 != 0 {
+        if !self.verify_child(next) {
+            return false;
+        }
+
+        if next.height > 2 && next.state %2 != 0 {
             return false;
         }
         
@@ -181,11 +185,15 @@ impl Header {
         }
 
         let next = &chain[0];
-        if !self.verify_child(next) || next.state %2 != 1 {
+        if !self.verify_child(next) {
+            return false;
+        }
+
+        if next.height > 2 && next.state %2 != 1 {
             return false;
         }
         
-        next.verify_sub_chain_even(&chain[1..])
+        next.verify_sub_chain_odd(&chain[1..])
     }
 
 }
@@ -228,7 +236,24 @@ fn verify_pow(h: &Header) -> bool {
 /// G -- 1 -- 2
 ///            \-- 3'-- 4'
 fn build_contentious_forked_chain() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
-    todo!("Exercise 6")
+    // The common prefix. Ending state is 3 (odd)
+    let g = Header::genesis();
+    let b1 = g.child(1);
+    let b2 = b1.child(2);
+
+    // The even side
+    let b3 = b2.child(3);
+    let b4 = b3.child(4);
+
+    // The odd side
+    let b3_prime = b2.child(6);
+    let b4_prime = b3_prime.child(8);
+
+    (
+        vec![g, b1, b2],
+        vec![b3, b4],
+        vec![b3_prime, b4_prime]
+    )
 }
 
 // To run these tests: `cargo test part_1`
