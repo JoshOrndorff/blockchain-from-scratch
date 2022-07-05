@@ -102,13 +102,6 @@ fn build_valid_chain(len: u64) -> Vec<Header> {
 /// Build and return a chain with at least three headers.
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
-/// 
-/// This is totally trivial since we can construct arbitrary block.
-/// However, fro moutside this crate, it is not so trivial. Our interface for creating
-/// new blocks `genesis()` and `child()` makes it impossible to create arbitrary blocks.
-///
-/// For this function, ONLY USE the the `genesis()` and `child()` methods to create blocks.
-/// The exercise is still possible.
 fn build_an_invalid_chain() -> Vec<Header> {
     let g = Header::genesis();
     let b1 = g.child();
@@ -118,35 +111,6 @@ fn build_an_invalid_chain() -> Vec<Header> {
 
     vec![g, evil_b1, b2]
 }
-
-/// Build and return two header chains.
-/// Both chains should individually be valid.
-/// They should have the same genesis header.
-/// They should not be the exact same chain.
-/// 
-/// Here is an example of two such chains:
-///            /-- 3 -- 4
-/// G -- 1 -- 2
-///            \-- 3'-- 4'
-/// 
-/// Side question: What is the fewest number of headers you could create to achieve this goal.
-fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
-    // This solution builds the chains from the example diagram
-    let g = Header::genesis();
-    let b1 = g.child();
-    let b2 = b1.child();
-    let b3 = b2.child();
-    let b4 = b3.child();
-
-    let b3_prime = b2.child();
-    let b4_prime = b3_prime.child();
-
-    (
-        vec![g.clone(), b1.clone(), b2.clone(), b3, b4],
-        vec![g, b1, b2, b3_prime, b4_prime]
-    )
-}
-
 
 // To run these tests: `cargo test part_1`
 #[test]
