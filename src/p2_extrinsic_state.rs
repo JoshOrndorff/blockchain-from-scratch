@@ -149,21 +149,21 @@ fn part_2_child_block_height() {
 fn part_2_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child(0);
-    assert!(g.parent == hash(&g));
+    assert!(b1.parent == hash(&g));
 }
 
 #[test]
 fn part_2_child_block_extrinsic() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert!(b1.extrinsic() = 7);
+    assert_eq!(b1.extrinsic(),  7);
 }
 
 #[test]
 fn part_2_child_block_state() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert!(b1.state() = 7);
+    assert_eq!(b1.state(), 7);
 }
 
 #[test]
@@ -179,8 +179,8 @@ fn part_2_verify_three_blocks() {
     let b1 = g.child(5);
     let b2 = b1.child(6);
 
+    assert_eq!(b2.state(), 11);
     assert!(g.verify_sub_chain(&vec![b1, b2]));
-    assert_eq!(b2.state(), 11)
 }
 
 #[test]
@@ -196,7 +196,7 @@ fn part_2_cant_verify_invalid_parent() {
 fn part_2_cant_verify_invalid_number() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
-    b1.number = 10;
+    b1.height = 10;
 
     assert!(!g.verify_sub_chain(&vec![b1]));
 }
@@ -208,4 +208,26 @@ fn part_2_cant_verify_invalid_state() {
     b1.state = 10;
 
     assert!(!g.verify_sub_chain(&vec![b1]));
+}
+
+#[test]
+fn part_2_verify_forked_chain() {
+    let g = Header::genesis();
+    let(c1, c2) = build_forked_chain();
+
+    // Both chains have the same valid genesis block
+    assert_eq!(g, c1[0]);
+    assert_eq!(g, c2[0]);
+
+    // Both chains are individually valid
+    assert!(g.verify_sub_chain(&c1[1..]));
+    assert!(g.verify_sub_chain(&c2[1..]));
+
+    // The two chains are not identical
+    // Question for students: I've only compared the last blocks here.
+    // Is that enough? Is it possible that the two chains have the same final block,
+    // but differ somewhere else?
+    assert_ne!(c1.last(), c2.last());
+
+
 }
