@@ -169,7 +169,18 @@ impl Header {
     /// Varify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE ODD.
     fn verify_sub_chain_odd(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 5")
+        // We use basically the same logic from `verify_sub_chain`
+        // with an additional check for even-ness
+        if chain.is_empty() {
+            return true;
+        }
+
+        let next = &chain[0];
+        if !self.verify_child(next) || next.state %2 != 1 {
+            return false;
+        }
+        
+        next.verify_sub_chain_even(&chain[1..])
     }
 
 }
