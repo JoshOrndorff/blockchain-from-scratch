@@ -72,6 +72,44 @@ impl Header {
 
 // And finally a few functions to use the code we just
 
+/// Build and return a valid chain with the given number of blocks.
+fn build_valid_chain(n: u64) -> Vec<Header> {
+    todo!("Exercise 4")
+}
+
+
+/// Build and return a chain with at least three headers.
+/// The chain should start with a proper genesis header,
+/// but the entire chain should NOT be valid.
+/// 
+/// As we saw in the last unit, this is rivial when we construct arbitrary blocks.
+/// However, from outside this crate, it is not so trivial. Our interface for creating
+/// new blocks, `genesis()` and `child()`, makes it impossible to create arbitrary blocks.
+///
+/// For this function, ONLY USE the the `genesis()` and `child()` methods to create blocks.
+/// The exercise is still possible.
+fn build_an_invalid_chain() -> Vec<Header> {
+    todo!("Exercise 5")
+}
+
+/// Build and return two header chains.
+/// Both chains should individually be valid.
+/// They should have the same genesis header.
+/// They should not be the exact same chain.
+/// 
+/// Here is an example of two such chains:
+///            /-- 3 -- 4
+/// G -- 1 -- 2
+///            \-- 3'-- 4'
+/// 
+/// Side question: What is the fewest number of headers you could create to achieve this goal.
+fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
+    todo!("Exercise 6")
+
+    // Exercise 7: After you have completed this task, look at how its test is written below.
+    // There is a critical thinking question for you there.
+}
+
 
 // To run these tests: `cargo test part_1`
 #[test]
