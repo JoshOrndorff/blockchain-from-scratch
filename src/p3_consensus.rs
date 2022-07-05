@@ -165,21 +165,21 @@ fn part_3_child_block_parent() {
 fn part_3_child_block_extrinsic() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert!(b1.extrinsic = 7);
+    assert_eq!(b1.extrinsic, 7);
 }
 
 #[test]
 fn part_3_child_block_state() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert!(b1.state = 7);
+    assert_eq!(b1.state, 7);
 }
 
 #[test]
 fn part_3_child_block_consensus_digest() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert!(hash(b1) < THRESHOLD);
+    assert!(hash(&b1) < THRESHOLD);
 }
 
 #[test]
@@ -195,8 +195,8 @@ fn part_3_verify_three_blocks() {
     let b1 = g.child(5);
     let b2 = b1.child(6);
 
+    assert_eq!(b2.state(), 11);
     assert!(g.verify_sub_chain(&vec![b1, b2]));
-    assert_eq!(b2.state(), 11)
 }
 
 #[test]
@@ -212,7 +212,7 @@ fn part_3_cant_verify_invalid_parent() {
 fn part_3_cant_verify_invalid_number() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
-    b1.number = 10;
+    b1.height = 10;
 
     assert!(!g.verify_sub_chain(&vec![b1]));
 }
@@ -239,9 +239,9 @@ fn part_3_cant_verify_invalid_pow() {
 
 #[test]
 fn part_3_verify_forked_chain() {
-    let(prefix, even, odd) = build_forked_chain();
+    let(prefix, even, odd) = build_contentious_forked_chain();
 
-    let g = prefix[0];
+    let g = &prefix[0];
     let full_even_chain = [&prefix[1..], &even].concat();
     let full_odd_chain  = [&prefix[1..], &odd].concat();
 
