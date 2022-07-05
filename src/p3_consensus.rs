@@ -318,11 +318,7 @@ fn part_3_verify_forked_chain() {
 
     let g = &prefix[0];
     let full_even_chain = [&prefix[1..], &even].concat();
-    let full_odd_chain  = [&prefix[1..], &odd].concat();
-    for h in full_even_chain.iter().cloned() {
-        println!("{:?}: {:?}", h, hash(&h));
-    }
-    
+    let full_odd_chain  = [&prefix[1..], &odd].concat();    
 
     // Both chains are individually valid according to the original rules.
     assert!(g.verify_sub_chain(&full_even_chain[..]));
