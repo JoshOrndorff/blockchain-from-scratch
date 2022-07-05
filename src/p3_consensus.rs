@@ -238,6 +238,54 @@ fn part_3_cant_verify_invalid_pow() {
 }
 
 #[test]
+fn part_3_even_chain_valid() {
+    let g = Header::genesis();
+    let b1 = g.child(2);
+    let b2 = b1.child(4);
+
+    assert!(g.verify_sub_chain_even(&vec![b1, b2]));
+}
+
+#[test]
+fn part_3_even_chain_invalid() {
+    let g = Header::genesis();
+    let b1 = g.child(1);
+    let b2 = b1.child(4);
+
+    assert!(!g.verify_sub_chain_even(&vec![b1, b2]));
+}
+
+#[test]
+fn part_3_odd_chain_valid() {
+    let g = Header::genesis();
+    let b1 = g.child(1);
+    // It' all about the states, not the extrinsics. So once the state is odd
+    // we need to keep it that way. So add evens
+    let b2 = b1.child(4);
+
+    assert!(g.verify_sub_chain_even(&vec![b1, b2]));
+}
+
+#[test]
+fn part_3_odd_chain_invalid_first_block() {
+    let g = Header::genesis();
+    let b1 = g.child(2);
+
+    assert!(!g.verify_sub_chain_even(&vec![b1]));
+}
+
+#[test]
+fn part_3_odd_chain_invalid_second_block() {
+    let g = Header::genesis();
+    let b1 = g.child(1);
+    // It' all about the states, not the extrinsics. So once the state is odd
+    // we need to keep it that way. Adding 3 makes the state 4 which is even
+    let b2 = b1.child(3);
+
+    assert!(!g.verify_sub_chain_even(&vec![b1, b2]));
+}
+
+#[test]
 fn part_3_verify_forked_chain() {
     let(prefix, even, odd) = build_contentious_forked_chain();
 
