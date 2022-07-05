@@ -143,28 +143,6 @@ fn part_1_verify_chain_length_five() {
 }
 
 #[test]
-fn part_1_verify_forked_chain() {
-    let g = Header::genesis();
-    let(c1, c2) = build_forked_chain();
-
-    // Both chains have the same valid genesis block
-    assert_eq!(g, c1[0]);
-    assert_eq!(g, c2[0]);
-
-    // Both chains are individually valid
-    assert!(g.verify_sub_chain(&c1[1..]));
-    assert!(g.verify_sub_chain(&c2[1..]));
-
-    // The two chains are not identical
-    // Question for students: I've only compared the last blocks here.
-    // Is that enough? Is it possible that the two chains have the same final block,
-    // but differ somewhere else?
-    assert_ne!(c1.last(), c2.last());
-
-
-}
-
-#[test]
 fn part_1_invalid_chain_is_really_invalid() {
     // This test chooses to use the student's own verify function.
     // This should be relatively safe given that we have already tested that function.
