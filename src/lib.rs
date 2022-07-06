@@ -1,13 +1,8 @@
 use std::hash::{Hash, Hasher};
 use std::collections::hash_map::DefaultHasher;
-mod p1_header_chain;
-mod p2_extrinsic_state;
-mod p3_consensus;
-mod p4_batched_extrinsics;
 
-fn main() {
-    println!("Hello, world!");
-}
+mod state_machine;
+mod blockchain;
 
 // Ideas
 // Do state machine stuff FIRST! in lesson 1.
@@ -23,8 +18,13 @@ fn main() {
 // Genesis state
 // Proof of authority
 // Abstract Consensus
-// Abstract interface for writing a state machines
-// Write a full client
+
+// Abstract interface so blockchain can run any state machine
+// Don't assume all transactions are valid
+// free execution
+
+// full client
+// light client. tracks headers doesn't store state. We don't need real merkle proofs, jsut send the full state.
 
 // Simple helper to do some hashing.
 fn hash<T: Hash>(t: &T) -> u64 {

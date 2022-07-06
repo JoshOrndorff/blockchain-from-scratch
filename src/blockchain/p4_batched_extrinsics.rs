@@ -14,6 +14,8 @@ struct Header {
     // For example, a hash or a Merkle root.
     extrinsics_root: Hash,
     state: u64,
+    // TODO No, actually we should keep consensus. We need t make the point that consensus rules
+    // are still checked on just the headers, not the entire blocks.
     // For this portion we will remove consensus again because nothing would change about it.
     consensus_digest: (),
 }
