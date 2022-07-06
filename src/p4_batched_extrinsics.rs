@@ -1,6 +1,8 @@
 //! Until now, each block has contained just a single extrinsic. Rreally we would prefer to batch them.
 //! Now, we stop relying solely on headers, and instead, create complete blocks.
 
+use crate::hash;
+type Hash = u64;
 
 /// The s
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -12,7 +14,8 @@ struct Header {
     // For example, a hash or a Merkle root.
     extrinsics_root: Hash,
     state: u64,
-    consensus_digest: u64,
+    // For this portion we will remove consensus again because nothing would change about it.
+    consensus_digest: (),
 }
 
 impl Header {
@@ -24,16 +27,12 @@ impl Header {
         self.height
     }
 
-    fn extrinsic(&self) -> u64 {
-        self.extrinsic
+    fn extrinsics_root(&self) -> u64 {
+        self.extrinsics_root
     }
 
     fn state(&self) -> u64 {
         self.state
-    }
-
-    fn consensus_digest(&self) -> u64 {
-        self.consensus_digest
     }
 }
 
@@ -119,6 +118,75 @@ impl Block {
 /// valid, but the block containing that header to be invalid.
 /// 
 /// Notice that you do not need the entire parent block to do this. You only need the header.
-fn build_invald_child_block_with_valid_header(parent: &Header) {
+fn build_invald_child_block_with_valid_header(parent: &Header) -> Block {
     todo!("Exercise 8")
+}
+
+#[test]
+fn part_4_genesis_header() {
+    let g = Header::genesis();
+    assert_eq!(g.height, 0);
+    assert_eq!(g.parent, 0);
+    assert_eq!(g.extrinsics_root, 0);
+    assert_eq!(g.state, 0);
+}
+
+#[test]
+fn part_4_genesis_block() {
+    let gh = Header::genesis();
+    let gb = Block::genesis();
+
+    assert_eq!(gb.header, gh);
+    assert!(gb.body.is_empty());
+}
+
+#[test]
+fn part_4_child_header() {
+    let g = Header::genesis();
+    let h1 = g.child(5, 10);
+
+    assert_eq!(h1.height, 1);
+    assert_eq!(h1.parent, hash(&g));
+    assert_eq!(h1.extrinsics_root, 5);
+    assert_eq!(h1.state, 10);
+}
+
+#[test]
+fn part_4_child_block_empty() {
+
+}
+
+#[test]
+fn part_4_verify_three_blocks() {
+
+}
+
+#[test]
+fn invalid_header_doesnt_check() {
+
+}
+
+#[test]
+fn invalid_block_state_doesnt_check() {
+
+}
+
+#[test]
+fn block_with_invalid_header_doesnt_check() {
+
+}
+
+#[test]
+fn student_invalid_block_really_is_invalid() {
+    let gb = Block::genesis();
+    let gh = &gb.header;
+
+    let b1 = build_invald_child_block_with_valid_header(gh);
+    let h1 = &b1.header;
+
+    // Make sure that the header is valid according to header rules.
+    assert!(gh.verify_child(h1));
+
+    // Make sure that the block is not valid when executed.
+    assert!(!gb.verify_sub_chain(&vec![b1]));
 }
