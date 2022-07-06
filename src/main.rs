@@ -8,7 +8,22 @@ fn main() {
     println!("Hello, world!");
 }
 
-// TODO write a fork choice rule somewhere?
+// Ideas
+// Do state machine stuff FIRST! in lesson 1.
+//  * machine for single light bulb on single switch
+//  * for single bulb on two switches
+//  * same as last but also a bulb on each switch
+//  * Really could do it for any digital circuit... but also other stuff
+//  * Can also do it for other stuff, game, token
+//  * Implement three of your own state machines. Also design them carefully
+
+
+// Write a fork choice rule somewhere?
+// Genesis state
+// Proof of authority
+// Abstract Consensus
+// Abstract interface for writing a state machines
+// Write a full client
 
 // Simple helper to do some hashing.
 fn hash<T: Hash>(t: &T) -> u64 {
