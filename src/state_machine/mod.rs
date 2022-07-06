@@ -1,6 +1,7 @@
 //! This module is all about modeling phenomina and systems as state machines. We begin with a few simple
 //! examples, and then proceed to build bigger and more complex state machines all implementing the same simple interface.
 
+mod one_bulb_one_switch;
 
 /// A state machine - Generic over the transition type
 pub trait StateMachine<Transition> {
