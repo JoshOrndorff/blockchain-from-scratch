@@ -32,7 +32,7 @@ impl Header {
     }
 }
 
-// Here are the methods for creating new hedaer and verifying headers.
+// Here are the methods for creating a new header and verifying headers.
 // It is your job to write them.
 impl Header {
     /// Returns a new valid genesis header.
