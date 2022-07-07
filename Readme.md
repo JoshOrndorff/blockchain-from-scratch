@@ -3,6 +3,8 @@ Blockchain From Scratch
 
 Learn the fundamentals of blockchain by building it from scratch. In Rust.
 
+Solutions are available on the `solutinos` branch.
+
 Contents
 --------
 
