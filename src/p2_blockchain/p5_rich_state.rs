@@ -17,4 +17,6 @@ struct State {
     product: u64,
 }
 
-//TODO
+//TODO write this
+
+// also do genesis state here
