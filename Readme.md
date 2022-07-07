@@ -16,8 +16,7 @@ Currently in place:
 * Batching extrinsics in blocks
 
 Upcoming:
-* Managing rich state
-* Genesis State
+* Managing rich state (and genesis state)
 * Abstract interface so blockchain can run any state machine
 * full client and transaction pool
 
@@ -25,9 +24,10 @@ Hopefully Somewhere:
 * Fork choice rule - could be a one-function exercise in one of the lessons
 * Proof of authority
 * Abstract Consensus interface
-* Free execution
+* Free execution (on_initialize, on_finalize)
 * "Invalid" transactions - transactions that don't cause a transition from this state even though they would from another state.
 * light client. tracks headers doesn't store state. We don't need real merkle proofs, jsut send the full state.
+* Merklized storage
 
 Context
 -------
