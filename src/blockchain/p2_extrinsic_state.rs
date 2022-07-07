@@ -17,7 +17,7 @@ type Hash = u64;
 /// using roots yet, but rather directly embedding some minimal extrinsic and state info
 /// into the header.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header {
+pub struct Header {
     parent: Hash,
     height: u64,
     extrinsic: u64,

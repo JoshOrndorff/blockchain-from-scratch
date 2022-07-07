@@ -11,7 +11,7 @@ type Hash = u64;
 
 /// The most basic blockchain header possible. We learned its basic structure from lecture.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header {
+pub struct Header {
     parent: Hash,
     height: u64,
     // We know from the lecture that we will probably need these, but we don't need them yet.

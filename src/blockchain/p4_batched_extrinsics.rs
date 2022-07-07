@@ -6,7 +6,7 @@ type Hash = u64;
 
 /// The s
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header {
+pub struct Header {
     parent: Hash,
     height: u64,
     // We now switch from storing an extrinsic directly, to storing an extrinsic root.
