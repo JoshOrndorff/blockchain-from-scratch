@@ -3,7 +3,7 @@ Blockchain From Scratch
 
 Learn the fundamentals of blockchain by building it from scratch. In Rust.
 
-Solutions are available on the `solutinos` branch.
+Solutions are available on the `solutions` branch.
 
 Contents
 --------
@@ -22,7 +22,7 @@ Upcoming:
 * full client and transaction pool
 
 Hopefully Somewhere:
-* Fork choice rule
+* Fork choice rule - could be a one-function exercise in one of the lessons
 * Proof of authority
 * Abstract Consensus interface
 * Free execution
