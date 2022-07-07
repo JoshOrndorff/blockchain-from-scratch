@@ -59,7 +59,7 @@ impl Header {
 
     /// Verify a single child header.
     /// 
-    /// This is a slightly different interface fro mthe previous units. Rather
+    /// This is a slightly different interface from the previous units. Rather
     /// than verify an entire subchain, this function checks a single header.
     /// This is useful because checking the header can now be thought of as a 
     /// subtask of checking an entire block. So it doesn't make sense to check
