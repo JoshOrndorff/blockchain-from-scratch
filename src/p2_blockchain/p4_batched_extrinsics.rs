@@ -82,7 +82,7 @@ impl Header {
 
 /// A complete Block is a header and the extrinsics.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Block {
+pub struct Block {
     header: Header,
     body: Vec<u64>,
 }
