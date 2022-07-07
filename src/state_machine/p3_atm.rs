@@ -34,6 +34,13 @@ pub struct Atm {
     pin_register: Vec<Key>,
 }
 
-impl StateMachine<Action> for Atm {
+impl StateMachine for Atm {
+
+    type State = ();
+    type Transition = ();
+
+    fn next_state(starting_state: &(), t: &()) -> () {
+        todo!()
+    }
 
 }

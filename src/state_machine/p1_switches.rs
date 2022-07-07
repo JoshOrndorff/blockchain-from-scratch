@@ -7,19 +7,25 @@ use super::StateMachine;
 
 /// This state machine models a single light switch.
 /// The internal state, a bool, represents whether the switch is on or not.
-pub struct LightSwitch(bool);
+pub struct LightSwitch;
 
 /// We model this simple system as a state machine with a single transition - toggling the switch
 /// Because there is only a single kind of transition, we can use a unit struct.
-impl StateMachine<()> for LightSwitch {
-    fn next_state(&self, t: &()) -> Self {
+impl StateMachine for LightSwitch {
+
+    type State = bool;
+    type Transition = ();
+
+    fn next_state(starting_state: &bool, t: &()) -> bool {
         todo!("Exercise 1")
     }
 }
 
-/// This second  state machine models two light switches (with one weird property).
-/// Either switch can be manually toggled via a transition.
-/// WEIRD PROPERTY: Whenever switch one is turned off, switch two also goes off.
+/// This second  state machine models two light switches with one weird property.
+/// Whenever switch one is turned off, switch two also goes off.
+pub struct WeirdSwitchMachine;
+
+/// The state is now two switches instead of one so we use a struct.
 pub struct TwoSwitches {
     first_switch: bool,
     second_switch: bool,
@@ -32,8 +38,12 @@ pub enum Toggle {
 }
 
 /// We model this system as a state machine with two possible transitions
-impl StateMachine<Toggle> for TwoSwitches {
-    fn next_state(&self, t:&Toggle) -> Self {
+impl StateMachine for TwoSwitches {
+
+    type State = TwoSwitches;
+    type Transition = Toggle;
+
+    fn next_state(starting_state: &TwoSwitches, t:&Toggle) -> TwoSwitches {
         todo!("Exercise 2")
     }
 }
@@ -41,20 +51,12 @@ impl StateMachine<Toggle> for TwoSwitches {
 
 #[test]
 fn sm_1_light_switch_toggles_off() {
-    let on = LightSwitch(true);
-
-    // Toggle once and assert it goes off
-    let s1 = on.next_state(&());
-    assert!(!s1.0);
+    assert!(!LightSwitch::next_state(&true, &()));
 }
 
 #[test]
 fn sm_1_light_switch_toggles_on() {
-    let off = LightSwitch(false);
-
-    // Toggle once and assert it comes on
-    let s1 = off.next_state(&());
-    assert!(s1.0);
+    assert!(LightSwitch::next_state(&false, &()));
 }
 
 #[test]

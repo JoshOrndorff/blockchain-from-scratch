@@ -1,9 +1,15 @@
 //! When you wear clothes they get dirty. When you wash them they get wet. When you dry them, they're
 //! ready to be worn again. Or course washing and wearing clothes takes its toll on the clothes, and
 //! eventually they get tattered.
+//! 
+use super::StateMachine;
+
+/// The rules are:
+/// TODO
+pub struct ClothesMachine;
 
 /// Models a piece of clothing throughout its lifecycle.
-pub enum Clothes {
+pub enum ClothesState {
     /// Clean clothes ready to be worn. With some given life left.
     Clean(u64),
     /// Dirty clothes. With some given life left.
@@ -21,8 +27,12 @@ pub enum ClothesAction {
     Dry,
 }
 
-impl StateMachine<ClothesAction> for Clothes {
-    fn next_state(&self, t: &ClothesAction) -> Self {
+impl StateMachine for ClothesMachine {
+
+    type State = ClothesState;
+    type Transition = ClothesAction;
+
+    fn next_state(starting_state: &ClothesState, t: &ClothesAction) -> ClothesState {
         todo!("Implement this state machine.")
     }
 }
