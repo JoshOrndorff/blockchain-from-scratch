@@ -14,16 +14,19 @@ Currently in place:
 * Blocks track state
 * PoW Consensus
 * Batching extrinsics in blocks
+*
+* Basic fork choice rules
+*
 
 Upcoming:
 * Managing rich state (and genesis state)
 * Abstract interface so blockchain can run any state machine
 * full client and transaction pool
+* More advanced fork choce rules including GHOST
+* Abstract Consensus interface
+* Proof of authority
 
 Hopefully Somewhere:
-* Fork choice rule - could be a one-function exercise in one of the lessons
-* Proof of authority
-* Abstract Consensus interface
 * Free execution (on_initialize, on_finalize)
 * "Invalid" transactions - transactions that don't cause a transition from this state even though they would from another state.
 * light client. tracks headers doesn't store state. We don't need real merkle proofs, jsut send the full state.
@@ -32,6 +35,6 @@ Hopefully Somewhere:
 Context
 -------
 
-This content was written to accompany the Module 3: Blockchain in the Polkadot Blockchain Academy.
+This content was written to accompany module 3 of the Polkadot Blockchain Academy.
 
 It strives to be useful stand-alone content as well.
