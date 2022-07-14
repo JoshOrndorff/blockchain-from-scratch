@@ -5,6 +5,7 @@
 use super::StateMachine;
 
 /// The keys on the ATM keypad
+#[derive(Hash)]
 pub enum Key{
     One,
     Two,
@@ -15,8 +16,8 @@ pub enum Key{
 
 /// Something you can do to the ATM
 pub enum Action {
-    /// Swipe your card at the ATM. The attached value is the pin that should
-    /// be keyed in on the keypad next.
+    /// Swipe your card at the ATM. The attached value is the hash of the pin
+    /// that should be keyed in on the keypad next.
     SwipeCard(u64),
     /// Press a key on the keypad
     PressKey(Key),
