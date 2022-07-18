@@ -26,6 +26,7 @@ impl StateMachine for LightSwitch {
 pub struct WeirdSwitchMachine;
 
 /// The state is now two switches instead of one so we use a struct.
+#[derive(PartialEq, Eq, Debug)]
 pub struct TwoSwitches {
     first_switch: bool,
     second_switch: bool,
@@ -61,25 +62,52 @@ fn sm_1_light_switch_toggles_on() {
 
 #[test]
 fn sm_1_two_switches_first_goes_on() {
+    let state = TwoSwitches { first_switch: false, second_switch: false };
 
+    assert_eq!(TwoSwitches::next_state(&state, &Toggle::FirstSwitch), TwoSwitches {
+        first_switch: true,
+        second_switch: false,
+    });
 }
 
 #[test]
 fn sm_1_two_switches_first_goes_off_second_was_on() {
     // This is the special case. We have to make sure the second one goes off with it.
+    let state = TwoSwitches { first_switch: true, second_switch: true };
+
+    assert_eq!(TwoSwitches::next_state(&state, &Toggle::FirstSwitch), TwoSwitches {
+        first_switch: false,
+        second_switch: false,
+    });
 }
 
 #[test]
 fn sm_1_two_switches_first_goes_off_second_was_off() {
     // This is adjascent to the special case. We have to make sure the second one stays off.
+        let state = TwoSwitches { first_switch: true, second_switch: false };
+
+        assert_eq!(TwoSwitches::next_state(&state, &Toggle::FirstSwitch), TwoSwitches {
+            first_switch: false,
+            second_switch: false,
+        });
 }
 
 #[test]
 fn sm_1_two_switches_second_goes_on() {
+    let state = TwoSwitches { first_switch: false, second_switch: false };
 
+    assert_eq!(TwoSwitches::next_state(&state, &Toggle::SecondSwitch), TwoSwitches {
+        first_switch: false,
+        second_switch: true,
+    });
 }
 
 #[test]
 fn sm_1_two_switches_second_goes_off() {
+    let state = TwoSwitches { first_switch: true, second_switch: true };
 
+    assert_eq!(TwoSwitches::next_state(&state, &Toggle::SecondSwitch), TwoSwitches {
+        first_switch: true,
+        second_switch: false,
+    });
 }
