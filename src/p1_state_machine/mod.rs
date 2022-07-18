@@ -16,6 +16,13 @@ pub trait StateMachine {
 
     /// Calculate the resulting state when this state undergoes the given transition
     fn next_state(starting_state: &Self::State, t: &Self::Transition) -> Self::State;
+
+    /// A human-readable name for this state machine. This may be used in user-facing
+    /// programs such as the repl described below. This is not in any way related to
+    /// the correctness of the state machine.
+    fn human_name() -> String {
+        "Unnamed state machine".into()
+    }
 }
 
 //TODO Some kind of main program that allows users to interact with their state machine in a repl-like way.
