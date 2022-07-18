@@ -39,7 +39,7 @@ pub enum Toggle {
 }
 
 /// We model this system as a state machine with two possible transitions
-impl StateMachine for TwoSwitches {
+impl StateMachine for WeirdSwitchMachine {
 
     type State = TwoSwitches;
     type Transition = Toggle;
