@@ -105,7 +105,7 @@ impl Header {
 /// Return your solutions as three vectors:
 /// 1. The common prefix including genesis
 /// 2. The even suffix (non-overlapping with the common prefix)
-/// 3. The oddn suffix (non-overlapping with the common prefix)
+/// 3. The odd suffix (non-overlapping with the common prefix)
 /// 
 /// Here is an example of two such chains:
 ///            /-- 3 -- 4
