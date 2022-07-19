@@ -23,7 +23,7 @@ pub enum Action {
     PressKey(Key),
 }
 
-/// The ATM itself. When you swipe your card, the ATM learns your correct pin.
+/// The ATM. When a card is swiped, the ATM learns the correct pin's hash.
 /// It waits for you to key in your pin. You can press as many numeric keys as
 /// you like followed by enter. If the pin is incorrect, your card is returned
 /// and the ATM automatically goes back to the main menu. If your pin is correct,
