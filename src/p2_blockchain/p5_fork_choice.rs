@@ -7,8 +7,7 @@
 //! we will import them from the previous lesson.
 
 use super::p4_batched_extrinsics::{Block, Header};
-//TODO use the latest one once that lesson is written
-// use super::p5_rich_state::{Block, Header};
+use crate::hash;
 
 /// Judge which blockchain is "best" when there are multiple candidates. There are several
 /// meaningful notions of "best" which is why this is a trait instead of just a
@@ -61,14 +60,22 @@ impl ForkChoice for LongestChainRule {
 /// conceptually-good-enough formula `work = THRESHOLD - block_hash`
 pub struct HeaviestChainRule;
 
+/// Mutates a block (and its embedded header) to contain more PoW difficulty.
+/// This will be useful for exploring the heaviest chain rule. The expected
+/// usage is that you create a block using the normal `Block.child()` method
+/// and then pass the block to this helper for additional mining.
+fn mine_extra_hard(block: &mut Block, threshold: u64) {
+    todo!("Exercise 4")
+}
+
 impl ForkChoice for HeaviestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 4")
+        todo!("Exercise 5")
     }
 
     fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
         // Remember, this method is provided.
-        todo!("Exercise 5")
+        todo!("Exercise 6")
     }
 }
 
@@ -90,12 +97,12 @@ pub struct MostBlocksWithEvenHash;
 
 impl ForkChoice for MostBlocksWithEvenHash {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 6")
+        todo!("Exercise 7")
     }
 
     fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
         // Remember, this method is provided.
-        todo!("Exercise 7")
+        todo!("Exercise 8")
     }
 }
 
@@ -126,4 +133,40 @@ fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>
 }
 
 #[test]
-fn part_6_todo(){}
+fn part_6_longest_chain(){
+    // Create two chains from the saem genesis block, pass them in,
+    // make sure the right one is returned
+    todo!("Exercise")
+}
+
+#[test]
+fn part_6_mine_to_custom_difficulty(){
+    let g = Block::genesis();
+    let mut b1 = g.child(vec![1, 2, 3]);
+
+    // We want the custom threshold to be high enough that we don't take forever mining
+    // but low enough that it is unlikely we caccidentally meet it with the normal
+    // block creation function
+    let custom_threshold = u64::max_value() / 1000;
+    mine_extra_hard(&mut b1, custom_threshold);
+
+    assert!(hash(&b1.header) < custom_threshold);
+}
+
+#[test]
+fn part_6_heaviest_chain(){
+    todo!("Exercise")
+}
+
+#[test]
+fn part_6_most_even_blocks(){
+    todo!("Exercise")
+}
+
+#[test]
+fn part_6_longest_vs_heaviest() {
+    // Create two chains where one is longer and one is heavier.
+    // You'll need two assertions one for a call o longest chain
+    // Another for the call to heaviest chain
+    todo!("Exercise")
+}

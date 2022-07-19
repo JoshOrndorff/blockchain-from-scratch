@@ -83,8 +83,8 @@ impl Header {
 /// A complete Block is a header and the extrinsics.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Block {
-    header: Header,
-    body: Vec<u64>,
+    pub(crate) header: Header,
+    pub(crate) body: Vec<u64>,
 }
 
 // Methods for creating and verifying blocks.
@@ -94,20 +94,20 @@ pub struct Block {
 // the transactions are no longer available at the Header level.
 impl Block {
     /// Returns a new valid genesis block. By convention this block has no extrinsics.
-    fn genesis() -> Self {
+    pub fn genesis() -> Self {
         todo!("Exercise 5")
     }
 
     /// Create and return a valid child block.
     /// The extrinsics are batched now, so we need to execute each of them.
-    fn child(&self, extrinsics: Vec<u8>) -> Self {
+    pub fn child(&self, extrinsics: Vec<u8>) -> Self {
         todo!("Exercise 6")
     }
 
     /// Verify that all the given blocks form a valid chain from this block to the tip.
     ///
     /// We need to verify the headers as well as execute all transactions and check the final state.
-    fn verify_sub_chain(&self, chain: &[Block]) -> bool {
+    pub fn verify_sub_chain(&self, chain: &[Block]) -> bool {
         todo!("Exercise 7")
     }
 }
