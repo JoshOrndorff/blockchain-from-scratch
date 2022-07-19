@@ -164,22 +164,22 @@ fn part_4_verify_three_blocks() {
 }
 
 #[test]
-fn invalid_header_doesnt_check() {
+fn part_4_invalid_header_doesnt_check() {
 
 }
 
 #[test]
-fn invalid_block_state_doesnt_check() {
+fn part_4_invalid_block_state_doesnt_check() {
 
 }
 
 #[test]
-fn block_with_invalid_header_doesnt_check() {
+fn part_4_block_with_invalid_header_doesnt_check() {
 
 }
 
 #[test]
-fn student_invalid_block_really_is_invalid() {
+fn part_4_student_invalid_block_really_is_invalid() {
     let gb = Block::genesis();
     let gh = &gb.header;
 
