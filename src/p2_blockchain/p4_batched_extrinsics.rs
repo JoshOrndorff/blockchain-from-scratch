@@ -155,27 +155,27 @@ fn part_4_child_header() {
 
 #[test]
 fn part_4_child_block_empty() {
-
+    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
 }
 
 #[test]
 fn part_4_verify_three_blocks() {
-
+    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
 }
 
 #[test]
 fn part_4_invalid_header_doesnt_check() {
-
+    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
 }
 
 #[test]
 fn part_4_invalid_block_state_doesnt_check() {
-
+    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
 }
 
 #[test]
 fn part_4_block_with_invalid_header_doesnt_check() {
-
+    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
 }
 
 #[test]
