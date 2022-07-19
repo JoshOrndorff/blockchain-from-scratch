@@ -112,6 +112,15 @@ impl ForkChoice for MostBlocksWithEvenHash {
 
 //
 
+/// Build and return two different chains with a common prefix.
+/// They should have the same genesis header. Both chains should be valid.
+/// The first chain should be longer (have more blocks), but the second
+/// chain should have more accumulated work.
+/// 
+/// Return your solutions as three vectors:
+/// 1. The common prefix including genesis
+/// 2. The even suffix (non-overlapping with the common prefix)
+/// 3. The odd suffix (non-overlapping with the common prefix)
 fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
     todo!("Exercise 8")
 }
