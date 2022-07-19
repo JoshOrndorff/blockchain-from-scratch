@@ -19,18 +19,16 @@ const THRESHOLD: u64 = u64::max_value() / 100;
 /// this block height.
 const FORK_HEIGHT: u64 = 2;
 
-/// The header is no expanded to contain an extrinsic and a state. Note that we are not
-/// using roots yet, but rather directly embedding some minimal extrinsic and state info
-/// into the header.
+/// The header is now expanded to contain a consensus digest.
+/// For Proof of Work, the consensus digest is basically just a nonce which gets the block
+/// hash below a certain threshold. Although we could call the field `nonce` we will leave
+/// the more general `digest` term. For PoA we would have a cryptographic signature in this field.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Header {
     parent: Hash,
     height: u64,
     extrinsic: u64,
     state: u64,
-    /// For Proof of Work, the consensus digest is basically just a nonce which gets the block
-    /// hash below a certain threshold. Although we could call the field `nonce` we will leave
-    /// the more general `digest` term. For PoA we would have a cryptographic signature in this field.
     consensus_digest: u64,
 }
 
@@ -83,13 +81,13 @@ impl Header {
     // On the one side, people believe that only blocks with even states should be valid.
     // On the other side, people bleieve in only blocks with odd states.
 
-    /// Varify that the given headers form a valid chain.
+    /// verify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE EVEN.
     fn verify_sub_chain_even(&self, chain: &[Header]) -> bool {
         todo!("Exercise 4")
     }
 
-    /// Varify that the given headers form a valid chain.
+    /// verify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE ODD.
     fn verify_sub_chain_odd(&self, chain: &[Header]) -> bool {
         todo!("Exercise 5")
