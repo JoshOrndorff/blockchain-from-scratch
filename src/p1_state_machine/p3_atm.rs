@@ -30,9 +30,13 @@ pub enum Action {
 /// the ATM waits for you to key in an amount of money to withdraw. Withdraws
 /// are bounded only by the cash in the machine (there is no account balance).
 pub struct Atm {
+    /// How much money is in the ATM
     cash_inside: u64,
-    expected_pin: Option<u64>,
-    pin_register: Vec<Key>,
+    /// The hash of a user's expected pin. The ATM will not expect any particular pin
+    /// before the user swipes their card.
+    expected_pin_hash: Option<u64>,
+    /// All the keys that have been pressed since the last `Enter`
+    keystroke_register: Vec<Key>,
 }
 
 impl StateMachine for Atm {
