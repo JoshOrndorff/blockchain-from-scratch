@@ -7,6 +7,6 @@ mod p3_consensus;
 // I'll want to have a more carefully considered re-export scheme later
 pub mod p4_batched_extrinsics;
 
-mod p5_rich_state;
+mod p6_rich_state;
 
-mod p6_fork_choice;
+mod p5_fork_choice;
