@@ -41,10 +41,11 @@ pub struct Atm {
 
 impl StateMachine for Atm {
 
+    // Exercise: Fill in these associated types.
     type State = ();
     type Transition = ();
 
-    fn next_state(starting_state: &(), t: &()) -> () {
+    fn next_state(starting_state: &Self::State, t: &Self::Transition) -> () {
         todo!()
     }
 
