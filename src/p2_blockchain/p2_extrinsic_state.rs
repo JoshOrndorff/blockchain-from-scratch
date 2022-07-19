@@ -26,24 +26,6 @@ pub struct Header {
     consensus_digest: (),
 }
 
-impl Header {
-    fn parent(&self) -> Hash {
-        self.parent
-    }
-
-    fn height(&self) -> u64 {
-        self.height
-    }
-
-    fn extrinsic(&self) -> u64 {
-        self.extrinsic
-    }
-
-    fn state(&self) -> u64 {
-        self.state
-    }
-}
-
 // Here are the methods for creating new hedaer and verifying headers.
 // It is your job to write them.
 impl Header {
@@ -115,7 +97,7 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
 #[test]
 fn part_2_genesis_block_height() {
     let g = Header::genesis();
-    assert!(g.height() == 0);
+    assert!(g.height == 0);
 }
 
 #[test]
@@ -156,14 +138,14 @@ fn part_2_child_block_parent() {
 fn part_2_child_block_extrinsic() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert_eq!(b1.extrinsic(),  7);
+    assert_eq!(b1.extrinsic,  7);
 }
 
 #[test]
 fn part_2_child_block_state() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert_eq!(b1.state(), 7);
+    assert_eq!(b1.state, 7);
 }
 
 #[test]
@@ -179,7 +161,7 @@ fn part_2_verify_three_blocks() {
     let b1 = g.child(5);
     let b2 = b1.child(6);
 
-    assert_eq!(b2.state(), 11);
+    assert_eq!(b2.state, 11);
     assert!(g.verify_sub_chain(&vec![b1, b2]));
 }
 

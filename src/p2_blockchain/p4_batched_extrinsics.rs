@@ -20,24 +20,6 @@ pub struct Header {
     consensus_digest: (),
 }
 
-impl Header {
-    fn parent(&self) -> Hash {
-        self.parent
-    }
-
-    fn height(&self) -> u64 {
-        self.height
-    }
-
-    fn extrinsics_root(&self) -> u64 {
-        self.extrinsics_root
-    }
-
-    fn state(&self) -> u64 {
-        self.state
-    }
-}
-
 // Methods for creating and verifying headers.
 //
 // With the extrinsics no longer stored in the header, we can no longer do

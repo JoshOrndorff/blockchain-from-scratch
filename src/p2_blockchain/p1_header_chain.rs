@@ -20,18 +20,6 @@ pub struct Header {
     consensus_digest: (),
 }
 
-// We want our header type to be immutable, so we provide accessor
-// methods (for the non-stubbed fields)
-impl Header {
-    fn parent(&self) -> Hash {
-        self.parent
-    }
-
-    fn height(&self) -> u64 {
-        self.height
-    }
-}
-
 // Here are the methods for creating a new header and verifying headers.
 // It is your job to write them.
 impl Header {
@@ -72,7 +60,7 @@ fn build_an_invalid_chain() -> Vec<Header> {
 #[test]
 fn part_1_genesis_block_height() {
     let g = Header::genesis();
-    assert!(g.height() == 0);
+    assert!(g.height == 0);
 }
 
 #[test]
