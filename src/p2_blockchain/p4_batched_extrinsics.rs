@@ -4,7 +4,9 @@
 use crate::hash;
 type Hash = u64;
 
-/// The s
+/// The header no longer contains an extrinsic directly. Rather a vector of extrinsics will be stored in
+/// the block body. We are still storing the state in the header for now. This will change in an upcoming
+/// lesson as well.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Header {
     parent: Hash,
