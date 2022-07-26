@@ -136,27 +136,48 @@ fn part_4_child_header() {
 
 #[test]
 fn part_4_child_block_empty() {
-    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
+	let b0 = Block::genesis();
+	let b1 = b0.child(vec![]);
+
+	assert_eq!(b1, Block { header: b1.header.clone(), body: vec![] });
 }
+
+
 
 #[test]
 fn part_4_verify_three_blocks() {
-    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
+	let g = Block::genesis();
+	let b1 = g.child(vec![1]);
+	let b2 = b1.child(vec![2]);
+	let chain = vec![g.clone(), b1, b2];
+	assert!(g.verify_sub_chain(&chain[1..]));
 }
 
 #[test]
 fn part_4_invalid_header_doesnt_check() {
-    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
+	let g = Header::genesis();
+	let h1 =
+		Header { parent: 0, height: 100, extrinsics_root: 0, state: 100, consensus_digest: 0 };
+
+	assert!(!g.verify_child(&h1));
 }
 
 #[test]
 fn part_4_invalid_block_state_doesnt_check() {
-    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
+	let b0 = Block::genesis();
+	let mut b1 = b0.child(vec![1, 2, 3]);
+	b1.body = vec![];
+
+	assert!(!b0.verify_sub_chain(&vec![b1]));
 }
 
 #[test]
 fn part_4_block_with_invalid_header_doesnt_check() {
-    todo!("Test not yet written. You may do this as an exercise. PRs welcome :)")
+	let b0 = Block::genesis();
+	let mut b1 = b0.child(vec![1, 2, 3]);
+	b1.header = Header::genesis();
+
+	assert!(!b0.verify_sub_chain(&vec![b1]));
 }
 
 #[test]
