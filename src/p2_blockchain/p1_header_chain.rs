@@ -11,25 +11,13 @@ type Hash = u64;
 
 /// The most basic blockchain header possible. We learned its basic structure from lecture.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header {
+pub struct Header {
     parent: Hash,
     height: u64,
     // We know from the lecture that we will probably need these, but we don't need them yet.
     extrinsics_root: (),
     state_root: (),
     consensus_digest: (),
-}
-
-// We want our header type to be immutable, so we provide accessor
-// methods (for the non-stubbed fields)
-impl Header {
-    fn parent(&self) -> Hash {
-        self.parent
-    }
-
-    fn height(&self) -> u64 {
-        self.height
-    }
 }
 
 // Here are the methods for creating a new header and verifying headers.
@@ -59,6 +47,8 @@ impl Header {
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
     /// An "entire" chain can be verified by calling this method on a genesis header.
+    /// This method may assume that the block on which it is called is valid, but it
+    /// must verify all of the blocks in the slice;
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
         let mut tip = self;
         for current in chain {
@@ -118,7 +108,7 @@ fn build_an_invalid_chain() -> Vec<Header> {
 #[test]
 fn part_1_genesis_block_height() {
     let g = Header::genesis();
-    assert!(g.height() == 0);
+    assert!(g.height == 0);
 }
 
 #[test]

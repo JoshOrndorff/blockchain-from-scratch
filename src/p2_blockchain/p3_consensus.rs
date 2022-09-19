@@ -19,41 +19,17 @@ const THRESHOLD: u64 = u64::max_value() / 100;
 /// this block height.
 const FORK_HEIGHT: u64 = 2;
 
-/// The header is no expanded to contain an extrinsic and a state. Note that we are not
-/// using roots yet, but rather directly embedding some minimal extrinsic and state info
-/// into the header.
+/// The header is now expanded to contain a consensus digest.
+/// For Proof of Work, the consensus digest is basically just a nonce which gets the block
+/// hash below a certain threshold. Although we could call the field `nonce` we will leave
+/// the more general `digest` term. For PoA we would have a cryptographic signature in this field.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header {
+pub struct Header {
     parent: Hash,
     height: u64,
     extrinsic: u64,
     state: u64,
-    /// For Proof of Work, the consensus digest is basically just a nonce which gets the block
-    /// hash below a certain threshold. Although we could call the field `nonce` we will leave
-    /// the more general `digest` term. For PoA we would have a cryptographic signature in this field.
     consensus_digest: u64,
-}
-
-impl Header {
-    fn parent(&self) -> Hash {
-        self.parent
-    }
-
-    fn height(&self) -> u64 {
-        self.height
-    }
-
-    fn extrinsic(&self) -> u64 {
-        self.extrinsic
-    }
-
-    fn state(&self) -> u64 {
-        self.state
-    }
-
-    fn consensus_digest(&self) -> u64 {
-        self.consensus_digest
-    }
 }
 
 // Here are the methods for creating new hedaer and verifying headers.
@@ -154,7 +130,7 @@ impl Header {
     // On the one side, people believe that only blocks with even states should be valid.
     // On the other side, people bleieve in only blocks with odd states.
 
-    /// Varify that the given headers form a valid chain.
+    /// verify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE EVEN.
     fn verify_sub_chain_even(&self, chain: &[Header]) -> bool {
         // We use basically the same logic from `verify_sub_chain`
@@ -175,7 +151,7 @@ impl Header {
         next.verify_sub_chain_even(&chain[1..])
     }
 
-    /// Varify that the given headers form a valid chain.
+    /// verify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE ODD.
     fn verify_sub_chain_odd(&self, chain: &[Header]) -> bool {
         // We use basically the same logic from `verify_sub_chain`
@@ -229,7 +205,7 @@ fn verify_pow(h: &Header) -> bool {
 /// Return your solutions as three vectors:
 /// 1. The common prefix including genesis
 /// 2. The even suffix (non-overlapping with the common prefix)
-/// 3. The oddn suffix (non-overlapping with the common prefix)
+/// 3. The odd suffix (non-overlapping with the common prefix)
 /// 
 /// Here is an example of two such chains:
 ///            /-- 3 -- 4
@@ -260,7 +236,7 @@ fn build_contentious_forked_chain() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
 #[test]
 fn part_3_genesis_block_height() {
     let g = Header::genesis();
-    assert!(g.height() == 0);
+    assert!(g.height == 0);
 }
 
 #[test]
@@ -339,7 +315,7 @@ fn part_3_verify_three_blocks() {
     let b1 = g.child(5);
     let b2 = b1.child(6);
 
-    assert_eq!(b2.state(), 11);
+    assert_eq!(b2.state, 11);
     assert!(g.verify_sub_chain(&vec![b1, b2]));
 }
 

@@ -4,9 +4,11 @@
 use crate::hash;
 type Hash = u64;
 
-/// The s
+/// The header no longer contains an extrinsic directly. Rather a vector of extrinsics will be stored in
+/// the block body. We are still storing the state in the header for now. This will change in an upcoming
+/// lesson as well.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header {
+pub struct Header {
     parent: Hash,
     height: u64,
     // We now switch from storing an extrinsic directly, to storing an extrinsic root.
@@ -14,36 +16,15 @@ struct Header {
     // For example, a hash or a Merkle root.
     extrinsics_root: Hash,
     state: u64,
-    // TODO No, actually we should keep consensus. We need t make the point that consensus rules
-    // are still checked on just the headers, not the entire blocks.
-    // For this portion we will remove consensus again because nothing would change about it.
-    consensus_digest: (),
-}
-
-impl Header {
-    fn parent(&self) -> Hash {
-        self.parent
-    }
-
-    fn height(&self) -> u64 {
-        self.height
-    }
-
-    fn extrinsics_root(&self) -> u64 {
-        self.extrinsics_root
-    }
-
-    fn state(&self) -> u64 {
-        self.state
-    }
+    consensus_digest: u64,
 }
 
 // Methods for creating and verifying headers.
 //
 // With the extrinsics no longer stored in the header, we can no longer do
 // "on-chain" execution with just headers. That means that this code actually
-// gets simpler in many ways. All the old execution logic, plus some new logic
-// for batching moves to the block level now.
+// gets simpler in many ways. All the old execution logic, plus some new batching
+// logic moves to the block level now.
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
@@ -59,7 +40,7 @@ impl Header {
 
     /// Verify a single child header.
     /// 
-    /// This is a slightly different interface fro mthe previous units. Rather
+    /// This is a slightly different interface from the previous units. Rather
     /// than verify an entire subchain, this function checks a single header.
     /// This is useful because checking the header can now be thought of as a 
     /// subtask of checking an entire block. So it doesn't make sense to check
@@ -82,9 +63,9 @@ impl Header {
 
 /// A complete Block is a header and the extrinsics.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Block {
-    header: Header,
-    body: Vec<u64>,
+pub struct Block {
+    pub(crate) header: Header,
+    pub(crate) body: Vec<u64>,
 }
 
 // Methods for creating and verifying blocks.
@@ -94,25 +75,25 @@ struct Block {
 // the transactions are no longer available at the Header level.
 impl Block {
     /// Returns a new valid genesis block. By convention this block has no extrinsics.
-    fn genesis() -> Self {
+    pub fn genesis() -> Self {
         todo!("Exercise 5")
     }
 
     /// Create and return a valid child block.
     /// The extrinsics are batched now, so we need to execute each of them.
-    fn child(&self, extrinsics: Vec<u8>) -> Self {
+    pub fn child(&self, extrinsics: Vec<u8>) -> Self {
         todo!("Exercise 6")
     }
 
     /// Verify that all the given blocks form a valid chain from this block to the tip.
     ///
     /// We need to verify the headers as well as execute all transactions and check the final state.
-    fn verify_sub_chain(&self, chain: &[Block]) -> bool {
+    pub fn verify_sub_chain(&self, chain: &[Block]) -> bool {
         todo!("Exercise 7")
     }
 }
 
-/// Create a child block of the given block. The child block should be invalid, but
+/// Create an invalid child block of the given block. Although the child block is invalid,
 /// the header should be valid.
 /// 
 /// Now that extrinsics are separate from headers, the logic for checking headers does
@@ -155,31 +136,52 @@ fn part_4_child_header() {
 
 #[test]
 fn part_4_child_block_empty() {
+	let b0 = Block::genesis();
+	let b1 = b0.child(vec![]);
 
+	assert_eq!(b1, Block { header: b1.header.clone(), body: vec![] });
 }
+
+
 
 #[test]
 fn part_4_verify_three_blocks() {
-
+	let g = Block::genesis();
+	let b1 = g.child(vec![1]);
+	let b2 = b1.child(vec![2]);
+	let chain = vec![g.clone(), b1, b2];
+	assert!(g.verify_sub_chain(&chain[1..]));
 }
 
 #[test]
-fn invalid_header_doesnt_check() {
+fn part_4_invalid_header_doesnt_check() {
+	let g = Header::genesis();
+	let h1 =
+		Header { parent: 0, height: 100, extrinsics_root: 0, state: 100, consensus_digest: 0 };
 
+	assert!(!g.verify_child(&h1));
 }
 
 #[test]
-fn invalid_block_state_doesnt_check() {
+fn part_4_invalid_block_state_doesnt_check() {
+	let b0 = Block::genesis();
+	let mut b1 = b0.child(vec![1, 2, 3]);
+	b1.body = vec![];
 
+	assert!(!b0.verify_sub_chain(&vec![b1]));
 }
 
 #[test]
-fn block_with_invalid_header_doesnt_check() {
+fn part_4_block_with_invalid_header_doesnt_check() {
+	let b0 = Block::genesis();
+	let mut b1 = b0.child(vec![1, 2, 3]);
+	b1.header = Header::genesis();
 
+	assert!(!b0.verify_sub_chain(&vec![b1]));
 }
 
 #[test]
-fn student_invalid_block_really_is_invalid() {
+fn part_4_student_invalid_block_really_is_invalid() {
     let gb = Block::genesis();
     let gh = &gb.header;
 
