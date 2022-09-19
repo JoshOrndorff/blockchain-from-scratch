@@ -23,8 +23,8 @@ pub struct Header {
 //
 // With the extrinsics no longer stored in the header, we can no longer do
 // "on-chain" execution with just headers. That means that this code actually
-// gets simpler in many ways. All the old execution logic, plus some new logic
-// for batching moves to the block level now.
+// gets simpler in many ways. All the old execution logic, plus some new batching
+// logic moves to the block level now.
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
@@ -93,7 +93,7 @@ impl Block {
     }
 }
 
-/// Create a child block of the given block. The child block should be invalid, but
+/// Create an invalid child block of the given block. Although the child block is invalid,
 /// the header should be valid.
 /// 
 /// Now that extrinsics are separate from headers, the logic for checking headers does
