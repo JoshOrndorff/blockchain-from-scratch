@@ -3,7 +3,9 @@ use std::collections::hash_map::DefaultHasher;
 
 mod p1_state_machine;
 mod p2_blockchain;
-// mod p3_client;
+// mod p3_consensus
+// mod p4_framework
+// mod p6_client;
 
 // Simple helper to do some hashing.
 fn hash<T: Hash>(t: &T) -> u64 {
