@@ -20,6 +20,8 @@
 //!   * Web of Trust
 //!   * Reputation System
 
+use super::StateMachine;
+
 pub struct State {
 
 }
@@ -28,8 +30,12 @@ pub enum Transition {
 
 }
 
-impl StateMachine<Transition> for State {
-    fn next_state(&self, t: &Transition) -> Self {
+impl StateMachine for State {
+
+    type State = State;
+    type Transition = Transition;
+    
+    fn next_state(_starting: &Self::State, _t: &Self::Transition) -> Self::State {
         todo!()
     }
 }
