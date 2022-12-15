@@ -4,6 +4,9 @@
 mod p1_switches;
 mod p2_laundry_machine;
 mod p3_atm;
+mod p4_accounted_currency;
+mod p5_digital_cash;
+mod p6_open_ended;
 
 /// A state machine - Generic over the transition type
 pub trait StateMachine {
@@ -23,6 +26,13 @@ pub trait StateMachine {
     fn human_name() -> String {
         "Unnamed state machine".into()
     }
+}
+
+/// A set of play users for experimenting with the multi-user state machines
+pub enum User {
+    Alice,
+    Bob,
+    Charlie,
 }
 
 //TODO Some kind of main program that allows users to interact with their state machine in a repl-like way.
