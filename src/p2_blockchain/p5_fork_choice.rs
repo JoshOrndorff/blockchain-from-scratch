@@ -57,7 +57,7 @@ impl ForkChoice for LongestChainRule {
 /// Roughly speaking, the lower a block's hash is, the more work it contains,
 /// because finding a block with a low hash requires, on average, trying more
 /// nonces. Modeling the amount of work required to achieve a particular hash
-/// is out of scope for this exerise, so we will use the not-really-right-but
+/// is out of scope for this exercise, so we will use the not-really-right-but
 /// conceptually-good-enough formula `work = THRESHOLD - block_hash`
 pub struct HeaviestChainRule;
 
@@ -107,7 +107,7 @@ impl ForkChoice for MostBlocksWithEvenHash {
     }
 }
 
-// This lesson has ommitted one popular fork choice rule:
+// This lesson has omitted one popular fork choice rule:
 // GHOST - Greedy Heaviest Observed SubTree
 //
 // I've omitted GHOST from here because it requires information about blocks that
@@ -135,7 +135,7 @@ fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>
 
 #[test]
 fn part_6_longest_chain(){
-    // Create two chains from the saem genesis block, pass them in,
+    // Create two chains from the same genesis block, pass them in,
     // make sure the right one is returned
     todo!("Exercise")
 }
@@ -146,7 +146,7 @@ fn part_6_mine_to_custom_difficulty(){
     let mut b1 = g.child(vec![1, 2, 3]);
 
     // We want the custom threshold to be high enough that we don't take forever mining
-    // but low enough that it is unlikely we caccidentally meet it with the normal
+    // but low enough that it is unlikely we accidentally meet it with the normal
     // block creation function
     let custom_threshold = u64::max_value() / 1000;
     mine_extra_hard(&mut b1, custom_threshold);
