@@ -32,7 +32,7 @@ pub struct Header {
     consensus_digest: u64,
 }
 
-// Here are the methods for creating new hedaer and verifying headers.
+// Here are the methods for creating new header and verifying headers.
 // It is your job to write them.
 impl Header {
     /// Returns a new valid genesis header.
@@ -57,7 +57,7 @@ impl Header {
     // (See the constant FORK_HEIGHT) which is set to 2 by default.
     // Most community members have become obsessed over the state of the blockchain.
     // On the one side, people believe that only blocks with even states should be valid.
-    // On the other side, people bleieve in only blocks with odd states.
+    // On the other side, people believe in only blocks with odd states.
 
     /// verify that the given headers form a valid chain.
     /// In this case "valid" means that the STATE MUST BE EVEN.
@@ -76,9 +76,9 @@ impl Header {
 /// Build and return two different chains with a common prefix.
 /// They should have the same genesis header.
 /// 
-/// Both chains should be valid according to the original vlidity rules.
-/// The first chain should be valid only according tothe even rules.
-/// The second chain should be valid only according tothe odd rules.
+/// Both chains should be valid according to the original validity rules.
+/// The first chain should be valid only according to the even rules.
+/// The second chain should be valid only according to the odd rules.
 /// 
 /// Return your solutions as three vectors:
 /// 1. The common prefix including genesis
@@ -93,7 +93,7 @@ fn build_contentious_forked_chain() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
     todo!("Exercise 6")
 }
 
-// To run these tests: `cargo test part_1`
+// To run these tests: `cargo test part_3`
 #[test]
 fn part_3_genesis_block_height() {
     let g = Header::genesis();
