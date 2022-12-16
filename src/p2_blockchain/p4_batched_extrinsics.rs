@@ -97,7 +97,7 @@ impl Block {
 /// the header should be valid.
 /// 
 /// Now that extrinsics are separate from headers, the logic for checking headers does
-/// not include actual transaction execution. That means its possible for a header to be
+/// not include actual transaction execution. That means it is possible for a header to be
 /// valid, but the block containing that header to be invalid.
 /// 
 /// Notice that you do not need the entire parent block to do this. You only need the header.
