@@ -1,3 +1,4 @@
+//! Forks in the blockchain represent alternative histories of the system.
 //! When forks arise in the blockchain, users need a way to decide which chain
 //! they will consider best, for now. This is known as a "fork choice rule".
 //! There are several meaningful notions of "best", so we introduce a trait

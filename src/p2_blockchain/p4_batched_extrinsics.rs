@@ -1,4 +1,4 @@
-//! Until now, each block has contained just a single extrinsic. Rreally we would prefer to batch them.
+//! Until now, each block has contained just a single extrinsic. Really we would prefer to batch them.
 //! Now, we stop relying solely on headers, and instead, create complete blocks.
 
 use crate::hash;
