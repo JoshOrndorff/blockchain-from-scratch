@@ -71,6 +71,22 @@ pub trait Consensus {
     }
 }
 
+/// A trivial consensus engine that considers all blocks valid, and does not have
+/// a meaningful consensus digest.
+impl Consensus for () {
+    type Digest = ();
+
+    /// All blocks are considered valid
+    fn validate(_: &Self::Digest, _: &Header<Self::Digest>) -> bool {
+        todo!("Exercise 2")
+    }
+
+    /// No real sealing is required. The partial header has all the necessary information
+    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Header<Self::Digest> {
+        todo!("Exercise 3")
+    }
+}
+
 /// A set of consensus authority accounts that can be used in
 /// identity-based consensus algorithms.
 #[derive(Hash, Debug, PartialEq, Eq, Clone, Copy)]
