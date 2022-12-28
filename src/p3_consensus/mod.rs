@@ -10,14 +10,22 @@ mod p5_interleave;
 
 type Hash = u64;
 
-///TOdo better description - basically a block header without the seal
-pub struct PreData{
+/// A Block Header similar to prior chapters of this tutorial.
+/// 
+/// Different consensus engines, require different information in the consensus digest.
+/// Therefore, the header is now generic over the digest type.
+/// 
+/// Consensus engines do not know or care about the blockchain's state machine,
+/// which means they can operate entirely at the header level. They never need to touch
+/// the complete blocks.
+pub struct Header<Digest>{
     parent: Hash,
     height: u64,
     state_root: Hash,
     extrinsics_root: Hash,
+    consensus_digest: Digest,
 }
-/// A Consensus Engine. Responsible for authoring and importing blocks
+/// A Consensus Engine. Responsible for Sealing blocks and verifying their seals
 /// 
 /// Consensus exists independently of execution logic, and therefore operates
 /// only on the block headers.
@@ -29,24 +37,33 @@ pub trait Consensus {
     /// function checks ONLY consensus-related aspects such as the signature
     /// or the attached work proof. It does not check ancestry, execution, or
     /// anything else.
-    fn validate(pre_data: &PreData, seal: Self::Digest) -> bool;
+    /// 
+    /// Some consensus engines need to check a relationship between the current
+    /// digest and the parent digest. For example, they may need to check that the
+    /// slot number is increasing. Therefore the parent digest is also passed
+    /// here. Other consensus engines will not need to use the parent digest at all.
+    fn validate(parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool;
 
-    /// Takes an existing header and mutates it to be valid according to
-    /// consensus rules. This will typically mean attaching signatures or
-    /// proving work.
-    fn seal(pre_data: &PreData) -> Self::Digest;
+    /// Takes a partial header that does not yet have a consensus digest attached. Returns
+    /// a new header including the consensus digest that is valid according to the consensus rules.
+    /// 
+    /// Some consensus engines need to enforce a relationship between the current digest and 
+    /// the parent digest. For example, they may need to make sure that the slot number is always
+    /// increasing. Therefore the parent digest is also passed here. Other consensus engines
+    /// will not need to use the parent digest at all
+    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Header<Self::Digest>;
     // NOTE TO SELF. For slot-based PoA etc, just look at the system time. It's what real-world aura does
 
     /// A human-readable name for this engine. This may be used in user-facing
     /// programs error reporting. This is not in any way related to
-    /// the correctness of the state machine.
+    /// the correctness of the consensus logic.
     fn human_name() -> String {
         "Unnamed Consensus Engine".into()
     }
 }
 
 /// A set of consensus authority accounts that can be used in
-/// identity-based consensus algorithms
+/// identity-based consensus algorithms.
 pub enum ConsensusAuthority {
     Alice,
     Bob,
