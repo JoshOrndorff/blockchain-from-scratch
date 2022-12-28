@@ -5,4 +5,3 @@
 
 /// A Consensus engine that alternates back and forth between PoW and PoA sealed blocks.
 struct AlternatingPowPoa;
-

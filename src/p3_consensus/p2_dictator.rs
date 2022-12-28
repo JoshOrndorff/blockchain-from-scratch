@@ -1,6 +1,6 @@
 //! The Dictator consensus engine considers any header valid as long as it is signed by the dictator.
 //! The "signature" is made by simply attaching one of the Consensus Authorities from the root of this module.
-//! 
+//!
 //! Throughout this chapter we will avoid performing _Actual_ cryptographic calculations because they
 //! require a crypto library which and overcoming its own learning curve, plus they distract from the
 //! underlying consensus-related logic. Instead, we just use the `ConsensusAuthority` enum from the module root.

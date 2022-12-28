@@ -1,4 +1,3 @@
-
 //! We begin our hands on exploration of state machines with two very simple examples.
 //! In these examples, we use actualy switch boards as the state machine. The state is,
 //! well, just the state of the switches.
@@ -12,7 +11,6 @@ pub struct LightSwitch;
 /// We model this simple system as a state machine with a single transition - toggling the switch
 /// Because there is only a single kind of transition, we can use a unit struct.
 impl StateMachine for LightSwitch {
-
     type State = bool;
     type Transition = ();
 
@@ -40,15 +38,13 @@ pub enum Toggle {
 
 /// We model this system as a state machine with two possible transitions
 impl StateMachine for WeirdSwitchMachine {
-
     type State = TwoSwitches;
     type Transition = Toggle;
 
-    fn next_state(starting_state: &TwoSwitches, t:&Toggle) -> TwoSwitches {
+    fn next_state(starting_state: &TwoSwitches, t: &Toggle) -> TwoSwitches {
         todo!("Exercise 2")
     }
 }
-
 
 #[test]
 fn sm_1_light_switch_toggles_off() {
@@ -62,52 +58,82 @@ fn sm_1_light_switch_toggles_on() {
 
 #[test]
 fn sm_1_two_switches_first_goes_on() {
-    let state = TwoSwitches { first_switch: false, second_switch: false };
-
-    assert_eq!(WeirdSwitchMachine::next_state(&state, &Toggle::FirstSwitch), TwoSwitches {
-        first_switch: true,
+    let state = TwoSwitches {
+        first_switch: false,
         second_switch: false,
-    });
+    };
+
+    assert_eq!(
+        WeirdSwitchMachine::next_state(&state, &Toggle::FirstSwitch),
+        TwoSwitches {
+            first_switch: true,
+            second_switch: false,
+        }
+    );
 }
 
 #[test]
 fn sm_1_two_switches_first_goes_off_second_was_on() {
     // This is the special case. We have to make sure the second one goes off with it.
-    let state = TwoSwitches { first_switch: true, second_switch: true };
+    let state = TwoSwitches {
+        first_switch: true,
+        second_switch: true,
+    };
 
-    assert_eq!(WeirdSwitchMachine::next_state(&state, &Toggle::FirstSwitch), TwoSwitches {
-        first_switch: false,
-        second_switch: false,
-    });
+    assert_eq!(
+        WeirdSwitchMachine::next_state(&state, &Toggle::FirstSwitch),
+        TwoSwitches {
+            first_switch: false,
+            second_switch: false,
+        }
+    );
 }
 
 #[test]
 fn sm_1_two_switches_first_goes_off_second_was_off() {
     // This is adjascent to the special case. We have to make sure the second one stays off.
-        let state = TwoSwitches { first_switch: true, second_switch: false };
+    let state = TwoSwitches {
+        first_switch: true,
+        second_switch: false,
+    };
 
-        assert_eq!(WeirdSwitchMachine::next_state(&state, &Toggle::FirstSwitch), TwoSwitches {
+    assert_eq!(
+        WeirdSwitchMachine::next_state(&state, &Toggle::FirstSwitch),
+        TwoSwitches {
             first_switch: false,
             second_switch: false,
-        });
+        }
+    );
 }
 
 #[test]
 fn sm_1_two_switches_second_goes_on() {
-    let state = TwoSwitches { first_switch: false, second_switch: false };
-
-    assert_eq!(WeirdSwitchMachine::next_state(&state, &Toggle::SecondSwitch), TwoSwitches {
+    let state = TwoSwitches {
         first_switch: false,
-        second_switch: true,
-    });
+        second_switch: false,
+    };
+
+    assert_eq!(
+        WeirdSwitchMachine::next_state(&state, &Toggle::SecondSwitch),
+        TwoSwitches {
+            first_switch: false,
+            second_switch: true,
+        }
+    );
 }
 
 #[test]
 fn sm_1_two_switches_second_goes_off() {
-    let state = TwoSwitches { first_switch: true, second_switch: true };
-
-    assert_eq!(WeirdSwitchMachine::next_state(&state, &Toggle::SecondSwitch), TwoSwitches {
+    let state = TwoSwitches {
         first_switch: true,
-        second_switch: false,
-    });
+        second_switch: true,
+    };
+
+    assert_eq!(
+        WeirdSwitchMachine::next_state(&state, &Toggle::SecondSwitch),
+        TwoSwitches {
+            first_switch: true,
+            second_switch: false,
+        }
+    );
 }

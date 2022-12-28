@@ -6,7 +6,7 @@ use super::StateMachine;
 
 /// The keys on the ATM keypad
 #[derive(Hash)]
-pub enum Key{
+pub enum Key {
     One,
     Two,
     Three,
@@ -40,7 +40,6 @@ pub struct Atm {
 }
 
 impl StateMachine for Atm {
-
     // Exercise: Fill in these associated types.
     type State = ();
     type Transition = ();
@@ -48,5 +47,4 @@ impl StateMachine for Atm {
     fn next_state(starting_state: &Self::State, t: &Self::Transition) -> () {
         todo!()
     }
-
 }

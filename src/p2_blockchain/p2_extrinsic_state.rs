@@ -3,7 +3,7 @@
 //! slightly abusing the header's extrinsics_root and state_root fields. As the names imply,
 //! these are typically used for Merkle roots of large data sets. But in our case we will use
 //! these fields to directly contain a single extrinsic per block, and a single piece of state.
-//! 
+//!
 //! In the coming parts of this tutorial, we will expand this to be more real-world like and
 //! use some real batching.
 
@@ -44,7 +44,7 @@ impl Header {
     /// In addition to the consecutive heights and linked hashes, we now need to consider our state.
     /// This blockchain will work as an adder. That means that the state starts at zero,
     /// and at each block we add the extrinsic to the state.
-    /// 
+    ///
     /// So in order for a block to verify, we must have that relationship between the extrinsic,
     /// the previous state, and the current state.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
@@ -59,11 +59,10 @@ fn build_valid_chain(n: u64) -> Vec<Header> {
     todo!("Exercise 4")
 }
 
-
 /// Build and return a chain with at least three headers.
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
-/// 
+///
 /// As we saw in the last unit, this is rivial when we construct arbitrary blocks.
 /// However, from outside this crate, it is not so trivial. Our interface for creating
 /// new blocks, `genesis()` and `child()`, makes it impossible to create arbitrary blocks.
@@ -78,12 +77,12 @@ fn build_an_invalid_chain() -> Vec<Header> {
 /// Both chains should individually be valid.
 /// They should have the same genesis header.
 /// They should not be the exact same chain.
-/// 
+///
 /// Here is an example of two such chains:
 ///            /-- 3 -- 4
 /// G -- 1 -- 2
 ///            \-- 3'-- 4'
-/// 
+///
 /// Side question: What is the fewest number of headers you could create to achieve this goal.
 fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     todo!("Exercise 6")
@@ -91,7 +90,6 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     // Exercise 7: After you have completed this task, look at how its test is written below.
     // There is a critical thinking question for you there.
 }
-
 
 // To run these tests: `cargo test part_1`
 #[test]
@@ -138,7 +136,7 @@ fn part_2_child_block_parent() {
 fn part_2_child_block_extrinsic() {
     let g = Header::genesis();
     let b1 = g.child(7);
-    assert_eq!(b1.extrinsic,  7);
+    assert_eq!(b1.extrinsic, 7);
 }
 
 #[test]
@@ -195,7 +193,7 @@ fn part_2_cant_verify_invalid_state() {
 #[test]
 fn part_2_verify_forked_chain() {
     let g = Header::genesis();
-    let(c1, c2) = build_forked_chain();
+    let (c1, c2) = build_forked_chain();
 
     // Both chains have the same valid genesis block
     assert_eq!(g, c1[0]);
@@ -210,6 +208,4 @@ fn part_2_verify_forked_chain() {
     // Is that enough? Is it possible that the two chains have the same final block,
     // but differ somewhere else?
     assert_ne!(c1.last(), c2.last());
-
-
 }

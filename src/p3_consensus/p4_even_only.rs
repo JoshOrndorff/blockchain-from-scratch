@@ -20,7 +20,10 @@ impl<Inner: Consensus> Consensus for EvenOnly<Inner> {
         todo!("Exercise 1")
     }
 
-    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(
+        parent_digest: &Self::Digest,
+        partial_header: Header<()>,
+    ) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }

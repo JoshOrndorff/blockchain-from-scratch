@@ -1,4 +1,3 @@
-
 //! In this module we design another multi-user currency system. This one is not based on
 //! accounts, but rather, is modelled after a paper cash system. The system tracks individual
 //! cash bills. Each bill has an amount and an owner, and can be spent in its entirety.
@@ -6,7 +5,6 @@
 
 use super::{StateMachine, User};
 use std::collections::HashSet;
-
 
 /// This state machine models a multi-user currency system. It tracks a set of bills in
 /// circulation, and updates that set when money is transferred.
@@ -33,10 +31,7 @@ pub struct State {
 /// The state transitions that users can make in a digital cash system
 pub enum CashTransaction {
     /// Mint a single new bill owned by the minter
-    Mint {
-        minter: User,
-        amount: u64,
-    },
+    Mint { minter: User, amount: u64 },
     /// Send some money from some users to other users. The money does not all need
     /// to come from the same user, and it does not all need to go to the same user.
     /// The total amount received must be less than or equal to the amount spent.
@@ -45,19 +40,17 @@ pub enum CashTransaction {
     Transfer {
         spends: Vec<Bill>,
         receives: Vec<Bill>,
-    }
+    },
 }
 
 /// We model this system as a state machine with two possible transitions
 impl StateMachine for DigitalCashSystem {
-
     type State = State;
     type Transition = CashTransaction;
 
-    fn next_state(starting_state: &State, t:&CashTransaction) -> State {
+    fn next_state(starting_state: &State, t: &CashTransaction) -> State {
         todo!("Exercise 1")
     }
 }
-
 
 // TODO lots of tests

@@ -70,21 +70,20 @@ impl Header {
     fn verify_sub_chain_odd(&self, chain: &[Header]) -> bool {
         todo!("Exercise 5")
     }
-
 }
 
 /// Build and return two different chains with a common prefix.
 /// They should have the same genesis header.
-/// 
+///
 /// Both chains should be valid according to the original validity rules.
 /// The first chain should be valid only according to the even rules.
 /// The second chain should be valid only according to the odd rules.
-/// 
+///
 /// Return your solutions as three vectors:
 /// 1. The common prefix including genesis
 /// 2. The even suffix (non-overlapping with the common prefix)
 /// 3. The odd suffix (non-overlapping with the common prefix)
-/// 
+///
 /// Here is an example of two such chains:
 ///            /-- 3 -- 4
 /// G -- 1 -- 2
@@ -220,11 +219,11 @@ fn part_3_cant_verify_invalid_pow() {
 
 #[test]
 fn part_3_even_chain_valid() {
-    let g = Header::genesis();     // 0
-    let b1 = g.child(2);  // 2
+    let g = Header::genesis(); // 0
+    let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
-    // It' all about the states, not the extrinsics. So once the state is even
-    // we need to keep it that way. So add evens
+                          // It' all about the states, not the extrinsics. So once the state is even
+                          // we need to keep it that way. So add evens
     let b3 = b2.child(1); // 4
     let b4 = b3.child(2); // 6
 
@@ -233,8 +232,8 @@ fn part_3_even_chain_valid() {
 
 #[test]
 fn part_3_even_chain_invalid_first_block_after_fork() {
-    let g = Header::genesis();     // 0
-    let b1 = g.child(2);  // 2
+    let g = Header::genesis(); // 0
+    let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(2); // 5 - invalid
     let b4 = b3.child(1); // 6
@@ -244,8 +243,8 @@ fn part_3_even_chain_invalid_first_block_after_fork() {
 
 #[test]
 fn part_3_even_chain_invalid_second_block_after_fork() {
-    let g = Header::genesis();     // 0
-    let b1 = g.child(2);  // 2
+    let g = Header::genesis(); // 0
+    let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(1); // 4
     let b4 = b3.child(1); // 5 - invalid
@@ -255,11 +254,11 @@ fn part_3_even_chain_invalid_second_block_after_fork() {
 
 #[test]
 fn part_3_odd_chain_valid() {
-    let g = Header::genesis();     // 0
-    let b1 = g.child(2);  // 2
+    let g = Header::genesis(); // 0
+    let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
-    // It' all about the states, not the extrinsics. So once the state is odd
-    // we need to keep it that way. So add evens
+                          // It' all about the states, not the extrinsics. So once the state is odd
+                          // we need to keep it that way. So add evens
     let b3 = b2.child(2); // 5
     let b4 = b3.child(2); // 7
 
@@ -268,8 +267,8 @@ fn part_3_odd_chain_valid() {
 
 #[test]
 fn part_3_odd_chain_invalid_first_block_after_fork() {
-    let g = Header::genesis();     // 0
-    let b1 = g.child(2);  // 2
+    let g = Header::genesis(); // 0
+    let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(1); // 4 - invalid
     let b4 = b3.child(1); // 5
@@ -279,8 +278,8 @@ fn part_3_odd_chain_invalid_first_block_after_fork() {
 
 #[test]
 fn part_3_odd_chain_invalid_second_block_after_fork() {
-    let g = Header::genesis();     // 0
-    let b1 = g.child(2);  // 2
+    let g = Header::genesis(); // 0
+    let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(2); // 5
     let b4 = b3.child(1); // 6 - invalid
@@ -290,11 +289,11 @@ fn part_3_odd_chain_invalid_second_block_after_fork() {
 
 #[test]
 fn part_3_verify_forked_chain() {
-    let(prefix, even, odd) = build_contentious_forked_chain();
+    let (prefix, even, odd) = build_contentious_forked_chain();
 
     let g = &prefix[0];
     let full_even_chain = [&prefix[1..], &even].concat();
-    let full_odd_chain  = [&prefix[1..], &odd].concat();    
+    let full_odd_chain = [&prefix[1..], &odd].concat();
 
     // Both chains are individually valid according to the original rules.
     assert!(g.verify_sub_chain(&full_even_chain[..]));

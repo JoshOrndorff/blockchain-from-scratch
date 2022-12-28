@@ -1,7 +1,7 @@
 //! We want to make the simplest possible blockchain to begin with. Just a hash-linked data structure.
-//! We leared from the lecture that it is actually the headers that are hash linked, so let's
+//! We learned from the lecture that it is actually the headers that are hash linked, so let's
 //! start with that.
-//! 
+//!
 
 use crate::hash;
 
@@ -49,14 +49,12 @@ fn build_valid_chain_length_5() -> Vec<Header> {
     todo!("Exercise 4")
 }
 
-
 /// Build and return a chain with at least three headers.
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
 fn build_an_invalid_chain() -> Vec<Header> {
     todo!("Exercise 5")
 }
-
 
 // To run these tests: `cargo test part_1`
 #[test]
@@ -104,7 +102,7 @@ fn part_1_verify_three_blocks() {
 #[test]
 fn part_1_cant_verify_invalid_height() {
     // This and following tests use the student's own verify function so as
-    // not to give away the solution to writing that function. 
+    // not to give away the solution to writing that function.
     let g = Header::genesis();
     let mut b1 = g.child();
     b1.height = 10;
@@ -115,14 +113,13 @@ fn part_1_cant_verify_invalid_height() {
 #[test]
 fn part_1_cant_verify_invalid_parent() {
     // This test chooses to use the student's own verify function so as
-    // not to give away the solution to writing that function. 
+    // not to give away the solution to writing that function.
     let g = Header::genesis();
     let mut b1 = g.child();
     b1.parent = 10;
 
     assert!(!g.verify_sub_chain(&vec![b1]))
 }
-
 
 #[test]
 fn part_1_verify_chain_length_five() {

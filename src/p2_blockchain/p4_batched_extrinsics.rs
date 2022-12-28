@@ -39,10 +39,10 @@ impl Header {
     }
 
     /// Verify a single child header.
-    /// 
+    ///
     /// This is a slightly different interface from the previous units. Rather
     /// than verify an entire subchain, this function checks a single header.
-    /// This is useful because checking the header can now be thought of as a 
+    /// This is useful because checking the header can now be thought of as a
     /// subtask of checking an entire block. So it doesn't make sense to check
     /// the entire header chain at once if the chain may be invalid at the second block.
     fn verify_child(&self, child: &Header) -> bool {
@@ -95,11 +95,11 @@ impl Block {
 
 /// Create an invalid child block of the given block. Although the child block is invalid,
 /// the header should be valid.
-/// 
+///
 /// Now that extrinsics are separate from headers, the logic for checking headers does
 /// not include actual transaction execution. That means it is possible for a header to be
 /// valid, but the block containing that header to be invalid.
-/// 
+///
 /// Notice that you do not need the entire parent block to do this. You only need the header.
 fn build_invald_child_block_with_valid_header(parent: &Header) -> Block {
     todo!("Exercise 8")
@@ -136,48 +136,57 @@ fn part_4_child_header() {
 
 #[test]
 fn part_4_child_block_empty() {
-	let b0 = Block::genesis();
-	let b1 = b0.child(vec![]);
+    let b0 = Block::genesis();
+    let b1 = b0.child(vec![]);
 
-	assert_eq!(b1, Block { header: b1.header.clone(), body: vec![] });
+    assert_eq!(
+        b1,
+        Block {
+            header: b1.header.clone(),
+            body: vec![]
+        }
+    );
 }
-
-
 
 #[test]
 fn part_4_verify_three_blocks() {
-	let g = Block::genesis();
-	let b1 = g.child(vec![1]);
-	let b2 = b1.child(vec![2]);
-	let chain = vec![g.clone(), b1, b2];
-	assert!(g.verify_sub_chain(&chain[1..]));
+    let g = Block::genesis();
+    let b1 = g.child(vec![1]);
+    let b2 = b1.child(vec![2]);
+    let chain = vec![g.clone(), b1, b2];
+    assert!(g.verify_sub_chain(&chain[1..]));
 }
 
 #[test]
 fn part_4_invalid_header_doesnt_check() {
-	let g = Header::genesis();
-	let h1 =
-		Header { parent: 0, height: 100, extrinsics_root: 0, state: 100, consensus_digest: 0 };
+    let g = Header::genesis();
+    let h1 = Header {
+        parent: 0,
+        height: 100,
+        extrinsics_root: 0,
+        state: 100,
+        consensus_digest: 0,
+    };
 
-	assert!(!g.verify_child(&h1));
+    assert!(!g.verify_child(&h1));
 }
 
 #[test]
 fn part_4_invalid_block_state_doesnt_check() {
-	let b0 = Block::genesis();
-	let mut b1 = b0.child(vec![1, 2, 3]);
-	b1.body = vec![];
+    let b0 = Block::genesis();
+    let mut b1 = b0.child(vec![1, 2, 3]);
+    b1.body = vec![];
 
-	assert!(!b0.verify_sub_chain(&vec![b1]));
+    assert!(!b0.verify_sub_chain(&vec![b1]));
 }
 
 #[test]
 fn part_4_block_with_invalid_header_doesnt_check() {
-	let b0 = Block::genesis();
-	let mut b1 = b0.child(vec![1, 2, 3]);
-	b1.header = Header::genesis();
+    let b0 = Block::genesis();
+    let mut b1 = b0.child(vec![1, 2, 3]);
+    b1.header = Header::genesis();
 
-	assert!(!b0.verify_sub_chain(&vec![b1]));
+    assert!(!b0.verify_sub_chain(&vec![b1]));
 }
 
 #[test]

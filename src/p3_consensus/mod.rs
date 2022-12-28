@@ -52,10 +52,13 @@ pub trait Consensus {
     /// the parent digest. For example, they may need to make sure that the slot number is always
     /// increasing. Therefore the parent digest is also passed here. Other consensus engines
     /// will not need to use the parent digest at all.
-    /// 
+    ///
     /// This function returns an Option because in some consensus engines, it may not be
     /// possible to construct a valid sealed block from the information given.
-    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>>;
+    fn seal(
+        parent_digest: &Self::Digest,
+        partial_header: Header<()>,
+    ) -> Option<Header<Self::Digest>>;
     // NOTE TO SELF. For slot-based PoA etc, just look at the system time. It's what real-world aura does
 
     /// Verify that all the given headers are valid according to the consensus rules.

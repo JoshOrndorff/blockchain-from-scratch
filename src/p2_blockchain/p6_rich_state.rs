@@ -1,16 +1,15 @@
 //! In this lesson we expand our simple notion of state, and show how the state is typically not stored in the header,
 //! Or indeed anywhere in the block at all.
-//! 
+//!
 //! To facilitate this exercise, consider that we want our blockchain to store not only the sum of the extrinsics,
 //! but also the product. You can also imagine many other calculations the chain may want to track (min, max, median, mean, etc).
-//! 
+//!
 //! As the state data gets large, it is no longer reasonable to store it in the blocks. But if the state isn't in the blocks,
 //! then how can we perform the state-related validation checks we previously performed? We use a state root to cryptographically
 //! link our heder to a complete state.
-//! 
+//!
 //! This notion of state may sound familiar from our previous work on state machines. Indeed this
 //! naming coincidence foreshadows a key abstraction that we will make in a coming chapter.
-
 
 type Hash = u64;
 
@@ -21,7 +20,6 @@ pub struct State {
     sum: u64,
     product: u64,
 }
-
 
 /// The header no longer contains the state directly, but rather, it contains a hash of
 /// the complete state. This hash will allow block verifiers to cryptographically confirm
@@ -51,7 +49,7 @@ impl Header {
     }
 
     /// Create and return a valid child header.
-    /// 
+    ///
     /// The state root is passed in similarly to how the complete state
     /// was in the previous section.
     fn child(&self, extrinsic_root: Hash, state_root: Hash) -> Self {
@@ -83,7 +81,7 @@ pub struct Block {
 /// In a real blockchain network, the client is typically responsible for
 /// storing some likely-to-be-needed states and have them ready for use in
 /// such operations.
-/// 
+///
 /// These methods also differ from last time because you will need to
 /// calculate state roots to pass to the header-level methods.
 impl Block {
@@ -99,7 +97,7 @@ impl Block {
 
     /// Verify that all the given blocks form a valid chain from this block to the tip.
     ///
-    /// This time we need to validate the initial block itself by confirming that we 
+    /// This time we need to validate the initial block itself by confirming that we
     /// have been given a valid pre-state. And we still need to verify the headers,
     /// execute all transactions, and check the final state.
     pub fn verify_sub_chain(&self, pre_state: &State, chain: &[Block]) -> bool {
@@ -109,20 +107,18 @@ impl Block {
 
 /// Create an invalid child block of the given block. The returned block should have an
 /// incorrect state root. Although the child block is invalid, the header should be valid.
-/// 
+///
 /// As we saw in the previous section, the logic for checking headers can no longer
 /// not include actual transaction execution, making it possible for invalid blocks
 /// to still contain valid headers. There are now two ways to accomplish this.
 /// 1. Block includes wrong extrinsics that do not match extrinsics root in header (from last time)
 /// 2. Block contains invalid state root that does not match the correct post state (new this time)
-/// 
+///
 /// As before, you do not need the entire parent block to do this. You only need the header.
 /// You do, however, now need a pre-state as you have throughout much of this section.
 fn build_invald_child_block_with_valid_header(parent: &Header, pre_state: &State) -> Block {
     todo!("Exercise 8")
 }
-
-
 
 //TODO tests.
 // when testing exercise 8, make sure the block has a bad state root specifically

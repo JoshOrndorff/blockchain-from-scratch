@@ -10,7 +10,6 @@ mod p6_open_ended;
 
 /// A state machine - Generic over the transition type
 pub trait StateMachine {
-
     /// The states that can be occupied by this machine
     type State;
 

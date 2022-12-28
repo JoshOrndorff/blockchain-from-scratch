@@ -1,6 +1,6 @@
 //! Proof of Work provides security to the blockchain by requiring block authors
 //! to expend a real-world scarce resource, namely energy, in order to author a valid block.
-//! 
+//!
 //! This is the same logic we implemented previously. Here we re-implement it in the
 //! generic consensus framework that we will use throughout the rest of the chapter.
 

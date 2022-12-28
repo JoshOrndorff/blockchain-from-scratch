@@ -35,7 +35,6 @@ pub enum ClothesAction {
 }
 
 impl StateMachine for ClothesMachine {
-
     type State = ClothesState;
     type Transition = ClothesAction;
 
@@ -45,61 +44,37 @@ impl StateMachine for ClothesMachine {
 }
 
 #[test]
-fn sm_2_wear_clean_clothes() {
-
-}
+fn sm_2_wear_clean_clothes() {}
 
 #[test]
-fn sm_2_wear_dirty_clothes() {
-
-}
+fn sm_2_wear_dirty_clothes() {}
 
 #[test]
-fn sm_2_wear_wet_clothes() {
-
-}
+fn sm_2_wear_wet_clothes() {}
 
 #[test]
-fn sm_2_wear_tattered_clothes() {
-
-}
+fn sm_2_wear_tattered_clothes() {}
 
 #[test]
-fn sm_2_wash_clean_clothes() {
-
-}
+fn sm_2_wash_clean_clothes() {}
 
 #[test]
-fn sm_2_wash_dirty_clothes() {
-
-}
+fn sm_2_wash_dirty_clothes() {}
 
 #[test]
-fn sm_2_wash_wet_clothes() {
-
-}
+fn sm_2_wash_wet_clothes() {}
 
 #[test]
-fn sm_2_wash_tattered_clothes() {
-
-}
+fn sm_2_wash_tattered_clothes() {}
 
 #[test]
-fn sm_2_dry_clean_clothes() {
-
-}
+fn sm_2_dry_clean_clothes() {}
 
 #[test]
-fn sm_2_dry_dirty_clothes() {
-
-}
+fn sm_2_dry_dirty_clothes() {}
 
 #[test]
-fn sm_2_dry_wet_clothes() {
-
-}
+fn sm_2_dry_wet_clothes() {}
 
 #[test]
-fn sm_2_dry_tattered_clothes() {
-
-}
+fn sm_2_dry_tattered_clothes() {}

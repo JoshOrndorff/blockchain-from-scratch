@@ -1,18 +1,17 @@
+use crate::p1_state_machine::StateMachine;
 /// Braindump (revise later):
-/// 
+///
 /// We have a blockchain data structure featuring:
 /// 1. A built in addition accumulator state machine
 /// 2. A built-in pow consensus mechanism
-/// 
+///
 /// We also have abstractions over:
 /// 1. State Machines
 /// 2. Consensus Engines
-/// 
+///
 /// Let's refactor our blockchain to take advantage of these two abstractions
 /// In doing so, we create a blockchain framework
-
 use crate::p3_consensus::{Consensus, Header};
-use crate::p1_state_machine::StateMachine;
 type Hash = u64;
 
 impl<Digest> Header<Digest> {
@@ -37,12 +36,12 @@ impl<Digest> Header<Digest> {
     }
 }
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Block<C:Consensus, SM: StateMachine> {
+struct Block<C: Consensus, SM: StateMachine> {
     header: Header<C::Digest>,
     body: Vec<SM::Transition>,
 }
 
-impl<C:Consensus, SM: StateMachine> Block<C, SM> {
+impl<C: Consensus, SM: StateMachine> Block<C, SM> {
     /// Returns a new valid genesis block. By convention this block has no extrinsics.
     pub fn genesis(genesis_state: &SM::State) -> Self {
         todo!("Exercise 5")
@@ -61,7 +60,10 @@ impl<C:Consensus, SM: StateMachine> Block<C, SM> {
 
 /// Create and return a block chain that is n blocks long starting from the given genesis state.
 /// The blocks should not contain any transactions.
-fn create_empty_chain<C: Consensus, SM:StateMachine>(n: u64, genesis_state: &SM::State) -> Vec<Block<C, SM>> {
+fn create_empty_chain<C: Consensus, SM: StateMachine>(
+    n: u64,
+    genesis_state: &SM::State,
+) -> Vec<Block<C, SM>> {
     todo!("Exercise 8")
 }
 

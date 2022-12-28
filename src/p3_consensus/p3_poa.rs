@@ -2,7 +2,7 @@
 //! is completely centralized. Let's achieve a middle ground by choosing a set of authorities
 //! who can sign blocks as opposed to a single dictator. This arrangement is typically known as
 //! Proof of Authority.
-//! 
+//!
 //! In public blockchains, Proof of Authority is often moved even further toward the decentralized
 //! and permissionless end of the spectrum by electing the authorities on-chain through an economic
 //! game in which users stake tokens. In such a configuration it is often known as "Proof of Stake".
@@ -23,7 +23,10 @@ impl Consensus for SimplePoa {
         todo!("Exercise 1")
     }
 
-    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(
+        parent_digest: &Self::Digest,
+        partial_header: Header<()>,
+    ) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }
@@ -42,7 +45,10 @@ impl Consensus for PoaRoundRobinByHeight {
         todo!("Exercise 3")
     }
 
-    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(
+        parent_digest: &Self::Digest,
+        partial_header: Header<()>,
+    ) -> Option<Header<Self::Digest>> {
         todo!("Exercise 4")
     }
 }
@@ -52,7 +58,7 @@ impl Consensus for PoaRoundRobinByHeight {
 ///   with no way to throttle them.
 /// * When using the round robin by height, their is throttling, but the dishonest authority can stop block production
 ///   entirely by refusing to ever sign a block at their height.
-/// 
+///
 /// A common PoA scheme that works around these weaknesses is to divide time into slots, and then do a round robin
 /// by slot instead of by height
 struct PoaRoundRobinBySlot {
@@ -75,8 +81,10 @@ impl Consensus for PoaRoundRobinBySlot {
         todo!("Exercise 5")
     }
 
-    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(
+        parent_digest: &Self::Digest,
+        partial_header: Header<()>,
+    ) -> Option<Header<Self::Digest>> {
         todo!("Exercise 6")
     }
-    
 }
