@@ -4,8 +4,8 @@
 
 mod p1_pow;
 mod p2_dictator;
-mod p3_even_only;
-mod p4_poa; // exercise: dictator is a special case of poa. Create dictator in terms of PoA.
+mod p3_poa; // exercise: dictator is a special case of poa. Create dictator in terms of PoA.
+mod p4_even_only;
 mod p5_interleave;
 mod p6_forking;
 
@@ -85,7 +85,7 @@ impl Consensus for () {
     }
 
     /// No real sealing is required. The partial header has all the necessary information
-    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Header<Self::Digest> {
+    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 3")
     }
 }

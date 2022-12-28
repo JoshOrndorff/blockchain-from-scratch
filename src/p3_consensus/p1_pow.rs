@@ -9,7 +9,7 @@ use super::{Consensus, Header};
 /// A Proof of Work consensus engine. This is the same consensus logic that we
 /// implemented in the previous chapter. Here we simply re-implement it in the
 /// consensus framework that will be used throughout this chapter.
-struct PoW {
+pub struct PoW {
     threshold: u64,
 }
 
@@ -27,4 +27,10 @@ impl Consensus for PoW {
     fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
+}
+
+/// Create a PoW consensus engine that has a difficulty threshold such that roughly 1 in 100 blocks
+/// with randomly drawn nonces will be valid. That is: the threshold should be u64::max_value() / 100.
+pub fn moderate_difficulty_pow() -> impl Consensus {
+    todo!("Exercise 3")
 }
