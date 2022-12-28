@@ -8,7 +8,7 @@
 
 use std::marker::PhantomData;
 
-use super::{Consensus, ConsensusAuthority};
+use super::{Consensus, ConsensusAuthority, Header};
 
 /// A Higher-order consensus engine that represents a change from one set of consensus rules (Before) to
 /// another set (After) at a specific block height
@@ -29,11 +29,11 @@ where
 {
     type Digest = D;
 
-    fn validate(parent_digest: &Self::Digest, header: &super::Header<Self::Digest>) -> bool {
+    fn validate(parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
-    fn seal(parent_digest: &Self::Digest, partial_header: super::Header<()>) -> super::Header<Self::Digest> {
+    fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }

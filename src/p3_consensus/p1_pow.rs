@@ -4,7 +4,7 @@
 //! This is the same logic we implemented previously. Here we re-implement it in the
 //! generic consensus framework that we will use throughout the rest of the chapter.
 
-use super::Consensus;
+use super::{Consensus, Header};
 
 /// A Proof of Work consensus engine. This is the same consensus logic that we
 /// implemented in the previous chapter. Here we simply re-implement it in the
@@ -18,13 +18,13 @@ impl Consensus for PoW {
 
     /// Check that the provided header's hash is below the required threshold.
     /// This does not rely on the parent digest at all.
-    fn validate(_: &Self::Digest, header: &super::Header<Self::Digest>) -> bool {
+    fn validate(_: &Self::Digest, header: &Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
     /// Mine a new PoW seal for the partial header provided.
     /// This does not rely on the parent digest at all.
-    fn seal(_: &Self::Digest, partial_header: super::Header<()>) -> super::Header<Self::Digest> {
+    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }

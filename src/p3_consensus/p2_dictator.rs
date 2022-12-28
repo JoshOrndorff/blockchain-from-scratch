@@ -5,7 +5,7 @@
 //! require a crypto library which and overcoming its own learning curve, plus they distract from the
 //! underlying consensus-related logic. Instead, we just use the `ConsensusAuthority` enum from the module root.
 
-use super::{Consensus, ConsensusAuthority};
+use super::{Consensus, ConsensusAuthority, Header};
 /// Dictator consensus is an identity-based consensus algorithm. It specifies a single dictator
 /// identity who is the only identity authorized to sign valid blocks. Any block signed by the
 /// dictator is valid (at the consensus level), and any block not signed by the dictator is invalid.
@@ -17,12 +17,12 @@ impl Consensus for DictatorConsensus {
     type Digest = ConsensusAuthority;
 
     /// Check that the header is signed by the dictator
-    fn validate(_: &Self::Digest, header: &super::Header<Self::Digest>) -> bool {
+    fn validate(_: &Self::Digest, header: &Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
     /// Sign the given partial header by the dictator
-    fn seal(_: &Self::Digest, partial_header: super::Header<()>) -> super::Header<Self::Digest> {
+    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }
