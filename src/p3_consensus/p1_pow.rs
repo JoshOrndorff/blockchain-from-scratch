@@ -16,14 +16,14 @@ struct PoW {
 impl Consensus for PoW {
     type Digest = u64;
 
-    // Check that the provided header's hash is below the required threshold.
-    // This does not rely on the parent digest at all.
+    /// Check that the provided header's hash is below the required threshold.
+    /// This does not rely on the parent digest at all.
     fn validate(_: &Self::Digest, header: &super::Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
-    // Mine a new PoW seal for the partial header provided.
-    // This does not rely on the parent digest at all.
+    /// Mine a new PoW seal for the partial header provided.
+    /// This does not rely on the parent digest at all.
     fn seal(_: &Self::Digest, partial_header: super::Header<()>) -> super::Header<Self::Digest> {
         todo!("Exercise 2")
     }

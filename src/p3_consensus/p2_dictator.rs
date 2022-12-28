@@ -16,11 +16,13 @@ struct DictatorConsensus {
 impl Consensus for DictatorConsensus {
     type Digest = ConsensusAuthority;
 
-    fn validate(parent_digest: &Self::Digest, header: &super::Header<Self::Digest>) -> bool {
+    /// Check that the header is signed by the dictator
+    fn validate(_: &Self::Digest, header: &super::Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
-    fn seal(parent_digest: &Self::Digest, partial_header: super::Header<()>) -> super::Header<Self::Digest> {
+    /// Sign the given partial header by the dictator
+    fn seal(_: &Self::Digest, partial_header: super::Header<()>) -> super::Header<Self::Digest> {
         todo!("Exercise 2")
     }
 }
