@@ -54,6 +54,15 @@ pub trait Consensus {
     fn seal(parent_digest: &Self::Digest, partial_header: Header<()>) -> Header<Self::Digest>;
     // NOTE TO SELF. For slot-based PoA etc, just look at the system time. It's what real-world aura does
 
+    /// Verify that all the given headers are valid according to the consensus rules.
+    ///
+    /// This method assumes that the parent_digest is valid, and verifies all the
+    /// following headers relative to the given parent digest. This is a provided method
+    /// on the trait, so it must be general enough to work for any specific consensus engine.
+    fn verify_sub_chain(parent_digest: &Self::Digest, chain: &[Header<Self::Digest>]) -> bool {
+        todo!("Exercise 1")
+    }
+
     /// A human-readable name for this engine. This may be used in user-facing
     /// programs error reporting. This is not in any way related to
     /// the correctness of the consensus logic.
