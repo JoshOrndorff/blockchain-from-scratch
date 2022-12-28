@@ -63,7 +63,7 @@ impl Header {
             tip = current;
         }
 
-        return true
+        return true;
     }
 }
 
@@ -80,7 +80,9 @@ fn build_valid_chain(len: u64) -> Vec<Header> {
     for _ in [1..len] {
         let next_block = chain
             .last()
-            .expect("Chain created with genesis block; no blocks removed; chain still not empty; qed")
+            .expect(
+                "Chain created with genesis block; no blocks removed; chain still not empty; qed",
+            )
             .child();
         chain.push(next_block)
     }

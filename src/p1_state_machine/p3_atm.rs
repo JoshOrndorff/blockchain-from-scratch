@@ -53,7 +53,6 @@ pub struct Atm {
 }
 
 impl StateMachine for Atm {
-
     // Notice that we are using the same type for the state as we are using for the machine this time.
     type State = Self;
     type Transition = Action;

@@ -116,7 +116,7 @@ impl Header {
 
         // Check the immediate child
         let next = &chain[0];
-        if !self.verify_child(next){
+        if !self.verify_child(next) {
             return false;
         }
 
@@ -144,10 +144,10 @@ impl Header {
             return false;
         }
 
-        if next.height > 2 && next.state %2 != 0 {
+        if next.height > 2 && next.state % 2 != 0 {
             return false;
         }
-        
+
         next.verify_sub_chain_even(&chain[1..])
     }
 
@@ -165,10 +165,10 @@ impl Header {
             return false;
         }
 
-        if next.height > 2 && next.state %2 != 1 {
+        if next.height > 2 && next.state % 2 != 1 {
             return false;
         }
-        
+
         next.verify_sub_chain_odd(&chain[1..])
     }
 }
@@ -224,11 +224,7 @@ fn build_contentious_forked_chain() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
     let b3_prime = b2.child(6);
     let b4_prime = b3_prime.child(8);
 
-    (
-        vec![g, b1, b2],
-        vec![b3, b4],
-        vec![b3_prime, b4_prime]
-    )
+    (vec![g, b1, b2], vec![b3, b4], vec![b3_prime, b4_prime])
 }
 
 // To run these tests: `cargo test part_3`

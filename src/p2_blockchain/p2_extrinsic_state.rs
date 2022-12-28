@@ -85,7 +85,7 @@ impl Header {
             tip = current;
         }
 
-        return true
+        return true;
     }
 }
 
@@ -98,7 +98,9 @@ fn build_valid_chain(n: u64) -> Vec<Header> {
     for _ in [1..n] {
         let next_block = chain
             .last()
-            .expect("Chain created with genesis block; no blocks removed; chain still not empty; qed")
+            .expect(
+                "Chain created with genesis block; no blocks removed; chain still not empty; qed",
+            )
             .child(0);
         chain.push(next_block)
     }
@@ -152,7 +154,7 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
 
     (
         vec![g.clone(), b1.clone(), b2.clone(), b3, b4],
-        vec![g, b1, b2, b3_prime, b4_prime]
+        vec![g, b1, b2, b3_prime, b4_prime],
     )
 
     // The fewest number of blocks possible is just two
