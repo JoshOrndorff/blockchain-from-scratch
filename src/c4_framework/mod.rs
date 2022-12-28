@@ -1,4 +1,3 @@
-use crate::p1_state_machine::StateMachine;
 /// Braindump (revise later):
 ///
 /// We have a blockchain data structure featuring:
@@ -11,7 +10,8 @@ use crate::p1_state_machine::StateMachine;
 ///
 /// Let's refactor our blockchain to take advantage of these two abstractions
 /// In doing so, we create a blockchain framework
-use crate::p3_consensus::{Consensus, Header};
+use crate::c1_state_machine::StateMachine;
+use crate::c3_consensus::{Consensus, Header};
 type Hash = u64;
 
 impl<Digest> Header<Digest> {
