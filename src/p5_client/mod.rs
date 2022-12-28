@@ -51,5 +51,7 @@ impl FullClient {
 
     fn submit_transaction(t: Transaction) -> Result<Hash, String> {todo!()}
 
-    fn 
+    //TODO maybe this method gets introduced later on and we see how it allows pruning
+    // the leaves and limits how far back we have to iterate for things like seeing which block is best
+    fn note_finality(b: Hash) { todo!()}
 }
