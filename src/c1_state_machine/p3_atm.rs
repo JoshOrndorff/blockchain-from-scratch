@@ -116,6 +116,6 @@ fn sm_3_try_to_withdraw_too_much() {
 }
 
 #[test]
-fn sm_3_withdraw_acceptable_amout() {
+fn sm_3_withdraw_acceptable_amount() {
     todo!()
 }
