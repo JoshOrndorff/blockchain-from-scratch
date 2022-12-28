@@ -1,0 +1,1 @@
+//! blocks must contain an even state root

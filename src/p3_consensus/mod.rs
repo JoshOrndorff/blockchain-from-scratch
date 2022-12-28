@@ -7,18 +7,19 @@ mod p2_dictator;
 mod p3_even_only;
 mod p4_poa; // exercise: dictator is a special case of poa. Create dictator in terms of PoA.
 mod p5_interleave;
+mod p6_forking;
 
 type Hash = u64;
 
 /// A Block Header similar to prior chapters of this tutorial.
-/// 
+///
 /// Different consensus engines, require different information in the consensus digest.
 /// Therefore, the header is now generic over the digest type.
-/// 
+///
 /// Consensus engines do not know or care about the blockchain's state machine,
 /// which means they can operate entirely at the header level. They never need to touch
 /// the complete blocks.
-pub struct Header<Digest>{
+pub struct Header<Digest> {
     parent: Hash,
     height: u64,
     state_root: Hash,
@@ -26,18 +27,17 @@ pub struct Header<Digest>{
     consensus_digest: Digest,
 }
 /// A Consensus Engine. Responsible for Sealing blocks and verifying their seals
-/// 
+///
 /// Consensus exists independently of execution logic, and therefore operates
 /// only on the block headers.
 pub trait Consensus {
-
     type Digest: Clone + core::fmt::Debug + Eq + PartialEq + std::hash::Hash;
-    
+
     /// Validates that a header is valid according to consensus rules. This
     /// function checks ONLY consensus-related aspects such as the signature
     /// or the attached work proof. It does not check ancestry, execution, or
     /// anything else.
-    /// 
+    ///
     /// Some consensus engines need to check a relationship between the current
     /// digest and the parent digest. For example, they may need to check that the
     /// slot number is increasing. Therefore the parent digest is also passed
@@ -46,8 +46,8 @@ pub trait Consensus {
 
     /// Takes a partial header that does not yet have a consensus digest attached. Returns
     /// a new header including the consensus digest that is valid according to the consensus rules.
-    /// 
-    /// Some consensus engines need to enforce a relationship between the current digest and 
+    ///
+    /// Some consensus engines need to enforce a relationship between the current digest and
     /// the parent digest. For example, they may need to make sure that the slot number is always
     /// increasing. Therefore the parent digest is also passed here. Other consensus engines
     /// will not need to use the parent digest at all
