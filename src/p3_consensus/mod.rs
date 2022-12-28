@@ -64,6 +64,7 @@ pub trait Consensus {
 
 /// A set of consensus authority accounts that can be used in
 /// identity-based consensus algorithms.
+#[derive(Hash, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum ConsensusAuthority {
     Alice,
     Bob,
