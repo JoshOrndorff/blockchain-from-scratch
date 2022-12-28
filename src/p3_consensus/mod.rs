@@ -19,6 +19,7 @@ type Hash = u64;
 /// Consensus engines do not know or care about the blockchain's state machine,
 /// which means they can operate entirely at the header level. They never need to touch
 /// the complete blocks.
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Header<Digest> {
     parent: Hash,
     height: u64,

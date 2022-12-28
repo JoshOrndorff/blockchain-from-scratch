@@ -11,20 +11,11 @@
 /// Let's refactor our blockchain to take advantage of these two abstractions
 /// In doing so, we create a blockchain framework
 
-use crate::p3_consensus::{PreData, Consensus};
+use crate::p3_consensus::{Consensus, Header};
 use crate::p1_state_machine::StateMachine;
 type Hash = u64;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Header<C: Consensus> {
-    parent: Hash,
-    height: u64,
-    consensus_digest: C::Digest,
-    state_root: Hash,
-    extrinsics_root: Hash,
-}
-
-impl<C: Consensus> Header<C> {
+impl<Digest> Header<Digest> {
     /// Returns a new valid genesis header.
     fn genesis(genesis_state_root: Hash) -> Self {
         todo!("Exercise 1")
@@ -47,7 +38,7 @@ impl<C: Consensus> Header<C> {
 }
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 struct Block<C:Consensus, SM: StateMachine> {
-    header: Header<C>,
+    header: Header<C::Digest>,
     body: Vec<SM::Transition>,
 }
 
