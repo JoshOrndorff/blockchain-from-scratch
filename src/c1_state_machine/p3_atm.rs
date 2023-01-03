@@ -62,21 +62,6 @@ impl StateMachine for Atm {
     }
 }
 
-fn make_pin(keystroke: Vec<Key>) -> u64 {
-    keystroke
-        .iter()
-        .map(|x| match x {
-            Key::One => "1",
-            Key::Two => "2",
-            Key::Three => "3",
-            Key::Four => "4",
-            _ => panic!("dev fault"),
-        })
-        .collect::<String>()
-        .parse::<u64>()
-        .unwrap()
-}
-
 #[test]
 fn sm_3_simple_swipe_card() {
     let start = Atm {
