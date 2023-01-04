@@ -3,6 +3,8 @@
 //! entered the wrong pin.
 
 use super::StateMachine;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 /// The keys on the ATM keypad
 #[derive(Hash, Debug, PartialEq, Eq, Clone)]
@@ -94,6 +96,20 @@ fn sm_3_swipe_card_again_part_way_through() {
     };
 
     assert_eq!(end, expected);
+
+    let start = Atm {
+        cash_inside: 10,
+        expected_pin_hash: Auth::Authenticating(1234),
+        keystroke_register: vec![Key::One, Key::Three],
+    };
+    let end = Atm::next_state(&start, &Action::SwipeCard(1234));
+    let expected = Atm {
+        cash_inside: 10,
+        expected_pin_hash: Auth::Authenticating(1234),
+        keystroke_register: vec![Key::One, Key::Three],
+    };
+
+    assert_eq!(end, expected);
 }
 
 #[test]
@@ -146,9 +162,15 @@ fn sm_3_enter_single_digit_of_pin() {
 
 #[test]
 fn sm_3_enter_wrong_pin() {
+    // Create hash of pin
+    let pin = vec![Key::One, Key::Two, Key::Three, Key::Four];
+    let mut hasher = DefaultHasher::new();
+    pin.hash(&mut hasher);
+    let pin_hash = hasher.finish();
+
     let start = Atm {
         cash_inside: 10,
-        expected_pin_hash: Auth::Authenticating(1234),
+        expected_pin_hash: Auth::Authenticating(pin_hash),
         keystroke_register: vec![Key::Three, Key::Three, Key::Three, Key::Three],
     };
     let end = Atm::next_state(&start, &Action::PressKey(Key::Enter));
@@ -163,9 +185,15 @@ fn sm_3_enter_wrong_pin() {
 
 #[test]
 fn sm_3_enter_correct_pin() {
+    // Create hash of pin
+    let pin = vec![Key::One, Key::Two, Key::Three, Key::Four];
+    let mut hasher = DefaultHasher::new();
+    pin.hash(&mut hasher);
+    let pin_hash = hasher.finish();
+
     let start = Atm {
         cash_inside: 10,
-        expected_pin_hash: Auth::Authenticating(1234),
+        expected_pin_hash: Auth::Authenticating(pin_hash),
         keystroke_register: vec![Key::One, Key::Two, Key::Three, Key::Four],
     };
     let end = Atm::next_state(&start, &Action::PressKey(Key::Enter));
