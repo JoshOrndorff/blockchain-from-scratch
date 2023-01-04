@@ -3,8 +3,6 @@
 //! entered the wrong pin.
 
 use super::StateMachine;
-use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
 
 /// The keys on the ATM keypad
 #[derive(Hash, Debug, PartialEq, Eq, Clone)]
@@ -164,9 +162,7 @@ fn sm_3_enter_single_digit_of_pin() {
 fn sm_3_enter_wrong_pin() {
     // Create hash of pin
     let pin = vec![Key::One, Key::Two, Key::Three, Key::Four];
-    let mut hasher = DefaultHasher::new();
-    pin.hash(&mut hasher);
-    let pin_hash = hasher.finish();
+    let pin_hash = crate::hash(&pin);
 
     let start = Atm {
         cash_inside: 10,
@@ -187,9 +183,7 @@ fn sm_3_enter_wrong_pin() {
 fn sm_3_enter_correct_pin() {
     // Create hash of pin
     let pin = vec![Key::One, Key::Two, Key::Three, Key::Four];
-    let mut hasher = DefaultHasher::new();
-    pin.hash(&mut hasher);
-    let pin_hash = hasher.finish();
+    let pin_hash = crate::hash(&pin);
 
     let start = Atm {
         cash_inside: 10,
