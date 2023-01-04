@@ -40,7 +40,7 @@ impl StateMachine for ClothesMachine {
     type Transition = ClothesAction;
 
     fn next_state(starting_state: &ClothesState, t: &ClothesAction) -> ClothesState {
-        todo!("Implement this state machine.")
+        todo!("Exercise 3")
     }
 }
 
