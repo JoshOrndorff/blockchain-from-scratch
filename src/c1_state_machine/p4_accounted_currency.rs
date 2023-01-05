@@ -276,23 +276,10 @@ fn sm_4_receiver_not_registered() {
     let expected = HashMap::from([(User::Alice, 100), (User::Bob, 50)]);
 
     assert_eq!(end, expected);
-
-    let start = HashMap::from([(User::Alice, 100), (User::Bob, 50)]);
-    let end1 = AccountedCurrency::next_state(
-        &start,
-        &AccountingTransaction::Transfer {
-            sender: User::Bob,
-            receiver: User::Charlie,
-            amount: 50,
-        },
-    );
-    let expected1 = HashMap::from([(User::Alice, 100), (User::Bob, 50)]);
-
-    assert_eq!(end1, expected1);
 }
 
 #[test]
-fn sm_4_transfer_sender_to_empty_balance() {
+fn sm_4_sender_to_empty_balance() {
     let start = HashMap::from([(User::Alice, 100), (User::Bob, 50)]);
     let end = AccountedCurrency::next_state(
         &start,
@@ -303,6 +290,22 @@ fn sm_4_transfer_sender_to_empty_balance() {
         },
     );
     let expected = HashMap::from([(User::Alice, 150)]);
+
+    assert_eq!(end, expected);
+}
+
+#[test]
+fn sm_4_sender_not_to_empty_balance() {
+    let start = HashMap::from([(User::Alice, 100), (User::Bob, 50)]);
+    let end = AccountedCurrency::next_state(
+        &start,
+        &AccountingTransaction::Transfer {
+            sender: User::Bob,
+            receiver: User::Charlie,
+            amount: 50,
+        },
+    );
+    let expected = HashMap::from([(User::Alice, 100), (User::Bob, 50)]);
 
     assert_eq!(end, expected);
 }
