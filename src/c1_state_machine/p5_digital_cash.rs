@@ -96,8 +96,7 @@ impl StateMachine for DigitalCashSystem {
     type Transition = CashTransaction;
 
     fn next_state(starting_state: &Self::State, t: &Self::Transition) -> Self::State {
-        // todo!("Exercise 1")
-        Self::State::new()
+        todo!("Exercise 1")
     }
 }
 
