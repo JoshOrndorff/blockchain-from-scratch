@@ -191,3 +191,25 @@ fn spending_more_than_bill_fails() {
     ]);
     assert_eq!(end, expected);
 }
+
+#[test]
+fn spending_non_existent_bill_fails() {
+    let start = State::from([
+        Bill { owner: User::Alice, amount: 32, serial: 0 },
+    ]);
+    let end = DigitalCashSystem::next_state(
+        &start,
+        &CashTransaction::Transfer {
+            spends: vec![
+                Bill { owner: User::Bob, amount: 1000, serial: 32 },
+            ],
+            receives: vec![
+                Bill { owner: User::Bob, amount: 1000, serial: 33 }
+            ]
+        }
+    );
+    let expected = State::from([
+        Bill { owner: User::Alice, amount: 32, serial: 0 },
+    ]);
+    assert_eq!(end, expected);
+}
