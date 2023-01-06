@@ -28,6 +28,7 @@ pub trait StateMachine {
 }
 
 /// A set of play users for experimenting with the multi-user state machines
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum User {
     Alice,
     Bob,
