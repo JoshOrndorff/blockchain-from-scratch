@@ -25,7 +25,7 @@ pub struct Bill {
 #[derive(Debug, Eq, PartialEq)]
 pub struct State {
     /// The set of currently circulating bills
-    pub bills: HashSet<Bill>,
+    bills: HashSet<Bill>,
     /// The next serial number to use when a bill is created.
     next_serial: u64,
 }
