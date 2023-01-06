@@ -100,8 +100,6 @@ impl StateMachine for DigitalCashSystem {
     }
 }
 
-// TODO lots of tests
-
 #[test]
 fn mint_new_cash() {
     let start = State::new();
