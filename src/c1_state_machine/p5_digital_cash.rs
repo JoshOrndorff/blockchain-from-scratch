@@ -13,6 +13,7 @@ pub struct DigitalCashSystem;
 /// A single bill in the digital cash system. Each bill has an owner who is allowed to spent
 /// it and an amount that it is worth. It also has serial number to ensure that each bill
 /// is unique.
+#[derive(Debug, Eq, PartialEq, Hash)]
 pub struct Bill {
     owner: User,
     amount: u64,
@@ -21,11 +22,59 @@ pub struct Bill {
 
 /// The State of a digital cash system. Primarily just the set of currently circulating bills.,
 /// but also a counter for the next serial number.
+#[derive(Debug, Eq, PartialEq)]
 pub struct State {
     /// The set of currently circulating bills
-    bills: HashSet<Bill>,
+    pub bills: HashSet<Bill>,
     /// The next serial number to use when a bill is created.
     next_serial: u64,
+}
+
+impl State {
+    pub fn new() -> Self {
+        State { bills: HashSet::<Bill>::new(), next_serial: 0 }
+    }
+
+    pub fn next_serial(&self) -> u64 {
+        self.next_serial + 1
+    }
+
+    fn increment_serial(&mut self) {
+        self.next_serial += 1
+    }
+
+    fn add_bill(&mut self, elem: Bill) {
+        self.bills.insert(elem);
+        self.increment_serial()
+    }
+}
+
+
+
+impl FromIterator<Bill> for State {
+    fn from_iter<I: IntoIterator<Item = Bill>>(iter: I) -> Self {
+        let mut state = State::new();
+
+        for i in iter {
+            state.add_bill(i)
+        }
+        state
+    }
+}
+
+impl<const N: usize> From<[Bill; N]> for State {
+    fn from(value : [Bill; N]) -> Self {
+        State::from_iter(value)
+    }
+}
+
+#[test]
+fn from_works() {
+    let state = State::from([
+        Bill { owner: User::Alice, amount: 20, serial: 0 },
+        Bill { owner: User::Bob, amount: 40, serial: 1}]
+    );
+    println!("my State:: {:?}", state);
 }
 
 /// The state transitions that users can make in a digital cash system
@@ -48,9 +97,71 @@ impl StateMachine for DigitalCashSystem {
     type State = State;
     type Transition = CashTransaction;
 
-    fn next_state(starting_state: &State, t: &CashTransaction) -> State {
-        todo!("Exercise 1")
+    fn next_state(starting_state: &Self::State, t: &Self::Transition) -> Self::State {
+        // todo!("Exercise 1")
+        Self::State::new()
     }
 }
 
 // TODO lots of tests
+
+#[test]
+fn mint_new_cash() {
+    let start = State::new();
+    let end = DigitalCashSystem::next_state(
+        &start,
+        &CashTransaction::Mint {
+            minter: User::Alice,
+            amount: 20u64,
+        }
+    );
+
+    let expected_bill = Bill { owner: User::Alice, amount: 20u64, serial: 0};
+    let expected = State {
+        bills: <HashSet<Bill>>::from([expected_bill]),
+        next_serial: 1
+    };
+    assert_eq!(end, expected);
+}
+
+#[test]
+fn spending_more_than_bill_fails() {
+    let start = State::from([
+        Bill { owner: User::Alice, amount: 20, serial: 0 }
+    ]);
+    let end = DigitalCashSystem::next_state(
+        &start,
+        &CashTransaction::Transfer {
+            spends: vec![Bill { owner: User::Alice, amount: 40, serial: 0  }],
+            receives: vec![Bill { owner: User::Bob, amount: 40, serial: start.next_serial() }]
+        }
+    );
+    let expected = State::from([
+        Bill { owner: User::Alice, amount: 20, serial: 0 }
+    ]);
+    assert_eq!(start, expected);
+}
+
+#[test]
+fn spending_same_bill_fails() {
+    let mut start = State::from([
+        Bill { owner: User::Alice, amount: 40, serial: 0 }
+    ]);
+    let end = DigitalCashSystem::next_state(
+        &start,
+        &CashTransaction::Transfer {
+            spends: vec![
+                Bill { owner: User::Alice, amount: 40, serial: 0 },
+                Bill { owner: User::Alice, amount: 40, serial: 0 }
+            ],
+            receives: vec![
+                Bill { owner: User::Bob, amount: 20, serial: start.next_serial() },
+                Bill { owner: User::Bob, amount: 20, serial: start.next_serial() + 1 }
+            ],
+        }
+    );
+    let expected = State::from([
+        Bill { owner: User::Alice, amount: 20, serial: 0 }
+    ]);
+    assert_eq!(start, expected);
+}
