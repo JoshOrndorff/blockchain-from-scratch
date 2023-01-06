@@ -49,8 +49,6 @@ impl State {
     }
 }
 
-
-
 impl FromIterator<Bill> for State {
     fn from_iter<I: IntoIterator<Item = Bill>>(iter: I) -> Self {
         let mut state = State::new();
@@ -72,8 +70,8 @@ impl<const N: usize> From<[Bill; N]> for State {
 fn from_works() {
     let state = State::from([
         Bill { owner: User::Alice, amount: 20, serial: 0 },
-        Bill { owner: User::Bob, amount: 40, serial: 1}]
-    );
+        Bill { owner: User::Bob, amount: 40, serial: 1}
+    ]);
     println!("my State:: {:?}", state);
 }
 
@@ -112,20 +110,18 @@ fn mint_new_cash() {
         &start,
         &CashTransaction::Mint {
             minter: User::Alice,
-            amount: 20u64,
+            amount: 20,
         }
     );
 
-    let expected_bill = Bill { owner: User::Alice, amount: 20u64, serial: 0};
-    let expected = State {
-        bills: <HashSet<Bill>>::from([expected_bill]),
-        next_serial: 1
-    };
+    let expected = State::from([
+        Bill { owner: User::Alice, amount: 20, serial: 0 }
+    ]);
     assert_eq!(end, expected);
 }
 
 #[test]
-fn spending_more_than_bill_fails() {
+fn spending_bill_with_incorrect_amount_fails() {
     let start = State::from([
         Bill { owner: User::Alice, amount: 20, serial: 0 }
     ]);
@@ -139,12 +135,12 @@ fn spending_more_than_bill_fails() {
     let expected = State::from([
         Bill { owner: User::Alice, amount: 20, serial: 0 }
     ]);
-    assert_eq!(start, expected);
+    assert_eq!(end, expected);
 }
 
 #[test]
 fn spending_same_bill_fails() {
-    let mut start = State::from([
+    let start = State::from([
         Bill { owner: User::Alice, amount: 40, serial: 0 }
     ]);
     let end = DigitalCashSystem::next_state(
@@ -156,12 +152,42 @@ fn spending_same_bill_fails() {
             ],
             receives: vec![
                 Bill { owner: User::Bob, amount: 20, serial: start.next_serial() },
-                Bill { owner: User::Bob, amount: 20, serial: start.next_serial() + 1 }
+                Bill { owner: User::Bob, amount: 20, serial: start.next_serial() + 1 },
+                Bill { owner: User::Alice, amount: 40, serial: start.next_serial() + 2 }
             ],
         }
     );
     let expected = State::from([
-        Bill { owner: User::Alice, amount: 20, serial: 0 }
+        Bill { owner: User::Bob, amount: 20, serial: 1 },
+        Bill { owner: User::Bob, amount: 20, serial: 2 }
     ]);
-    assert_eq!(start, expected);
+    assert_eq!(end, expected);
+}
+
+#[test]
+fn spending_more_than_bill_fails() {
+    let start = State::from([
+        Bill { owner: User::Alice, amount: 40, serial: 0 },
+        Bill { owner: User::Charlie, amount: 42, serial: 1 }
+    ]);
+    let end = DigitalCashSystem::next_state(
+        &start,
+        &CashTransaction::Transfer {
+            spends: vec![
+                Bill { owner: User::Alice, amount: 40, serial: 0 },
+                Bill { owner: User::Charlie, amount: 42, serial: 1 }
+            ],
+            receives: vec![
+                Bill { owner: User::Bob, amount: 20, serial: 2 },
+                Bill { owner: User::Bob, amount: 20, serial: 3 },
+                Bill { owner: User::Alice, amount: 52, serial: 4 }
+            ],
+        }
+    );
+    let expected = State::from([
+        Bill { owner: User::Charlie, amount: 42, serial: 1 },
+        Bill { owner: User::Bob, amount: 20, serial: 2 },
+        Bill { owner: User::Bob, amount: 20, serial: 3 }
+    ]);
+    assert_eq!(end, expected);
 }
