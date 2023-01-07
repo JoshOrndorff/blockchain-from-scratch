@@ -1,5 +1,5 @@
 //! We begin our hands on exploration of state machines with two very simple examples.
-//! In these examples, we use actualy switch boards as the state machine. The state is,
+//! In these examples, we use actually switch boards as the state machine. The state is,
 //! well, just the state of the switches.
 
 use super::StateMachine;
@@ -91,7 +91,7 @@ fn sm_1_two_switches_first_goes_off_second_was_on() {
 
 #[test]
 fn sm_1_two_switches_first_goes_off_second_was_off() {
-    // This is adjascent to the special case. We have to make sure the second one stays off.
+    // This is adjacent to the special case. We have to make sure the second one stays off.
     let state = TwoSwitches {
         first_switch: true,
         second_switch: false,
