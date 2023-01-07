@@ -1,4 +1,4 @@
-/// Braindump (revise later):
+/// Brain dump (TODO revise later):
 ///
 /// We have a blockchain data structure featuring:
 /// 1. A built in addition accumulator state machine

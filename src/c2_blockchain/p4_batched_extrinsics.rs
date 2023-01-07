@@ -41,7 +41,7 @@ impl Header {
     /// Verify a single child header.
     ///
     /// This is a slightly different interface from the previous units. Rather
-    /// than verify an entire subchain, this function checks a single header.
+    /// than verify an entire sub-chain, this function checks a single header.
     /// This is useful because checking the header can now be thought of as a
     /// subtask of checking an entire block. So it doesn't make sense to check
     /// the entire header chain at once if the chain may be invalid at the second block.
@@ -101,7 +101,7 @@ impl Block {
 /// valid, but the block containing that header to be invalid.
 ///
 /// Notice that you do not need the entire parent block to do this. You only need the header.
-fn build_invald_child_block_with_valid_header(parent: &Header) -> Block {
+fn build_invalid_child_block_with_valid_header(parent: &Header) -> Block {
     todo!("Exercise 8")
 }
 
@@ -158,7 +158,7 @@ fn part_4_verify_three_blocks() {
 }
 
 #[test]
-fn part_4_invalid_header_doesnt_check() {
+fn part_4_invalid_header_doesn't_check() {
     let g = Header::genesis();
     let h1 = Header {
         parent: 0,
@@ -172,7 +172,7 @@ fn part_4_invalid_header_doesnt_check() {
 }
 
 #[test]
-fn part_4_invalid_block_state_doesnt_check() {
+fn part_4_invalid_block_state_does_not_check() {
     let b0 = Block::genesis();
     let mut b1 = b0.child(vec![1, 2, 3]);
     b1.body = vec![];
@@ -181,7 +181,7 @@ fn part_4_invalid_block_state_doesnt_check() {
 }
 
 #[test]
-fn part_4_block_with_invalid_header_doesnt_check() {
+fn part_4_block_with_invalid_header_does_not_check() {
     let b0 = Block::genesis();
     let mut b1 = b0.child(vec![1, 2, 3]);
     b1.header = Header::genesis();
@@ -194,7 +194,7 @@ fn part_4_student_invalid_block_really_is_invalid() {
     let gb = Block::genesis();
     let gh = &gb.header;
 
-    let b1 = build_invald_child_block_with_valid_header(gh);
+    let b1 = build_invalid_child_block_with_valid_header(gh);
     let h1 = &b1.header;
 
     // Make sure that the header is valid according to header rules.
