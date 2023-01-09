@@ -116,7 +116,7 @@ impl Block {
 ///
 /// As before, you do not need the entire parent block to do this. You only need the header.
 /// You do, however, now need a pre-state as you have throughout much of this section.
-fn build_invald_child_block_with_valid_header(parent: &Header, pre_state: &State) -> Block {
+fn build_invalid_child_block_with_valid_header(parent: &Header, pre_state: &State) -> Block {
     todo!("Exercise 8")
 }
 

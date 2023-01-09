@@ -1,4 +1,4 @@
-//! This module is all about modeling phenomina and systems as state machines. We begin with a few simple
+//! This module is all about modeling phenomena and systems as state machines. We begin with a few simple
 //! examples, and then proceed to build bigger and more complex state machines all implementing the same simple interface.
 
 mod p1_switches;
@@ -28,6 +28,7 @@ pub trait StateMachine {
 }
 
 /// A set of play users for experimenting with the multi-user state machines
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum User {
     Alice,
     Bob,
