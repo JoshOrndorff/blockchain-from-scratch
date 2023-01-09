@@ -1,6 +1,6 @@
-//! Until now we have focused primarily on the blockchain as a datastructure. We've created instances of the
-//! datastructure, practiced validating it, and deciding on a canonical branch when forks occur and the
-//! datastructure becomes more like a tree than a list.
+//! Until now we have focused primarily on the blockchain as a data structure. We've created instances of the
+//! data structure, practiced validating it, and deciding on a canonical branch when forks occur and the
+//! data structure becomes more like a tree than a list.
 //! 
 //! Now we turn 
 //!
