@@ -158,7 +158,7 @@ fn part_4_verify_three_blocks() {
 }
 
 #[test]
-fn part_4_invalid_header_doesn't_check() {
+fn part_4_invalid_header_does_not_check() {
     let g = Header::genesis();
     let h1 = Header {
         parent: 0,
