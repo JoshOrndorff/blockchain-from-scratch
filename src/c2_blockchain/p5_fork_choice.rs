@@ -182,7 +182,7 @@ fn part_5_heaviest_chain() {
 
     let h_b1 = loop {
         let header = g.child(hash(&[i]), i);
-        // Extrinsics root hash must be higher than threshold (more work done)
+        // Extrinsics root hash must be lower than threshold (more work done)
         if hash(&header) < THRESHOLD {
             break header;
         }
