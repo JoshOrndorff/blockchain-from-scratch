@@ -63,7 +63,7 @@ fn build_valid_chain(n: u64) -> Vec<Header> {
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
 ///
-/// As we saw in the last unit, this is rival when we construct arbitrary blocks.
+/// As we saw in the last unit, this is trivial when we construct arbitrary blocks.
 /// However, from outside this crate, it is not so trivial. Our interface for creating
 /// new blocks, `genesis()` and `child()`, makes it impossible to create arbitrary blocks.
 ///
