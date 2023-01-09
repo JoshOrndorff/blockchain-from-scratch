@@ -42,7 +42,64 @@ impl StateMachine for AccountedCurrency {
     type Transition = AccountingTransaction;
 
     fn next_state(starting_state: &Balances, t: &AccountingTransaction) -> Balances {
-        todo!("Exercise 1")
+        use AccountingTransaction::*;
+
+        let mut new_state = starting_state.clone();
+        match t {
+            Mint { minter, amount } => {
+                if *amount == 0 {
+                    return new_state;
+                }
+                new_state
+                    .entry(*minter)
+                    .and_modify(|balance| *balance += amount)
+                    .or_insert(*amount);
+            }
+            Burn { burner, amount } => {
+                // When burning, if the burn amount exceeds the available balance, we burn as much as possible
+
+                let Some(old_amount) = starting_state.get(burner) else {
+                    // If the burner doesn't even have an account, there is nothing to do
+                    return new_state;
+                };
+
+                let new_amount = old_amount.saturating_sub(*amount);
+
+                if new_amount == 0 {
+                    new_state.remove(burner);
+                } else {
+                    new_state.insert(*burner, new_amount);
+                }
+            }
+            Transfer {
+                sender,
+                receiver,
+                amount,
+            } => {
+                let Some(sender_original_balance) = starting_state.get(sender) else {
+                    return new_state;
+                };
+
+                if sender_original_balance < amount {
+                    return new_state;
+                }
+
+                if sender_original_balance > amount {
+                    new_state
+                        .entry(*sender)
+                        .and_modify(|balance| *balance -= amount);
+                } else if sender_original_balance == amount {
+                    new_state.remove(sender);
+                }
+
+                new_state
+                    .entry(*receiver)
+                    .and_modify(|balance| *balance += amount)
+                    .or_insert(*amount);
+            }
+        }
+
+        new_state
     }
 }
 
