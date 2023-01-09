@@ -13,7 +13,7 @@ use crate::hash;
 // so the code is slightly more readable.
 type Hash = u64;
 
-/// The header is no expanded to contain an extrinsic and a state. Note that we are not
+/// The header is now expanded to contain an extrinsic and a state. Note that we are not
 /// using roots yet, but rather directly embedding some minimal extrinsic and state info
 /// into the header.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -26,7 +26,7 @@ pub struct Header {
     consensus_digest: (),
 }
 
-// Here are the methods for creating new hedaer and verifying headers.
+// Here are the methods for creating new header and verifying headers.
 // It is your job to write them.
 impl Header {
     /// Returns a new valid genesis header.
@@ -63,7 +63,7 @@ fn build_valid_chain(n: u64) -> Vec<Header> {
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
 ///
-/// As we saw in the last unit, this is rivial when we construct arbitrary blocks.
+/// As we saw in the last unit, this is trivial when we construct arbitrary blocks.
 /// However, from outside this crate, it is not so trivial. Our interface for creating
 /// new blocks, `genesis()` and `child()`, makes it impossible to create arbitrary blocks.
 ///
@@ -91,7 +91,7 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     // There is a critical thinking question for you there.
 }
 
-// To run these tests: `cargo test part_1`
+// To run these tests: `cargo test part_2`
 #[test]
 fn part_2_genesis_block_height() {
     let g = Header::genesis();
