@@ -2,7 +2,7 @@
 //! by a single user at a time. State machines can also model multi user systems. Blockchains
 //! strive to provide reliable public infrastructure. And the public is very much multiple users.
 //!
-//! In this module and the next we explore two common techniques at modeling multiuser state
+//! In this module and the next we explore two common techniques at modeling multi-user state
 //! machines. In this module we explore accounts, and in the next we explore UTXOs.
 //!
 //! In this module we design a state machine that tracks the currency balances of several users.
@@ -182,7 +182,7 @@ fn sm_4_empty_burn() {
 }
 
 #[test]
-fn sm_4_burner_doesnt_exist() {
+fn sm_4_burner_does_not_exist() {
     let start = HashMap::from([(User::Alice, 100)]);
     let end = AccountedCurrency::next_state(
         &start,
