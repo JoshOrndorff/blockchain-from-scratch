@@ -15,7 +15,7 @@ type Hash = u64;
 /// high so we aren't wasting time mining. I'll start with 1 in 100 blocks being valid.
 const THRESHOLD: u64 = u64::max_value() / 100;
 
-/// In this lesson we introduce the concept of a contentuous hard fork. The fork will happen at
+/// In this lesson we introduce the concept of a contentious hard fork. The fork will happen at
 /// this block height.
 const FORK_HEIGHT: u64 = 2;
 
@@ -210,7 +210,7 @@ fn part_3_cant_verify_invalid_state() {
 fn part_3_cant_verify_invalid_pow() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
-    // It is possible that this test will pass with a false positive becaue
+    // It is possible that this test will pass with a false positive because
     // the PoW difficulty is relatively low.
     b1.consensus_digest = 10;
 

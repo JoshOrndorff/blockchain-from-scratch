@@ -13,7 +13,7 @@ Some sections are less important than others and may be skipped if you are in a 
 We formalize the notion of a state machine and implement several examples. We do not yet discuss the blockchain data structure or consensus. Examples range from simple toys for learning purposes, to realistic multi-user state machines common in real-world blockchain systems.
 
 - Part 1 - Switch-based state machines - Two dead simple state machines to learn the basics.
-- Part 2 - Laundry Machine - A toy state machine modeling the lifecylce of clean and dirty laundry.
+- Part 2 - Laundry Machine - A toy state machine modeling the lifecycle of clean and dirty laundry.
 - Part 3\* - Automated Teller Machine - A semi-realistic, but significantly simplified state machine modelling a common ATM.
 - Part 4\* - Accounted Currency - A realistic state machine used as the foundation for many cryptocurrencies such as Ethereum and Polkadot.
 - Part 5 - Digital Cash - A realistic state machine used as the foundation for many cryptocurrencies such as Monero, Dogecoin, and Litecoin.
