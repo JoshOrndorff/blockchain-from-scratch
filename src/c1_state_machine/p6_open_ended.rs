@@ -9,7 +9,7 @@
 //!   * Tic tac toe
 //! * Beaurocracies:
 //!   * Beauro of Motor Vehicles - maintains driving licenses and vehicle registrations.
-//!   * Public Utitiy Provider - Customers open accounts, consume the utility, pay their bill periodically, maybe utility prices fluctuate
+//!   * Public Utility Provider - Customers open accounts, consume the utility, pay their bill periodically, maybe utility prices fluctuate
 //!   * Land ownership registry
 //! * Tokenomics:
 //!   * Token Curated Registry
