@@ -280,8 +280,20 @@ fn bc_5_most_even_blocks() {
     }
     let chain_1 = &[g.clone(), h_a1, h_a2];
 
-    let h_b1 = g.child(3, 3);
-    let h_b2 = h_b1.child(3, 3);
+    let mut h_b1 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_b1 = g.child(2, i);
+        if hash(&h_b1) % 2 != 0 {
+            break;
+        }
+    }
+    let mut h_b2 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_b2 = h_b1.child(2, i);
+        if hash(&h_b2) % 2 != 0 {
+            break;
+        }
+    }
     let chain_2 = &[g, h_b1, h_b2];
 
     assert!(MostBlocksWithEvenHash::first_chain_is_better(
