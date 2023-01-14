@@ -46,7 +46,13 @@ pub struct Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis(genesis_state_root: Hash) -> Self {
-        todo!("Exercise 1")
+        Header {
+            parent: 0,
+            height: 0,
+            extrinsics_root: 0,
+            state_root: genesis_state_root,
+            consensus_digest: 0,
+        }
     }
 
     /// Create and return a valid child header.
@@ -54,17 +60,30 @@ impl Header {
     /// The state root is passed in similarly to how the complete state
     /// was in the previous section.
     fn child(&self, extrinsics_root: Hash, state_root: Hash) -> Self {
-        todo!("Exercise 2")
+        Header {
+            parent: hash(self),
+            height: self.height + 1,
+            consensus_digest: 0,
+            state_root,
+            extrinsics_root,
+        }
     }
 
     /// Verify a single child header.
     fn verify_child(&self, child: &Header) -> bool {
-        todo!("Exercise 3")
+        child.parent == hash(self) && child.height == self.height + 1
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 4")
+        let mut parent_header = self;
+        for header in chain {
+            if !parent_header.verify_child(header) {
+                return false;
+            }
+            parent_header = header;
+        }
+        true
     }
 }
 
@@ -88,12 +107,23 @@ pub struct Block {
 impl Block {
     /// Returns a new valid genesis block. By convention this block has no extrinsics.
     pub fn genesis(genesis_state: &State) -> Self {
-        todo!("Exercise 5")
+        Block {
+            header: Header::genesis(hash(genesis_state)),
+            body: Vec::new(),
+        }
     }
 
     /// Create and return a valid child block.
     pub fn child(&self, pre_state: &State, extrinsics: Vec<u64>) -> Self {
-        todo!("Exercise 6")
+        let mut state = pre_state.clone();
+        for extrinsic in extrinsics.iter() {
+            state.sum += extrinsic;
+            state.product *= extrinsic;
+        }
+        Block {
+            header: self.header.child(hash(&extrinsics), hash(&state)),
+            body: extrinsics,
+        }
     }
 
     /// Verify that all the given blocks form a valid chain from this block to the tip.
@@ -102,7 +132,22 @@ impl Block {
     /// have been given a valid pre-state. And we still need to verify the headers,
     /// execute all transactions, and check the final state.
     pub fn verify_sub_chain(&self, pre_state: &State, chain: &[Block]) -> bool {
-        todo!("Exercise 7")
+        let mut old_block = self;
+        let mut state = pre_state.clone();
+        for block in chain {
+            for extrinsic in block.body.iter() {
+                state.sum += extrinsic;
+                state.product *= extrinsic;
+            }
+            if !old_block.header.verify_child(&block.header)
+                || hash(&state) != block.header.state_root
+                || hash(&block.body) != block.header.extrinsics_root
+            {
+                return false;
+            }
+            old_block = block;
+        }
+        true
     }
 }
 
@@ -118,7 +163,21 @@ impl Block {
 /// As before, you do not need the entire parent block to do this. You only need the header.
 /// You do, however, now need a pre-state as you have throughout much of this section.
 fn build_invalid_child_block_with_valid_header(parent: &Header, pre_state: &State) -> Block {
-    todo!("Exercise 8")
+    let new_extrinsics = vec![0, 1, 2, 3, 4, 5];
+
+    // In stead of using the correct state:
+    //
+    // let state = pre_state.clone();
+    // for extrinsic in new_extrinsics.iter() {
+    //     state.sum += extrinsic;
+    //     state.product *= extrinsic;
+    // }
+    //
+    // We use hash of pre_state. The extrinsics root is correct.
+    Block {
+        header: parent.child(hash(&new_extrinsics), hash(pre_state)),
+        body: new_extrinsics,
+    }
 }
 
 #[test]
