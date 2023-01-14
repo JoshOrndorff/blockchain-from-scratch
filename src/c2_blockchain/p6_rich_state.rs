@@ -122,7 +122,7 @@ fn build_invalid_child_block_with_valid_header(parent: &Header, pre_state: &Stat
 }
 
 #[test]
-fn part_6_genesis_header() {
+fn bc_6_genesis_header() {
     let state = State { sum: 6, product: 9 };
     let g = Header::genesis(hash(&state));
     assert_eq!(g.height, 0);
@@ -132,7 +132,7 @@ fn part_6_genesis_header() {
 }
 
 #[test]
-fn part_6_genesis_block() {
+fn bc_6_genesis_block() {
     let state = State { sum: 6, product: 9 };
     let gh = Header::genesis(hash(&state));
     let gb = Block::genesis(&state);
@@ -142,7 +142,7 @@ fn part_6_genesis_block() {
 }
 
 #[test]
-fn part_6_child_block_empty() {
+fn bc_6_child_block_empty() {
     let state = State { sum: 6, product: 9 };
     let b0 = Block::genesis(&state);
     let b1 = b0.child(&state, vec![]);
@@ -158,7 +158,7 @@ fn part_6_child_block_empty() {
 }
 
 #[test]
-fn part_6_child_block() {
+fn bc_6_child_block() {
     let state = State { sum: 6, product: 9 };
     let b0 = Block::genesis(&state);
     let b1 = b0.child(&state, vec![1, 2, 3, 4, 5]);
@@ -174,7 +174,7 @@ fn part_6_child_block() {
 }
 
 #[test]
-fn part_6_child_header() {
+fn bc_6_child_header() {
     let state_0 = State { sum: 6, product: 9 };
     let g = Header::genesis(hash(&state_0));
     let mut extrinsics = vec![1, 2, 3];
@@ -204,7 +204,7 @@ fn part_6_child_header() {
 }
 
 #[test]
-fn part_6_verify_three_blocks() {
+fn bc_6_verify_three_blocks() {
     let state_1 = State { sum: 6, product: 9 };
     let g = Block::genesis(&state_1);
     let b1 = g.child(&state_1, vec![1]);
@@ -215,7 +215,7 @@ fn part_6_verify_three_blocks() {
 }
 
 #[test]
-fn part_6_invalid_header_doesnt_check() {
+fn bc_6_invalid_header_doesnt_check() {
     let state = State { sum: 6, product: 9 };
     let g = Header::genesis(hash(&state));
     let h1 = Header {
@@ -230,7 +230,7 @@ fn part_6_invalid_header_doesnt_check() {
 }
 
 #[test]
-fn part_6_invalid_block_state_doesnt_check() {
+fn bc_6_invalid_block_state_doesnt_check() {
     let state = State { sum: 6, product: 9 };
     let b0 = Block::genesis(&state);
     let mut b1 = b0.child(&state, vec![1, 2, 3]);
@@ -240,7 +240,7 @@ fn part_6_invalid_block_state_doesnt_check() {
 }
 
 #[test]
-fn part_6_block_with_invalid_header_doesnt_check() {
+fn bc_6_block_with_invalid_header_doesnt_check() {
     let state = State { sum: 6, product: 9 };
     let b0 = Block::genesis(&state);
     let mut b1 = b0.child(&state, vec![1, 2, 3]);
@@ -250,12 +250,12 @@ fn part_6_block_with_invalid_header_doesnt_check() {
 }
 
 #[test]
-fn part_6_student_invalid_block_really_is_invalid() {
+fn bc_6_student_invalid_block_really_is_invalid() {
     let state = State { sum: 6, product: 9 };
     let gb = Block::genesis(&state);
     let gh = &gb.header;
 
-    let b1 = build_invald_child_block_with_valid_header(gh, &state);
+    let b1 = build_invalid_child_block_with_valid_header(gh, &state);
     let h1 = &b1.header;
 
     // Make sure that the header is valid according to header rules.
