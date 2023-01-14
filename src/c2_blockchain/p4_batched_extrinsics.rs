@@ -16,7 +16,7 @@ pub struct Header {
     // For example, a hash or a Merkle root.
     extrinsics_root: Hash,
     state: u64,
-    consensus_digest: u64,
+    pub consensus_digest: u64,
 }
 
 // Methods for creating and verifying headers.
