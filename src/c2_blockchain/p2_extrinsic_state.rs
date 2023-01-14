@@ -13,7 +13,7 @@ use crate::hash;
 // so the code is slightly more readable.
 type Hash = u64;
 
-/// The header is no expanded to contain an extrinsic and a state. Note that we are not
+/// The header is now expanded to contain an extrinsic and a state. Note that we are not
 /// using roots yet, but rather directly embedding some minimal extrinsic and state info
 /// into the header.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -91,7 +91,7 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     // There is a critical thinking question for you there.
 }
 
-// To run these tests: `cargo test part_1`
+// To run these tests: `cargo test part_2`
 #[test]
 fn part_2_genesis_block_height() {
     let g = Header::genesis();

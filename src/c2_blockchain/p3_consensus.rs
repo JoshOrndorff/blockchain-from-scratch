@@ -166,7 +166,7 @@ fn part_3_child_block_consensus_digest() {
 fn part_3_verify_genesis_only() {
     let g = Header::genesis();
 
-    assert!(g.verify_sub_chain(&vec![]));
+    assert!(g.verify_sub_chain(&[]));
 }
 
 #[test]
@@ -176,7 +176,7 @@ fn part_3_verify_three_blocks() {
     let b2 = b1.child(6);
 
     assert_eq!(b2.state, 11);
-    assert!(g.verify_sub_chain(&vec![b1, b2]));
+    assert!(g.verify_sub_chain(&[b1, b2]));
 }
 
 #[test]
@@ -185,7 +185,7 @@ fn part_3_cant_verify_invalid_parent() {
     let mut b1 = g.child(5);
     b1.parent = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
@@ -194,7 +194,7 @@ fn part_3_cant_verify_invalid_number() {
     let mut b1 = g.child(5);
     b1.height = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
@@ -203,7 +203,7 @@ fn part_3_cant_verify_invalid_state() {
     let mut b1 = g.child(5);
     b1.state = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
@@ -214,7 +214,7 @@ fn part_3_cant_verify_invalid_pow() {
     // the PoW difficulty is relatively low.
     b1.consensus_digest = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
@@ -227,7 +227,7 @@ fn part_3_even_chain_valid() {
     let b3 = b2.child(1); // 4
     let b4 = b3.child(2); // 6
 
-    assert!(g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+    assert!(g.verify_sub_chain_even(&[b1, b2, b3, b4]));
 }
 
 #[test]
@@ -238,7 +238,7 @@ fn part_3_even_chain_invalid_first_block_after_fork() {
     let b3 = b2.child(2); // 5 - invalid
     let b4 = b3.child(1); // 6
 
-    assert!(!g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_even(&[b1, b2, b3, b4]));
 }
 
 #[test]
@@ -249,7 +249,7 @@ fn part_3_even_chain_invalid_second_block_after_fork() {
     let b3 = b2.child(1); // 4
     let b4 = b3.child(1); // 5 - invalid
 
-    assert!(!g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_even(&[b1, b2, b3, b4]));
 }
 
 #[test]
@@ -262,7 +262,7 @@ fn part_3_odd_chain_valid() {
     let b3 = b2.child(2); // 5
     let b4 = b3.child(2); // 7
 
-    assert!(g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
+    assert!(g.verify_sub_chain_odd(&[b1, b2, b3, b4]));
 }
 
 #[test]
@@ -273,7 +273,7 @@ fn part_3_odd_chain_invalid_first_block_after_fork() {
     let b3 = b2.child(1); // 4 - invalid
     let b4 = b3.child(1); // 5
 
-    assert!(!g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_odd(&[b1, b2, b3, b4]));
 }
 
 #[test]
@@ -284,7 +284,7 @@ fn part_3_odd_chain_invalid_second_block_after_fork() {
     let b3 = b2.child(2); // 5
     let b4 = b3.child(1); // 6 - invalid
 
-    assert!(!g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_odd(&[b1, b2, b3, b4]));
 }
 
 #[test]
