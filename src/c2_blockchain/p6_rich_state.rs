@@ -52,7 +52,7 @@ impl Header {
     ///
     /// The state root is passed in similarly to how the complete state
     /// was in the previous section.
-    fn child(&self, extrinsic_root: Hash, state_root: Hash) -> Self {
+    fn child(&self, extrinsics_root: Hash, state_root: Hash) -> Self {
         todo!("Exercise 2")
     }
 

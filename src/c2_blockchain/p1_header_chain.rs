@@ -56,73 +56,73 @@ fn build_an_invalid_chain() -> Vec<Header> {
     todo!("Exercise 5")
 }
 
-// To run these tests: `cargo test part_1`
+// To run these tests: `cargo test bc_1
 #[test]
-fn part_1_genesis_block_height() {
+fn bc_1_genesis_block_height() {
     let g = Header::genesis();
     assert!(g.height == 0);
 }
 
 #[test]
-fn part_1_genesis_block_parent() {
+fn bc_1_genesis_block_parent() {
     let g = Header::genesis();
     assert!(g.parent == 0);
 }
 
 #[test]
-fn part_1_child_block_height() {
+fn bc_1_child_block_height() {
     let g = Header::genesis();
     let b1 = g.child();
     assert!(b1.height == 1);
 }
 
 #[test]
-fn part_1_child_block_parent() {
+fn bc_1_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child();
     assert!(b1.parent == hash(&g));
 }
 
 #[test]
-fn part_1_verify_genesis_only() {
+fn bc_1_verify_genesis_only() {
     let g = Header::genesis();
 
-    assert!(g.verify_sub_chain(&vec![]));
+    assert!(g.verify_sub_chain(&[]));
 }
 
 #[test]
-fn part_1_verify_three_blocks() {
+fn bc_1_verify_three_blocks() {
     let g = Header::genesis();
     let b1 = g.child();
     let b2 = b1.child();
 
-    assert!(g.verify_sub_chain(&vec![b1, b2]));
+    assert!(g.verify_sub_chain(&[b1, b2]));
 }
 
 #[test]
-fn part_1_cant_verify_invalid_height() {
+fn bc_1_cant_verify_invalid_height() {
     // This and following tests use the student's own verify function so as
     // not to give away the solution to writing that function.
     let g = Header::genesis();
     let mut b1 = g.child();
     b1.height = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]))
+    assert!(!g.verify_sub_chain(&[b1]))
 }
 
 #[test]
-fn part_1_cant_verify_invalid_parent() {
+fn bc_1_cant_verify_invalid_parent() {
     // This test chooses to use the student's own verify function so as
     // not to give away the solution to writing that function.
     let g = Header::genesis();
     let mut b1 = g.child();
     b1.parent = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]))
+    assert!(!g.verify_sub_chain(&[b1]))
 }
 
 #[test]
-fn part_1_verify_chain_length_five() {
+fn bc_1_verify_chain_length_five() {
     // This test chooses to use the student's own verify function.
     // This should be relatively safe given that we have already tested that function.
     let chain = build_valid_chain_length_5();
@@ -130,7 +130,7 @@ fn part_1_verify_chain_length_five() {
 }
 
 #[test]
-fn part_1_invalid_chain_is_really_invalid() {
+fn bc_1_invalid_chain_is_really_invalid() {
     // This test chooses to use the student's own verify function.
     // This should be relatively safe given that we have already tested that function.
     let invalid_chain = build_an_invalid_chain();

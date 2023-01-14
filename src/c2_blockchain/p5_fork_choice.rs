@@ -136,7 +136,7 @@ fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>
 }
 
 #[test]
-fn part_5_longest_chain() {
+fn bc_5_longest_chain() {
     let g = Header::genesis();
 
     let h_a1 = g.child(hash(&[1]), 1);
@@ -152,7 +152,7 @@ fn part_5_longest_chain() {
 }
 
 #[test]
-fn part_5_mine_to_custom_difficulty() {
+fn bc_5_mine_to_custom_difficulty() {
     let g = Block::genesis();
     let mut b1 = g.child(vec![1, 2, 3]);
 
@@ -166,7 +166,7 @@ fn part_5_mine_to_custom_difficulty() {
 }
 
 #[test]
-fn part_5_heaviest_chain() {
+fn bc_5_heaviest_chain() {
     let g = Header::genesis();
 
     let mut i = 0;
@@ -196,7 +196,7 @@ fn part_5_heaviest_chain() {
 }
 
 #[test]
-fn part_5_most_even_blocks() {
+fn bc_5_most_even_blocks() {
     let g = Header::genesis();
 
     let h_a1 = g.child(2, 2);
@@ -218,7 +218,7 @@ fn part_5_most_even_blocks() {
 }
 
 #[test]
-fn part_5_longest_vs_heaviest() {
+fn bc_5_longest_vs_heaviest() {
     let (_, longest_chain, pow_chain) = create_fork_one_side_longer_other_side_heavier();
 
     assert!(LongestChainRule::first_chain_is_better(

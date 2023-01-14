@@ -91,21 +91,21 @@ fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
     // There is a critical thinking question for you there.
 }
 
-// To run these tests: `cargo test part_2`
+// To run these tests: `cargo test bc_2`
 #[test]
-fn part_2_genesis_block_height() {
+fn bc_2_genesis_block_height() {
     let g = Header::genesis();
     assert!(g.height == 0);
 }
 
 #[test]
-fn part_2_genesis_block_parent() {
+fn bc_2_genesis_block_parent() {
     let g = Header::genesis();
     assert!(g.parent == 0);
 }
 
 #[test]
-fn part_2_genesis_block_extrinsic() {
+fn bc_2_genesis_block_extrinsic() {
     // Typically genesis blocks do not have any extrinsics.
     // In Substrate they never do. So our convention is to have the extrinsic be 0.
     let g = Header::genesis();
@@ -113,85 +113,85 @@ fn part_2_genesis_block_extrinsic() {
 }
 
 #[test]
-fn part_2_genesis_block_state() {
+fn bc_2_genesis_block_state() {
     let g = Header::genesis();
     assert!(g.state == 0);
 }
 
 #[test]
-fn part_2_child_block_height() {
+fn bc_2_child_block_height() {
     let g = Header::genesis();
     let b1 = g.child(0);
     assert!(b1.height == 1);
 }
 
 #[test]
-fn part_2_child_block_parent() {
+fn bc_2_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child(0);
     assert!(b1.parent == hash(&g));
 }
 
 #[test]
-fn part_2_child_block_extrinsic() {
+fn bc_2_child_block_extrinsic() {
     let g = Header::genesis();
     let b1 = g.child(7);
     assert_eq!(b1.extrinsic, 7);
 }
 
 #[test]
-fn part_2_child_block_state() {
+fn bc_2_child_block_state() {
     let g = Header::genesis();
     let b1 = g.child(7);
     assert_eq!(b1.state, 7);
 }
 
 #[test]
-fn part_2_verify_genesis_only() {
+fn bc_2_verify_genesis_only() {
     let g = Header::genesis();
 
-    assert!(g.verify_sub_chain(&vec![]));
+    assert!(g.verify_sub_chain(&[]));
 }
 
 #[test]
-fn part_2_verify_three_blocks() {
+fn bc_2_verify_three_blocks() {
     let g = Header::genesis();
     let b1 = g.child(5);
     let b2 = b1.child(6);
 
     assert_eq!(b2.state, 11);
-    assert!(g.verify_sub_chain(&vec![b1, b2]));
+    assert!(g.verify_sub_chain(&[b1, b2]));
 }
 
 #[test]
-fn part_2_cant_verify_invalid_parent() {
+fn bc_2_cant_verify_invalid_parent() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     b1.parent = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_2_cant_verify_invalid_number() {
+fn bc_2_cant_verify_invalid_number() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     b1.height = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_2_cant_verify_invalid_state() {
+fn bc_2_cant_verify_invalid_state() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     b1.state = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_2_verify_forked_chain() {
+fn bc_2_verify_forked_chain() {
     let g = Header::genesis();
     let (c1, c2) = build_forked_chain();
 
