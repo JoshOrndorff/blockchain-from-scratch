@@ -106,7 +106,7 @@ fn build_invald_child_block_with_valid_header(parent: &Header) -> Block {
 }
 
 #[test]
-fn bc_4_genesis_header() {
+fn part_4_genesis_header() {
     let g = Header::genesis();
     assert_eq!(g.height, 0);
     assert_eq!(g.parent, 0);
@@ -115,7 +115,7 @@ fn bc_4_genesis_header() {
 }
 
 #[test]
-fn bc_4_genesis_block() {
+fn part_4_genesis_block() {
     let gh = Header::genesis();
     let gb = Block::genesis();
 
@@ -124,10 +124,11 @@ fn bc_4_genesis_block() {
 }
 
 #[test]
-fn bc_4_child_block_empty() {
+fn part_4_child_block_empty() {
     let b0 = Block::genesis();
     let b1 = b0.child(vec![]);
 
+    assert!(b0.header.verify_child(&b1.header));
     assert_eq!(
         b1,
         Block {
@@ -138,10 +139,11 @@ fn bc_4_child_block_empty() {
 }
 
 #[test]
-fn bc_4_child_block() {
+fn part_4_child_block() {
     let b0 = Block::genesis();
     let b1 = b0.child(vec![1, 2, 3, 4, 5]);
 
+    assert!(b0.header.verify_child(&b1.header));
     assert_eq!(
         b1,
         Block {
@@ -152,25 +154,23 @@ fn bc_4_child_block() {
 }
 
 #[test]
-fn bc_4_child_header() {
+fn part_4_child_header() {
     let g = Header::genesis();
     let h1 = g.child(hash(&[1, 2, 3]), 6);
 
-    assert_eq!(h1.height, 1);
-    assert_eq!(h1.parent, hash(&g));
+    assert!(g.verify_child(&h1));
     assert_eq!(h1.extrinsics_root, hash(&[1, 2, 3]));
     assert_eq!(h1.state, 6);
 
     let h2 = h1.child(hash(&[10, 20]), 36);
 
-    assert_eq!(h2.height, 2);
-    assert_eq!(h2.parent, hash(&h1));
+    assert!(h1.verify_child(&h2));
     assert_eq!(h2.extrinsics_root, hash(&[10, 20]));
     assert_eq!(h2.state, 36);
 }
 
 #[test]
-fn bc_4_verify_three_blocks() {
+fn part_4_verify_three_blocks() {
     let g = Block::genesis();
     let b1 = g.child(vec![1]);
     let b2 = b1.child(vec![2]);
@@ -179,7 +179,7 @@ fn bc_4_verify_three_blocks() {
 }
 
 #[test]
-fn bc_4_invalid_header_doesnt_check() {
+fn part_4_invalid_header_doesnt_check() {
     let g = Header::genesis();
     let h1 = Header {
         parent: 0,
@@ -193,7 +193,7 @@ fn bc_4_invalid_header_doesnt_check() {
 }
 
 #[test]
-fn bc_4_invalid_block_state_doesnt_check() {
+fn part_4_invalid_block_state_doesnt_check() {
     let b0 = Block::genesis();
     let mut b1 = b0.child(vec![1, 2, 3]);
     b1.body = vec![];
@@ -202,7 +202,7 @@ fn bc_4_invalid_block_state_doesnt_check() {
 }
 
 #[test]
-fn bc_4_block_with_invalid_header_doesnt_check() {
+fn part_4_block_with_invalid_header_doesnt_check() {
     let b0 = Block::genesis();
     let mut b1 = b0.child(vec![1, 2, 3]);
     b1.header = Header::genesis();
@@ -211,7 +211,7 @@ fn bc_4_block_with_invalid_header_doesnt_check() {
 }
 
 #[test]
-fn bc_4_student_invalid_block_really_is_invalid() {
+fn part_4_student_invalid_block_really_is_invalid() {
     let gb = Block::genesis();
     let gh = &gb.header;
 
