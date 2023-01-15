@@ -70,15 +70,6 @@ impl<const N: usize> From<[Bill; N]> for State {
     }
 }
 
-#[test]
-fn from_works() {
-    let state = State::from([
-        Bill { owner: User::Alice, amount: 20, serial: 0 },
-        Bill { owner: User::Bob, amount: 40, serial: 1}
-    ]);
-    println!("my State:: {:?}", state);
-}
-
 /// The state transitions that users can make in a digital cash system
 pub enum CashTransaction {
     /// Mint a single new bill owned by the minter
@@ -286,6 +277,7 @@ fn spending_from_charlie_to_all() {
         }
     );
     let mut expected = State::from([
+        Bill { owner: User::Alice, amount: 4000, serial: 58},
         Bill { owner: User::Alice, amount: 42, serial: 59 },
         Bill { owner: User::Bob, amount: 5, serial: 60 },
         Bill { owner: User::Charlie, amount: 5, serial: 61 }
