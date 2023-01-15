@@ -33,13 +33,7 @@ pub trait ForkChoice {
     /// two chains. Therefore this method has a provided implementation. However,
     /// it may be much more performant to write a fork-choice-specific implementation.
     fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
-        let mut best_chain = candidate_chains[0];
-        for chain in candidate_chains.iter().skip(1) {
-            if !Self::first_chain_is_better(best_chain, chain) {
-                best_chain = chain;
-            }
-        }
-        best_chain
+        todo!("Exercise 1")
     }
 }
 
@@ -48,7 +42,14 @@ pub struct LongestChainRule;
 
 impl ForkChoice for LongestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        chain_1.len() >= chain_2.len()
+        todo!("Exercise 1")
+    }
+
+    fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
+        // Remember, this method is provided. You _can_ solve the exercise by
+        // simply deleting this block. It is up to you to decide whether this fork
+        // choice warrants a custom implementation.
+        todo!("Exercise 3")
     }
 }
 
@@ -67,37 +68,17 @@ pub struct HeaviestChainRule;
 /// usage is that you create a block using the normal `Block.child()` method
 /// and then pass the block to this helper for additional mining.
 fn mine_extra_hard(block: &mut Block, threshold: u64) {
-    loop {
-        if hash(&block.header) < threshold {
-            return;
-        } else {
-            block.header.consensus_digest += 1;
-        }
-    }
+    todo!("Exercise 4")
 }
 
 impl ForkChoice for HeaviestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        chain_1
-            .iter()
-            .map(|block| {
-                if hash(block) < THRESHOLD {
-                    THRESHOLD - hash(block)
-                } else {
-                    0
-                }
-            })
-            .sum::<u64>()
-            > chain_2
-                .iter()
-                .map(|block| {
-                    if hash(block) < THRESHOLD {
-                        THRESHOLD - hash(block)
-                    } else {
-                        0
-                    }
-                })
-                .sum::<u64>()
+        todo!("Exercise 5")
+    }
+
+    fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
+        // Remember, this method is provided.
+        todo!("Exercise 6")
     }
 }
 /// The best chain is the one with the most blocks that have even hashes.
@@ -118,14 +99,12 @@ pub struct MostBlocksWithEvenHash;
 
 impl ForkChoice for MostBlocksWithEvenHash {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        chain_1
-            .iter()
-            .map(|block| u64::from(hash(block) % 2 == 0))
-            .sum::<u64>()
-            > chain_2
-                .iter()
-                .map(|block| u64::from(hash(block) % 2 == 0))
-                .sum::<u64>()
+        todo!("Exercise 7")
+    }
+
+    fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
+        // Remember, this method is provided.
+        todo!("Exercise 8")
     }
 }
 
@@ -152,52 +131,7 @@ impl ForkChoice for MostBlocksWithEvenHash {
 /// 2. The even suffix (non-overlapping with the common prefix)
 /// 3. The odd suffix (non-overlapping with the common prefix)
 fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
-    let mutual = build_valid_chain(2);
-    let fork_block = mutual.last().unwrap();
-    (
-        mutual.clone(),
-        build_long_chain(fork_block.clone()),
-        build_pow_chain(fork_block.clone()),
-    )
-}
-
-fn build_valid_chain(n: u64) -> Vec<Header> {
-    let mut chain = Vec::new();
-    let mut block = Header::genesis();
-    chain.push(block.clone());
-    for _ in 0..n {
-        block = block.child(hash(&[1]), 1);
-        chain.push(block.clone())
-    }
-    chain
-}
-
-fn build_long_chain(h: Header) -> Vec<Header> {
-    let mut chain = Vec::new();
-    let mut latest_header = h;
-    for _ in 0..=5 {
-        let header = latest_header.child(hash(&[1, 2]), 3);
-        chain.push(header.clone());
-        latest_header = header;
-    }
-    chain
-}
-
-fn build_pow_chain(h: Header) -> Vec<Header> {
-    let mut chain = Vec::new();
-    let mut latest_header = h;
-    for _ in 0..=3 {
-        let mut consensus_digest = 0;
-        let header = loop {
-            if hash(&latest_header.child(hash(&[consensus_digest]), consensus_digest)) < THRESHOLD {
-                break latest_header.child(hash(&[consensus_digest]), consensus_digest);
-            }
-            consensus_digest += 1;
-        };
-        chain.push(header.clone());
-        latest_header = header;
-    }
-    chain
+    todo!("Exercise 9")
 }
 
 #[test]

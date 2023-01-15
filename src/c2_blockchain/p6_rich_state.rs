@@ -46,13 +46,7 @@ pub struct Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis(genesis_state_root: Hash) -> Self {
-        Header {
-            parent: 0,
-            height: 0,
-            extrinsics_root: 0,
-            state_root: genesis_state_root,
-            consensus_digest: 0,
-        }
+        todo!("Exercise 1")
     }
 
     /// Create and return a valid child header.
@@ -60,30 +54,17 @@ impl Header {
     /// The state root is passed in similarly to how the complete state
     /// was in the previous section.
     fn child(&self, extrinsics_root: Hash, state_root: Hash) -> Self {
-        Header {
-            parent: hash(self),
-            height: self.height + 1,
-            consensus_digest: 0,
-            state_root,
-            extrinsics_root,
-        }
+        todo!("Exercise 2")
     }
 
     /// Verify a single child header.
     fn verify_child(&self, child: &Header) -> bool {
-        child.parent == hash(self) && child.height == self.height + 1
+        todo!("Exercise 3")
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
-        let mut parent_header = self;
-        for header in chain {
-            if !parent_header.verify_child(header) {
-                return false;
-            }
-            parent_header = header;
-        }
-        true
+        todo!("Exercise 4")
     }
 }
 
@@ -107,23 +88,12 @@ pub struct Block {
 impl Block {
     /// Returns a new valid genesis block. By convention this block has no extrinsics.
     pub fn genesis(genesis_state: &State) -> Self {
-        Block {
-            header: Header::genesis(hash(genesis_state)),
-            body: Vec::new(),
-        }
+        todo!("Exercise 5")
     }
 
     /// Create and return a valid child block.
     pub fn child(&self, pre_state: &State, extrinsics: Vec<u64>) -> Self {
-        let mut state = pre_state.clone();
-        for extrinsic in extrinsics.iter() {
-            state.sum += extrinsic;
-            state.product *= extrinsic;
-        }
-        Block {
-            header: self.header.child(hash(&extrinsics), hash(&state)),
-            body: extrinsics,
-        }
+        todo!("Exercise 6")
     }
 
     /// Verify that all the given blocks form a valid chain from this block to the tip.
@@ -132,22 +102,7 @@ impl Block {
     /// have been given a valid pre-state. And we still need to verify the headers,
     /// execute all transactions, and check the final state.
     pub fn verify_sub_chain(&self, pre_state: &State, chain: &[Block]) -> bool {
-        let mut old_block = self;
-        let mut state = pre_state.clone();
-        for block in chain {
-            for extrinsic in block.body.iter() {
-                state.sum += extrinsic;
-                state.product *= extrinsic;
-            }
-            if !old_block.header.verify_child(&block.header)
-                || hash(&state) != block.header.state_root
-                || hash(&block.body) != block.header.extrinsics_root
-            {
-                return false;
-            }
-            old_block = block;
-        }
-        true
+        todo!("Exercise 7")
     }
 }
 
@@ -163,21 +118,7 @@ impl Block {
 /// As before, you do not need the entire parent block to do this. You only need the header.
 /// You do, however, now need a pre-state as you have throughout much of this section.
 fn build_invalid_child_block_with_valid_header(parent: &Header, pre_state: &State) -> Block {
-    let new_extrinsics = vec![0, 1, 2, 3, 4, 5];
-
-    // In stead of using the correct state:
-    //
-    // let state = pre_state.clone();
-    // for extrinsic in new_extrinsics.iter() {
-    //     state.sum += extrinsic;
-    //     state.product *= extrinsic;
-    // }
-    //
-    // We use hash of pre_state. The extrinsics root is correct.
-    Block {
-        header: parent.child(hash(&new_extrinsics), hash(pre_state)),
-        body: new_extrinsics,
-    }
+    todo!("Exercise 8")
 }
 
 #[test]
@@ -206,12 +147,13 @@ fn bc_6_child_block_empty() {
     let b0 = Block::genesis(&state);
     let b1 = b0.child(&state, vec![]);
 
-    assert!(b0.header.verify_child(&b1.header));
+    assert_eq!(b1.header.height, 1);
+    assert_eq!(b1.header.parent, hash(&b0.header));
     assert_eq!(
         b1,
         Block {
             header: b1.header.clone(),
-            body: vec![],
+            body: vec![]
         }
     );
 }
@@ -222,12 +164,13 @@ fn bc_6_child_block() {
     let b0 = Block::genesis(&state);
     let b1 = b0.child(&state, vec![1, 2, 3, 4, 5]);
 
-    assert!(b0.header.verify_child(&b1.header));
+    assert_eq!(b1.header.height, 1);
+    assert_eq!(b1.header.parent, hash(&b0.header));
     assert_eq!(
         b1,
         Block {
             header: b1.header.clone(),
-            body: vec![1, 2, 3, 4, 5],
+            body: vec![1, 2, 3, 4, 5]
         }
     );
 }
@@ -244,7 +187,8 @@ fn bc_6_child_header() {
     }
     let h1 = g.child(hash(&extrinsics), hash(&state_1));
 
-    assert!(g.verify_child(&h1));
+    assert_eq!(h1.height, 1);
+    assert_eq!(h1.parent, hash(&g));
     assert_eq!(h1.extrinsics_root, hash(&extrinsics));
     assert_eq!(h1.state_root, hash(&state_1));
 
@@ -257,7 +201,8 @@ fn bc_6_child_header() {
 
     let h2 = h1.child(hash(&extrinsics), hash(&state_2));
 
-    assert!(h1.verify_child(&h2));
+    assert_eq!(h2.height, 2);
+    assert_eq!(h2.parent, hash(&h1));
     assert_eq!(h2.extrinsics_root, hash(&extrinsics));
     assert_eq!(h2.state_root, hash(&state_2));
 }
