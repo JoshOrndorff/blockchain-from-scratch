@@ -42,7 +42,7 @@ pub struct LongestChainRule;
 
 impl ForkChoice for LongestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 2")
+        todo!("Exercise 1")
     }
 
     fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
@@ -81,7 +81,6 @@ impl ForkChoice for HeaviestChainRule {
         todo!("Exercise 6")
     }
 }
-
 /// The best chain is the one with the most blocks that have even hashes.
 ///
 /// This exact rule is a bit contrived, but it does model a family of fork choice rules
@@ -132,11 +131,11 @@ impl ForkChoice for MostBlocksWithEvenHash {
 /// 2. The even suffix (non-overlapping with the common prefix)
 /// 3. The odd suffix (non-overlapping with the common prefix)
 fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
-    todo!("Exercise 8")
+    todo!("Exercise 9")
 }
 
 #[test]
-fn part_5_longest_chain() {
+fn bc_5_longest_chain() {
     let g = Header::genesis();
 
     let h_a1 = g.child(hash(&[1]), 1);
@@ -152,7 +151,7 @@ fn part_5_longest_chain() {
 }
 
 #[test]
-fn part_5_mine_to_custom_difficulty() {
+fn bc_5_mine_to_custom_difficulty() {
     let g = Block::genesis();
     let mut b1 = g.child(vec![1, 2, 3]);
 
@@ -166,7 +165,7 @@ fn part_5_mine_to_custom_difficulty() {
 }
 
 #[test]
-fn part_5_heaviest_chain() {
+fn bc_5_heaviest_chain() {
     let g = Header::genesis();
 
     let mut i = 0;
@@ -196,15 +195,39 @@ fn part_5_heaviest_chain() {
 }
 
 #[test]
-fn part_5_most_even_blocks() {
+fn bc_5_most_even_blocks() {
     let g = Header::genesis();
 
-    let h_a1 = g.child(2, 2);
-    let h_a2 = h_a1.child(2, 2);
+    let mut h_a1 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_a1 = g.child(2, i);
+        if hash(&h_a1) % 2 == 0 {
+            break;
+        }
+    }
+    let mut h_a2 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_a2 = h_a1.child(2, i);
+        if hash(&h_a2) % 2 == 0 {
+            break;
+        }
+    }
     let chain_1 = &[g.clone(), h_a1, h_a2];
 
-    let h_b1 = g.child(3, 3);
-    let h_b2 = h_b1.child(3, 3);
+    let mut h_b1 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_b1 = g.child(2, i);
+        if hash(&h_b1) % 2 != 0 {
+            break;
+        }
+    }
+    let mut h_b2 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_b2 = h_b1.child(2, i);
+        if hash(&h_b2) % 2 != 0 {
+            break;
+        }
+    }
     let chain_2 = &[g, h_b1, h_b2];
 
     assert!(MostBlocksWithEvenHash::first_chain_is_better(
@@ -218,7 +241,7 @@ fn part_5_most_even_blocks() {
 }
 
 #[test]
-fn part_5_longest_vs_heaviest() {
+fn bc_5_longest_vs_heaviest() {
     let (_, longest_chain, pow_chain) = create_fork_one_side_longer_other_side_heavier();
 
     assert!(LongestChainRule::first_chain_is_better(
