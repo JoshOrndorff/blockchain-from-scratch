@@ -13,7 +13,7 @@ pub struct DigitalCashSystem;
 /// A single bill in the digital cash system. Each bill has an owner who is allowed to spent
 /// it and an amount that it is worth. It also has serial number to ensure that each bill
 /// is unique.
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Bill {
     owner: User,
     amount: u64,
@@ -22,7 +22,7 @@ pub struct Bill {
 
 /// The State of a digital cash system. Primarily just the set of currently circulating bills.,
 /// but also a counter for the next serial number.
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct State {
     /// The set of currently circulating bills
     bills: HashSet<Bill>,
