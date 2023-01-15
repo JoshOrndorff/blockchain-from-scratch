@@ -40,7 +40,7 @@ impl State {
     }
 
     pub fn next_serial(&self) -> u64 {
-        self.next_serial + 1
+        self.next_serial
     }
 
     fn increment_serial(&mut self) {
