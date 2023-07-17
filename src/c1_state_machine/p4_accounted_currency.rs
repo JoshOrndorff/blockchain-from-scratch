@@ -28,7 +28,10 @@ pub enum AccountingTransaction {
     /// Create some new money for the given minter in the given amount
     Mint { minter: User, amount: u64 },
     /// Destroy some money from the given account in the given amount
+    /// If the burn amount exceeds the account balance, burn the entire
+    /// amount and remove the account from storage
     Burn { burner: User, amount: u64 },
+    /// Send some tokens from one account to another
     Transfer {
         sender: User,
         receiver: User,
@@ -36,7 +39,7 @@ pub enum AccountingTransaction {
     },
 }
 
-/// We model this system as a state machine with two possible transitions
+/// We model this system as a state machine with three possible transitions
 impl StateMachine for AccountedCurrency {
     type State = Balances;
     type Transition = AccountingTransaction;

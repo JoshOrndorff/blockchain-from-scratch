@@ -17,12 +17,12 @@ impl Consensus for DictatorConsensus {
     type Digest = ConsensusAuthority;
 
     /// Check that the header is signed by the dictator
-    fn validate(_: &Self::Digest, header: &Header<Self::Digest>) -> bool {
+    fn validate(&self, _: &Self::Digest, header: &Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
     /// Sign the given partial header by the dictator
-    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }

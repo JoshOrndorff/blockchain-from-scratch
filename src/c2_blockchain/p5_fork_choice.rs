@@ -128,8 +128,8 @@ impl ForkChoice for MostBlocksWithEvenHash {
 ///
 /// Return your solutions as three vectors:
 /// 1. The common prefix including genesis
-/// 2. The even suffix (non-overlapping with the common prefix)
-/// 3. The odd suffix (non-overlapping with the common prefix)
+/// 2. The suffix chain which is longer (non-overlapping with the common prefix)
+/// 3. The suffix chain with more work (non-overlapping with the common prefix)
 fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
     todo!("Exercise 9")
 }
