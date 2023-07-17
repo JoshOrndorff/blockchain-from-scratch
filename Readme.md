@@ -47,9 +47,3 @@ This chapter is still under development. We begin by extending our blockchain da
 ## License
 
 Licensed under the terms of the [GPL-3](https://www.gnu.org/licenses/gpl-3.0.en.html) or later.
-
-## Context
-
-This content was written to accompany module 3 of the Polkadot Blockchain Academy.
-
-It strives to be useful stand-alone content as well.
