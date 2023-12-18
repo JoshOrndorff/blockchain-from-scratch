@@ -8,7 +8,10 @@ use super::{Consensus, Header};
 
 /// A Consensus engine that requires the state root to be even for the header to be valid.
 /// Wraps an inner consensus engine whose rules will also be enforced.
-struct EvenOnly<Inner: Consensus>(PhantomData<Inner>);
+struct EvenOnly<Inner: Consensus> {
+    /// The inner consensus engine that will be used in addition to the even-only requirement.
+    inner: Inner,
+}
 
 impl<Inner: Consensus> Consensus for EvenOnly<Inner> {
     type Digest = Inner::Digest;
