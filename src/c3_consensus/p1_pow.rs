@@ -34,3 +34,9 @@ impl Consensus for PoW {
 pub fn moderate_difficulty_pow() -> impl Consensus {
     todo!("Exercise 3")
 }
+
+/// Create an instance of the PoW Consensus that behaves identically to the trivial
+/// consensus implementation for `()` from the module level.
+pub fn trivial_always_valid_pow() -> PoW {
+    todo!("Exercise 4")
+}
