@@ -89,7 +89,7 @@ impl Consensus for () {
         todo!("Exercise 2")
     }
 
-    /// No real sealing is required. The partial header has all the necessary information
+    /// No real sealing is required.
     fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 3")
     }
