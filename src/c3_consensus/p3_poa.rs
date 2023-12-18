@@ -55,16 +55,42 @@ struct PoaRoundRobinByHeight {
 impl Consensus for PoaRoundRobinByHeight {
     type Digest = ConsensusAuthority;
 
-    fn validate(&self, parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
-        todo!("Exercise 3")
+    fn validate(&self, _parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
+        // First make sure there are actually some authorities
+        if self.authorities.is_empty() {
+            return false;
+        }
+
+        // Calculate the proper authority
+        let authority_index = header.height as usize % self.authorities.len();
+        let proper_authority = self.authorities[authority_index];
+        
+        // Make sure the proper authority signed
+        header.consensus_digest == proper_authority
     }
 
     fn seal(
         &self,
-        parent_digest: &Self::Digest,
+        _parent_digest: &Self::Digest,
         partial_header: Header<()>,
     ) -> Option<Header<Self::Digest>> {
-        todo!("Exercise 4")
+        // First make sure there are actually some authorities
+        if self.authorities.is_empty() {
+            return None;
+        }
+
+        // Calculate the proper authority
+        let authority_index = partial_header.height as usize % self.authorities.len();
+        let proper_authority = self.authorities[authority_index];
+        
+        // Sign as the proper authority
+        Some(Header::<Self::Digest> {
+            parent: partial_header.parent,
+            height: partial_header.height,
+            state_root: partial_header.state_root,
+            extrinsics_root: partial_header.extrinsics_root,
+            consensus_digest: proper_authority,
+        })
     }
 }
 
