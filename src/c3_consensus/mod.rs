@@ -68,7 +68,24 @@ pub trait Consensus {
     /// following headers relative to the given parent digest. This is a provided method
     /// on the trait, so it must be general enough to work for any specific consensus engine.
     fn verify_sub_chain(&self, parent_digest: &Self::Digest, chain: &[Header<Self::Digest>]) -> bool {
-        todo!("Exercise 1")
+        // We will use a recursive algorithm in this solution.
+        // An iterative solution is also valid.
+
+        // The terminating case is when the chain is empty.
+        if chain.is_empty() {
+            return true;
+        }
+
+        // Knowing that we have at least some subchain, we check the first link in the chain
+        // using the required method `validate`.
+        // If the first link is bad, then the subchain is bad.
+        if !self.validate(parent_digest, &chain[0]) {
+            return false;
+        }
+
+        // Having confirmed that the first link is good, we make a recursive call
+        // to check the rest of the chain.
+        self.verify_sub_chain(&chain[0].consensus_digest, &chain[1..])
     }
 
     /// A human-readable name for this engine. This may be used in user-facing
