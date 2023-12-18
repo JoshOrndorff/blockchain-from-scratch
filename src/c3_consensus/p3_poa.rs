@@ -64,7 +64,7 @@ impl Consensus for PoaRoundRobinByHeight {
         // Calculate the proper authority
         let authority_index = header.height as usize % self.authorities.len();
         let proper_authority = self.authorities[authority_index];
-        
+
         // Make sure the proper authority signed
         header.consensus_digest == proper_authority
     }
@@ -82,7 +82,7 @@ impl Consensus for PoaRoundRobinByHeight {
         // Calculate the proper authority
         let authority_index = partial_header.height as usize % self.authorities.len();
         let proper_authority = self.authorities[authority_index];
-        
+
         // Sign as the proper authority
         Some(Header::<Self::Digest> {
             parent: partial_header.parent,
