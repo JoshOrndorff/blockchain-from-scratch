@@ -5,12 +5,13 @@
 //! generic consensus framework that we will use throughout the rest of the chapter.
 
 use super::{Consensus, Header};
+use crate::hash;
 
 /// A Proof of Work consensus engine. This is the same consensus logic that we
 /// implemented in the previous chapter. Here we simply re-implement it in the
 /// consensus framework that will be used throughout this chapter.
 pub struct PoW {
-    threshold: u64,
+    pub threshold: u64,
 }
 
 impl Consensus for PoW {
@@ -19,18 +20,36 @@ impl Consensus for PoW {
     /// Check that the provided header's hash is below the required threshold.
     /// This does not rely on the parent digest at all.
     fn validate(&self, _: &Self::Digest, header: &Header<Self::Digest>) -> bool {
-        todo!("Exercise 1")
+        hash(header) < self.threshold
     }
 
     /// Mine a new PoW seal for the partial header provided.
     /// This does not rely on the parent digest at all.
     fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
-        todo!("Exercise 2")
+        // The simple synchronous mining algorithm is to construct a header
+        // and try nonces iteratively starting from zero.
+        let mut header = Header::<Self::Digest> {
+            parent: partial_header.parent,
+            height: partial_header.height,
+            state_root: partial_header.state_root,
+            extrinsics_root: partial_header.extrinsics_root,
+            consensus_digest: 0,
+        };
+
+        while hash(&header) >= self.threshold {
+            header.consensus_digest += 1;
+        }
+
+        // In the case of PoW we will always be able to mine a valid seal.
+        // So we always return `Some(_)`.
+        Some(header)
     }
 }
 
 /// Create a PoW consensus engine that has a difficulty threshold such that roughly 1 in 100 blocks
 /// with randomly drawn nonces will be valid. That is: the threshold should be u64::max_value() / 100.
 pub fn moderate_difficulty_pow() -> impl Consensus {
-    todo!("Exercise 3")
+    PoW {
+        threshold: u64::max_value() / 100,
+    }
 }
