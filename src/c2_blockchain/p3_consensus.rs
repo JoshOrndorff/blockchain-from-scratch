@@ -227,21 +227,21 @@ fn build_contentious_forked_chain() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
     (vec![g, b1, b2], vec![b3, b4], vec![b3_prime, b4_prime])
 }
 
-// To run these tests: `cargo test part_3`
+// To run these tests: `cargo test bc_3`
 #[test]
-fn part_3_genesis_block_height() {
+fn bc_3_genesis_block_height() {
     let g = Header::genesis();
     assert!(g.height == 0);
 }
 
 #[test]
-fn part_3_genesis_block_parent() {
+fn bc_3_genesis_block_parent() {
     let g = Header::genesis();
     assert!(g.parent == 0);
 }
 
 #[test]
-fn part_3_genesis_block_extrinsic() {
+fn bc_3_genesis_block_extrinsic() {
     // Typically genesis blocks do not have any extrinsics.
     // In Substrate they never do. So our convention is to have the extrinsic be 0.
     let g = Header::genesis();
@@ -249,13 +249,13 @@ fn part_3_genesis_block_extrinsic() {
 }
 
 #[test]
-fn part_3_genesis_block_state() {
+fn bc_3_genesis_block_state() {
     let g = Header::genesis();
     assert!(g.state == 0);
 }
 
 #[test]
-fn part_3_genesis_consensus_digest() {
+fn bc_3_genesis_consensus_digest() {
     // We could require that the genesis block have a valid proof of work as well.
     // But instead I've chosen the simpler path of defining the nonce = 0 in genesis.
     let g = Header::genesis();
@@ -263,97 +263,97 @@ fn part_3_genesis_consensus_digest() {
 }
 
 #[test]
-fn part_3_child_block_height() {
+fn bc_3_child_block_height() {
     let g = Header::genesis();
     let b1 = g.child(0);
     assert!(b1.height == 1);
 }
 
 #[test]
-fn part_3_child_block_parent() {
+fn bc_3_child_block_parent() {
     let g = Header::genesis();
     let b1 = g.child(0);
     assert!(b1.parent == hash(&g));
 }
 
 #[test]
-fn part_3_child_block_extrinsic() {
+fn bc_3_child_block_extrinsic() {
     let g = Header::genesis();
     let b1 = g.child(7);
     assert_eq!(b1.extrinsic, 7);
 }
 
 #[test]
-fn part_3_child_block_state() {
+fn bc_3_child_block_state() {
     let g = Header::genesis();
     let b1 = g.child(7);
     assert_eq!(b1.state, 7);
 }
 
 #[test]
-fn part_3_child_block_consensus_digest() {
+fn bc_3_child_block_consensus_digest() {
     let g = Header::genesis();
     let b1 = g.child(7);
     assert!(hash(&b1) < THRESHOLD);
 }
 
 #[test]
-fn part_3_verify_genesis_only() {
+fn bc_3_verify_genesis_only() {
     let g = Header::genesis();
 
-    assert!(g.verify_sub_chain(&vec![]));
+    assert!(g.verify_sub_chain(&[]));
 }
 
 #[test]
-fn part_3_verify_three_blocks() {
+fn bc_3_verify_three_blocks() {
     let g = Header::genesis();
     let b1 = g.child(5);
     let b2 = b1.child(6);
 
     assert_eq!(b2.state, 11);
-    assert!(g.verify_sub_chain(&vec![b1, b2]));
+    assert!(g.verify_sub_chain(&[b1, b2]));
 }
 
 #[test]
-fn part_3_cant_verify_invalid_parent() {
+fn bc_3_cant_verify_invalid_parent() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     b1.parent = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_3_cant_verify_invalid_number() {
+fn bc_3_cant_verify_invalid_number() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     b1.height = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_3_cant_verify_invalid_state() {
+fn bc_3_cant_verify_invalid_state() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     b1.state = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_3_cant_verify_invalid_pow() {
+fn bc_3_cant_verify_invalid_pow() {
     let g = Header::genesis();
     let mut b1 = g.child(5);
     // It is possible that this test will pass with a false positive because
     // the PoW difficulty is relatively low.
     b1.consensus_digest = 10;
 
-    assert!(!g.verify_sub_chain(&vec![b1]));
+    assert!(!g.verify_sub_chain(&[b1]));
 }
 
 #[test]
-fn part_3_even_chain_valid() {
+fn bc_3_even_chain_valid() {
     let g = Header::genesis(); // 0
     let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
@@ -362,33 +362,33 @@ fn part_3_even_chain_valid() {
     let b3 = b2.child(1); // 4
     let b4 = b3.child(2); // 6
 
-    assert!(g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+    assert!(g.verify_sub_chain_even(&[b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_even_chain_invalid_first_block_after_fork() {
+fn bc_3_even_chain_invalid_first_block_after_fork() {
     let g = Header::genesis(); // 0
     let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(2); // 5 - invalid
     let b4 = b3.child(1); // 6
 
-    assert!(!g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_even(&[b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_even_chain_invalid_second_block_after_fork() {
+fn bc_3_even_chain_invalid_second_block_after_fork() {
     let g = Header::genesis(); // 0
     let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(1); // 4
     let b4 = b3.child(1); // 5 - invalid
 
-    assert!(!g.verify_sub_chain_even(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_even(&[b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_odd_chain_valid() {
+fn bc_3_odd_chain_valid() {
     let g = Header::genesis(); // 0
     let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
@@ -397,33 +397,33 @@ fn part_3_odd_chain_valid() {
     let b3 = b2.child(2); // 5
     let b4 = b3.child(2); // 7
 
-    assert!(g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
+    assert!(g.verify_sub_chain_odd(&[b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_odd_chain_invalid_first_block_after_fork() {
+fn bc_3_odd_chain_invalid_first_block_after_fork() {
     let g = Header::genesis(); // 0
     let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(1); // 4 - invalid
     let b4 = b3.child(1); // 5
 
-    assert!(!g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_odd(&[b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_odd_chain_invalid_second_block_after_fork() {
+fn bc_3_odd_chain_invalid_second_block_after_fork() {
     let g = Header::genesis(); // 0
     let b1 = g.child(2); // 2
     let b2 = b1.child(1); // 3
     let b3 = b2.child(2); // 5
     let b4 = b3.child(1); // 6 - invalid
 
-    assert!(!g.verify_sub_chain_odd(&vec![b1, b2, b3, b4]));
+    assert!(!g.verify_sub_chain_odd(&[b1, b2, b3, b4]));
 }
 
 #[test]
-fn part_3_verify_forked_chain() {
+fn bc_3_verify_forked_chain() {
     let (prefix, even, odd) = build_contentious_forked_chain();
 
     let g = &prefix[0];

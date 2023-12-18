@@ -28,11 +28,12 @@ where
 {
     type Digest = D;
 
-    fn validate(parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
+    fn validate(&self, parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
     fn seal(
+        &self, 
         parent_digest: &Self::Digest,
         partial_header: Header<()>,
     ) -> Option<Header<Self::Digest>> {

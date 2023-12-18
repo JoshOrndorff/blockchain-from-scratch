@@ -43,7 +43,7 @@ pub trait Consensus {
     /// digest and the parent digest. For example, they may need to check that the
     /// slot number is increasing. Therefore the parent digest is also passed
     /// here. Other consensus engines will not need to use the parent digest at all.
-    fn validate(parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool;
+    fn validate(&self, parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool;
 
     /// Takes a partial header that does not yet have a consensus digest attached. Returns
     /// a new header including the consensus digest that is valid according to the consensus rules.
@@ -56,6 +56,7 @@ pub trait Consensus {
     /// This function returns an Option because in some consensus engines, it may not be
     /// possible to construct a valid sealed block from the information given.
     fn seal(
+        &self,
         parent_digest: &Self::Digest,
         partial_header: Header<()>,
     ) -> Option<Header<Self::Digest>>;
@@ -66,7 +67,7 @@ pub trait Consensus {
     /// This method assumes that the parent_digest is valid, and verifies all the
     /// following headers relative to the given parent digest. This is a provided method
     /// on the trait, so it must be general enough to work for any specific consensus engine.
-    fn verify_sub_chain(parent_digest: &Self::Digest, chain: &[Header<Self::Digest>]) -> bool {
+    fn verify_sub_chain(&self, parent_digest: &Self::Digest, chain: &[Header<Self::Digest>]) -> bool {
         todo!("Exercise 1")
     }
 
@@ -84,12 +85,12 @@ impl Consensus for () {
     type Digest = ();
 
     /// All blocks are considered valid
-    fn validate(_: &Self::Digest, _: &Header<Self::Digest>) -> bool {
+    fn validate(&self, _: &Self::Digest, _: &Header<Self::Digest>) -> bool {
         todo!("Exercise 2")
     }
 
     /// No real sealing is required. The partial header has all the necessary information
-    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 3")
     }
 }

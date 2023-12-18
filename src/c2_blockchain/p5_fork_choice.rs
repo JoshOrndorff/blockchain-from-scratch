@@ -10,6 +10,8 @@
 use super::p4_batched_extrinsics::{Block, Header};
 use crate::hash;
 
+const THRESHOLD: u64 = u64::max_value() / 100;
+
 /// Judge which blockchain is "best" when there are multiple candidates. There are several
 /// meaningful notions of "best" which is why this is a trait instead of just a
 /// method.
@@ -40,7 +42,7 @@ pub struct LongestChainRule;
 
 impl ForkChoice for LongestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 2")
+        todo!("Exercise 1")
     }
 
     fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
@@ -79,7 +81,6 @@ impl ForkChoice for HeaviestChainRule {
         todo!("Exercise 6")
     }
 }
-
 /// The best chain is the one with the most blocks that have even hashes.
 ///
 /// This exact rule is a bit contrived, but it does model a family of fork choice rules
@@ -127,21 +128,30 @@ impl ForkChoice for MostBlocksWithEvenHash {
 ///
 /// Return your solutions as three vectors:
 /// 1. The common prefix including genesis
-/// 2. The even suffix (non-overlapping with the common prefix)
-/// 3. The odd suffix (non-overlapping with the common prefix)
+/// 2. The suffix chain which is longer (non-overlapping with the common prefix)
+/// 3. The suffix chain with more work (non-overlapping with the common prefix)
 fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
-    todo!("Exercise 8")
+    todo!("Exercise 9")
 }
 
 #[test]
-fn part_6_longest_chain() {
-    // Create two chains from the same genesis block, pass them in,
-    // make sure the right one is returned
-    todo!("Exercise")
+fn bc_5_longest_chain() {
+    let g = Header::genesis();
+
+    let h_a1 = g.child(hash(&[1]), 1);
+    let h_a2 = h_a1.child(hash(&[2]), 2);
+    let chain_1 = &[g.clone(), h_a1, h_a2];
+
+    let h_b1 = g.child(hash(&[3]), 3);
+    let chain_2 = &[g, h_b1];
+
+    assert!(LongestChainRule::first_chain_is_better(chain_1, chain_2));
+
+    assert_eq!(LongestChainRule::best_chain(&[chain_1, chain_2]), chain_1);
 }
 
 #[test]
-fn part_6_mine_to_custom_difficulty() {
+fn bc_5_mine_to_custom_difficulty() {
     let g = Block::genesis();
     let mut b1 = g.child(vec![1, 2, 3]);
 
@@ -155,19 +165,104 @@ fn part_6_mine_to_custom_difficulty() {
 }
 
 #[test]
-fn part_6_heaviest_chain() {
-    todo!("Exercise")
+fn bc_5_heaviest_chain() {
+    let g = Header::genesis();
+
+    let mut i = 0;
+    let h_a1 = loop {
+        let header = g.child(hash(&[i]), i);
+        // Extrinsics root hash must be higher than threshold (less work done)
+        if hash(&header) > THRESHOLD {
+            break header;
+        }
+        i += 1;
+    };
+    let chain_1 = &[g.clone(), h_a1];
+
+    let h_b1 = loop {
+        let header = g.child(hash(&[i]), i);
+        // Extrinsics root hash must be lower than threshold (more work done)
+        if hash(&header) < THRESHOLD {
+            break header;
+        }
+        i += 1;
+    };
+    let chain_2 = &[g, h_b1];
+
+    assert!(HeaviestChainRule::first_chain_is_better(chain_2, chain_1));
+
+    assert_eq!(HeaviestChainRule::best_chain(&[chain_1, chain_2]), chain_2);
 }
 
 #[test]
-fn part_6_most_even_blocks() {
-    todo!("Exercise")
+fn bc_5_most_even_blocks() {
+    let g = Header::genesis();
+
+    let mut h_a1 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_a1 = g.child(2, i);
+        if hash(&h_a1) % 2 == 0 {
+            break;
+        }
+    }
+    let mut h_a2 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_a2 = h_a1.child(2, i);
+        if hash(&h_a2) % 2 == 0 {
+            break;
+        }
+    }
+    let chain_1 = &[g.clone(), h_a1, h_a2];
+
+    let mut h_b1 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_b1 = g.child(2, i);
+        if hash(&h_b1) % 2 != 0 {
+            break;
+        }
+    }
+    let mut h_b2 = g.child(2, 0);
+    for i in 0..u64::max_value() {
+        h_b2 = h_b1.child(2, i);
+        if hash(&h_b2) % 2 != 0 {
+            break;
+        }
+    }
+    let chain_2 = &[g, h_b1, h_b2];
+
+    assert!(MostBlocksWithEvenHash::first_chain_is_better(
+        chain_1, chain_2
+    ));
+
+    assert_eq!(
+        MostBlocksWithEvenHash::best_chain(&[chain_1, chain_2]),
+        chain_1
+    );
 }
 
 #[test]
-fn part_6_longest_vs_heaviest() {
-    // Create two chains where one is longer and one is heavier.
-    // You'll need two assertions one for a call o longest chain
-    // Another for the call to heaviest chain
-    todo!("Exercise")
+fn bc_5_longest_vs_heaviest() {
+    let (_, longest_chain, pow_chain) = create_fork_one_side_longer_other_side_heavier();
+
+    assert!(LongestChainRule::first_chain_is_better(
+        &longest_chain,
+        &pow_chain
+    ));
+
+    assert_eq!(
+        LongestChainRule::best_chain(&[&longest_chain, &pow_chain]),
+        &longest_chain
+    );
+
+    let (_, longest_chain, pow_chain) = create_fork_one_side_longer_other_side_heavier();
+
+    assert!(HeaviestChainRule::first_chain_is_better(
+        &pow_chain,
+        &longest_chain
+    ));
+
+    assert_eq!(
+        HeaviestChainRule::best_chain(&[&longest_chain, &pow_chain]),
+        &pow_chain
+    );
 }

@@ -18,13 +18,13 @@ impl Consensus for PoW {
 
     /// Check that the provided header's hash is below the required threshold.
     /// This does not rely on the parent digest at all.
-    fn validate(_: &Self::Digest, header: &Header<Self::Digest>) -> bool {
+    fn validate(&self, _: &Self::Digest, header: &Header<Self::Digest>) -> bool {
         todo!("Exercise 1")
     }
 
     /// Mine a new PoW seal for the partial header provided.
     /// This does not rely on the parent digest at all.
-    fn seal(_: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
+    fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         todo!("Exercise 2")
     }
 }

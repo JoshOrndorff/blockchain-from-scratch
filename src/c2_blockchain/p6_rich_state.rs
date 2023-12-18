@@ -12,6 +12,7 @@
 //! naming coincidence foreshadows a key abstraction that we will make in a coming chapter.
 
 type Hash = u64;
+use crate::hash;
 
 /// In this section we will use sum and product together to be our state. While this is only a doubling of state size
 /// remember that in real world blockchains, the state is often really really large.
@@ -32,7 +33,7 @@ pub struct Header {
     extrinsics_root: Hash,
     /// Stores a cryptographic commitment, like a Merkle root or a hash to the complete
     /// post state.
-    state_root: u64,
+    state_root: Hash,
     consensus_digest: u64,
 }
 
@@ -52,7 +53,7 @@ impl Header {
     ///
     /// The state root is passed in similarly to how the complete state
     /// was in the previous section.
-    fn child(&self, extrinsic_root: Hash, state_root: Hash) -> Self {
+    fn child(&self, extrinsics_root: Hash, state_root: Hash) -> Self {
         todo!("Exercise 2")
     }
 
@@ -91,7 +92,7 @@ impl Block {
     }
 
     /// Create and return a valid child block.
-    pub fn child(&self, pre_state: &State, extrinsics: Vec<u8>) -> Self {
+    pub fn child(&self, pre_state: &State, extrinsics: Vec<u64>) -> Self {
         todo!("Exercise 6")
     }
 
@@ -120,6 +121,150 @@ fn build_invalid_child_block_with_valid_header(parent: &Header, pre_state: &Stat
     todo!("Exercise 8")
 }
 
-//TODO tests.
-// when testing exercise 8, make sure the block has a bad state root specifically
-// otherwise students may have copied unmodified code from the previous section.
+#[test]
+fn bc_6_genesis_header() {
+    let state = State { sum: 6, product: 9 };
+    let g = Header::genesis(hash(&state));
+    assert_eq!(g.height, 0);
+    assert_eq!(g.parent, 0);
+    assert_eq!(g.extrinsics_root, 0);
+    assert_eq!(g.state_root, hash(&state));
+}
+
+#[test]
+fn bc_6_genesis_block() {
+    let state = State { sum: 6, product: 9 };
+    let gh = Header::genesis(hash(&state));
+    let gb = Block::genesis(&state);
+
+    assert_eq!(gb.header, gh);
+    assert!(gb.body.is_empty());
+}
+
+#[test]
+fn bc_6_child_block_empty() {
+    let state = State { sum: 6, product: 9 };
+    let b0 = Block::genesis(&state);
+    let b1 = b0.child(&state, vec![]);
+
+    assert_eq!(b1.header.height, 1);
+    assert_eq!(b1.header.parent, hash(&b0.header));
+    assert_eq!(
+        b1,
+        Block {
+            header: b1.header.clone(),
+            body: vec![]
+        }
+    );
+}
+
+#[test]
+fn bc_6_child_block() {
+    let state = State { sum: 6, product: 9 };
+    let b0 = Block::genesis(&state);
+    let b1 = b0.child(&state, vec![1, 2, 3, 4, 5]);
+
+    assert_eq!(b1.header.height, 1);
+    assert_eq!(b1.header.parent, hash(&b0.header));
+    assert_eq!(
+        b1,
+        Block {
+            header: b1.header.clone(),
+            body: vec![1, 2, 3, 4, 5]
+        }
+    );
+}
+
+#[test]
+fn bc_6_child_header() {
+    let state_0 = State { sum: 6, product: 9 };
+    let g = Header::genesis(hash(&state_0));
+    let mut extrinsics = vec![1, 2, 3];
+    let mut state_1 = state_0;
+    for extrinsic in extrinsics.iter() {
+        state_1.sum += extrinsic;
+        state_1.product *= extrinsic;
+    }
+    let h1 = g.child(hash(&extrinsics), hash(&state_1));
+
+    assert_eq!(h1.height, 1);
+    assert_eq!(h1.parent, hash(&g));
+    assert_eq!(h1.extrinsics_root, hash(&extrinsics));
+    assert_eq!(h1.state_root, hash(&state_1));
+
+    extrinsics = vec![10, 20];
+    let mut state_2 = state_1;
+    for extrinsic in extrinsics.iter() {
+        state_2.sum += extrinsic;
+        state_2.product *= extrinsic;
+    }
+
+    let h2 = h1.child(hash(&extrinsics), hash(&state_2));
+
+    assert_eq!(h2.height, 2);
+    assert_eq!(h2.parent, hash(&h1));
+    assert_eq!(h2.extrinsics_root, hash(&extrinsics));
+    assert_eq!(h2.state_root, hash(&state_2));
+}
+
+#[test]
+fn bc_6_verify_three_blocks() {
+    let state_1 = State { sum: 6, product: 9 };
+    let g = Block::genesis(&state_1);
+    let b1 = g.child(&state_1, vec![1]);
+    let state_2 = State { sum: 7, product: 9 };
+    let b2 = b1.child(&state_2, vec![2]);
+    let chain = vec![g.clone(), b1, b2];
+    assert!(g.verify_sub_chain(&state_1, &chain[1..]));
+}
+
+#[test]
+fn bc_6_invalid_header_doesnt_check() {
+    let state = State { sum: 6, product: 9 };
+    let g = Header::genesis(hash(&state));
+    let h1 = Header {
+        parent: 0,
+        height: 100,
+        extrinsics_root: 0,
+        state_root: hash(&(State { sum: 0, product: 0 })),
+        consensus_digest: 0,
+    };
+
+    assert!(!g.verify_child(&h1));
+}
+
+#[test]
+fn bc_6_invalid_block_state_doesnt_check() {
+    let state = State { sum: 6, product: 9 };
+    let b0 = Block::genesis(&state);
+    let mut b1 = b0.child(&state, vec![1, 2, 3]);
+    b1.body = vec![];
+
+    assert!(!b0.verify_sub_chain(&state, &[b1]));
+}
+
+#[test]
+fn bc_6_block_with_invalid_header_doesnt_check() {
+    let state = State { sum: 6, product: 9 };
+    let b0 = Block::genesis(&state);
+    let mut b1 = b0.child(&state, vec![1, 2, 3]);
+    b1.header = Header::genesis(hash(&state));
+
+    assert!(!b0.verify_sub_chain(&state, &[b1]));
+}
+
+#[test]
+fn bc_6_student_invalid_block_really_is_invalid() {
+    let state = State { sum: 6, product: 9 };
+    let gb = Block::genesis(&state);
+    let gh = &gb.header;
+
+    let b1 = build_invalid_child_block_with_valid_header(gh, &state);
+    let h1 = &b1.header;
+
+    // Make sure that the header is valid according to header rules.
+    assert!(gh.verify_child(h1));
+
+    // Make sure that the block is not valid when executed.
+    assert!(!gb.verify_sub_chain(&state, &[b1]));
+}
