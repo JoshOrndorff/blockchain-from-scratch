@@ -106,7 +106,7 @@ impl Consensus for () {
         true
     }
 
-    /// No real sealing is required. The partial header has all the necessary information
+    /// No real sealing is required.
     fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
         Some(partial_header)
     }
