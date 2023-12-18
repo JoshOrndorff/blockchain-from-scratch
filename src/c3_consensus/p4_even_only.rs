@@ -6,9 +6,6 @@ use std::marker::PhantomData;
 
 use super::{Consensus, Header};
 
-/// A Consensus engine that wraps another consensus engine. This engine enforces the requirement that
-/// a block must have an even state root in order to be valid
-
 /// A Consensus engine that requires the state root to be even for the header to be valid.
 /// Wraps an inner consensus engine whose rules will also be enforced.
 struct EvenOnly<Inner: Consensus>(PhantomData<Inner>);
