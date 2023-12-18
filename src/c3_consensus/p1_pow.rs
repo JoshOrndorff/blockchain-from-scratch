@@ -31,7 +31,7 @@ impl Consensus for PoW {
 
 /// Create a PoW consensus engine that has a difficulty threshold such that roughly 1 in 100 blocks
 /// with randomly drawn nonces will be valid. That is: the threshold should be u64::max_value() / 100.
-pub fn moderate_difficulty_pow() -> impl Consensus {
+pub fn moderate_difficulty_pow() -> PoW {
     todo!("Exercise 3")
 }
 
