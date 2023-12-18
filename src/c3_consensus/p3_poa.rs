@@ -13,22 +13,35 @@ use super::{Consensus, ConsensusAuthority, Header};
 
 /// A Proof of Authority consensus engine. If any of the authorities have signed the block, it is valid.
 struct SimplePoa {
-    authorities: Vec<ConsensusAuthority>,
+    pub authorities: Vec<ConsensusAuthority>,
 }
 
 impl Consensus for SimplePoa {
     type Digest = ConsensusAuthority;
 
-    fn validate(&self, parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
-        todo!("Exercise 1")
+    fn validate(&self, _parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
+        self.authorities.contains(&header.consensus_digest)
     }
 
     fn seal(
-        &self, 
-        parent_digest: &Self::Digest,
+        &self,
+        _parent_digest: &Self::Digest,
         partial_header: Header<()>,
     ) -> Option<Header<Self::Digest>> {
-        todo!("Exercise 2")
+        // We can sign by any authority, so for simplicity, we just choose the first one in the list.
+        // For the first time, we an engine that may not be able to produce a valid block.
+        // If there are no authorities in the list, we have to return None.
+        let Some(&signer) = self.authorities.get(0) else {
+            return None;
+        };
+
+        Some(Header::<Self::Digest> {
+            parent: partial_header.parent,
+            height: partial_header.height,
+            state_root: partial_header.state_root,
+            extrinsics_root: partial_header.extrinsics_root,
+            consensus_digest: signer,
+        })
     }
 }
 
