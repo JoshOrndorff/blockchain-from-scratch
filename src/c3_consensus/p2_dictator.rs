@@ -10,7 +10,7 @@ use super::{Consensus, ConsensusAuthority, Header};
 /// identity who is the only identity authorized to sign valid blocks. Any block signed by the
 /// dictator is valid (at the consensus level), and any block not signed by the dictator is invalid.
 struct DictatorConsensus {
-    dictator: ConsensusAuthority,
+    pub dictator: ConsensusAuthority,
 }
 
 impl Consensus for DictatorConsensus {
@@ -18,11 +18,17 @@ impl Consensus for DictatorConsensus {
 
     /// Check that the header is signed by the dictator
     fn validate(&self, _: &Self::Digest, header: &Header<Self::Digest>) -> bool {
-        todo!("Exercise 1")
+        header.consensus_digest == self.dictator
     }
 
     /// Sign the given partial header by the dictator
     fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
-        todo!("Exercise 2")
+        Some(Header::<Self::Digest> {
+            parent: partial_header.parent,
+            height: partial_header.height,
+            state_root: partial_header.state_root,
+            extrinsics_root: partial_header.extrinsics_root,
+            consensus_digest: self.dictator,
+        })
     }
 }
