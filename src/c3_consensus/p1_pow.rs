@@ -50,12 +50,14 @@ impl Consensus for PoW {
 /// with randomly drawn nonces will be valid. That is: the threshold should be u64::max_value() / 100.
 pub fn moderate_difficulty_pow() -> impl Consensus {
     PoW {
-        threshold: u64::max_value() / 100,
+        threshold: u64::MAX / 100,
     }
 }
 
 /// Create an instance of the PoW Consensus that behaves identically to the trivial
 /// consensus implementation for `()` from the module level.
 pub fn trivial_always_valid_pow() -> PoW {
-    todo!("Exercise 4")
+    PoW {
+        threshold: u64::MAX,
+    }
 }
