@@ -103,12 +103,12 @@ impl Consensus for () {
 
     /// All blocks are considered valid
     fn validate(&self, _: &Self::Digest, _: &Header<Self::Digest>) -> bool {
-        todo!("Exercise 2")
+        true
     }
 
     /// No real sealing is required. The partial header has all the necessary information
     fn seal(&self, _: &Self::Digest, partial_header: Header<()>) -> Option<Header<Self::Digest>> {
-        todo!("Exercise 3")
+        Some(partial_header)
     }
 }
 
