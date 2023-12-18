@@ -1,5 +1,8 @@
 //! The Dictator consensus engine considers any header valid as long as it is signed by the dictator.
 //! The "signature" is made by simply attaching one of the Consensus Authorities from the root of this module.
+//! 
+//! Notice that there is no iterating or "searching" for a correct seal. This save a lot of computation and
+//! a lot of energy.
 //!
 //! Throughout this chapter we will avoid performing _Actual_ cryptographic calculations because they
 //! require a crypto library which and overcoming its own learning curve, plus they distract from the
