@@ -24,7 +24,7 @@ impl Consensus for SimplePoa {
     }
 
     fn seal(
-        &self, 
+        &self,
         parent_digest: &Self::Digest,
         partial_header: Header<()>,
     ) -> Option<Header<Self::Digest>> {

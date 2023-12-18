@@ -67,7 +67,11 @@ pub trait Consensus {
     /// This method assumes that the parent_digest is valid, and verifies all the
     /// following headers relative to the given parent digest. This is a provided method
     /// on the trait, so it must be general enough to work for any specific consensus engine.
-    fn verify_sub_chain(&self, parent_digest: &Self::Digest, chain: &[Header<Self::Digest>]) -> bool {
+    fn verify_sub_chain(
+        &self,
+        parent_digest: &Self::Digest,
+        chain: &[Header<Self::Digest>],
+    ) -> bool {
         todo!("Exercise 1")
     }
 
