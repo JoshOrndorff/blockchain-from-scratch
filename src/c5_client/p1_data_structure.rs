@@ -1,4 +1,4 @@
-//! Before we implement methods on our client, we must, create the `Block` and `Header`
+//! Before we implement any serious  methods on our client, we must, create the `Block` and `Header`
 //! data structures one last time like we did in Chapter 1. the logic you wrote there
 //! will be useful here as well and can probably be reused to some extent.
 //! 
@@ -17,7 +17,9 @@
 //! This abstraction is the key idea behind blockchain _frameworks_ like Substrate or the Cosmos SDK.
 
 use crate::c1_state_machine::StateMachine;
-use crate::c3_consensus::{Consensus, Header};
+pub use crate::c3_consensus::{Consensus, Header};
+
+use super::FullClient;
 type Hash = u64;
 
 impl<Digest> Header<Digest> {
@@ -42,7 +44,7 @@ impl<Digest> Header<Digest> {
     }
 }
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-struct Block<C: Consensus, SM: StateMachine> {
+pub struct Block<C: Consensus, SM: StateMachine> {
     header: Header<C::Digest>,
     body: Vec<SM::Transition>,
 }
@@ -71,6 +73,25 @@ fn create_empty_chain<C: Consensus, SM: StateMachine>(
     genesis_state: &SM::State,
 ) -> Vec<Block<C, SM>> {
     todo!("Exercise 8")
+}
+
+// To wrap this section up, we will implement the first two simple methods on our client.
+// These methods simply create a new instance of the client initialized with a proper
+// genesis block.
+impl<C: Consensus, SM: StateMachine> FullClient<C, SM> {
+    fn new(genesis_state: SM::State) -> Self {
+        todo!("Exercise 9")
+    }
+}
+
+// The default client is initialized with the default genesis state.
+// Depending on the state machine definition there may not _be_ a default
+// genesis state. There is only a default client when there is also a
+// default genesis state.
+impl<C: Consensus, SM: StateMachine> Default for FullClient<C, SM> {
+    fn default() -> Self {
+        todo!("Exerise 10")
+    }
 }
 
 //TODO tests
