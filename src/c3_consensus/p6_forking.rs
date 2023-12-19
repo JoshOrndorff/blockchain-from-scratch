@@ -71,33 +71,12 @@ fn even_after_given_height<Original: Consensus>(fork_height: u64) -> impl Consen
     todo!("Exercise 5")
 }
 
-/// So far we have considered the simpler case where the consensus engines before and after the fork
-/// use the same Digest type. Let us now turn our attention to the more general case where even the digest type changes.
-///
-/// In order to implement a consensus change where even the Digest type changes, we will need an enum
-/// that wraps the two individual digest types
-#[derive(Hash, Debug, PartialEq, Eq, Clone, Copy)]
-enum PowOrPoaDigest {
-    Pow(u64),
-    Poa(ConsensusAuthority),
-}
-
-impl From<u64> for PowOrPoaDigest {
-    fn from(d: u64) -> Self {
-        PowOrPoaDigest::Pow(d)
-    }
-}
-
-impl From<ConsensusAuthority> for PowOrPoaDigest {
-    fn from(d: ConsensusAuthority) -> Self {
-        PowOrPoaDigest::Poa(d)
-    }
-}
-
 /// In the spirit of Ethereum's recent switch from PoW to PoA, let us model a similar
 /// switch in our consensus framework. It should go without saying that the real-world ethereum
 /// handoff was considerably more complex than it may appear in our simplified example, although
 /// the fundamentals are the same.
+/// 
+/// For this task, you may use the PowOrPoaDigest type from the previous module if you like.
 fn pow_to_poa(
     fork_height: u64,
     difficulty: u64,
