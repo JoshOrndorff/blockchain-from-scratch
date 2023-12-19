@@ -21,8 +21,11 @@ pub trait ImportBlock<C: Consensus, SM: StateMachine> {
 
     /// Check whether a given block is a leaf (aka tip) of the chain.
     /// A leaf block has no known children.
-    /// Returns None if the block is not known
+    /// Returns None if the block is not known.
     fn is_leaf(&self, block_hash: u64) -> Option<bool>;
+
+    /// Get a list of all the leaf nodes in the chain.
+    fn all_leaves(&self) -> Vec<u64>;
 }
 
 impl<C: Consensus, SM: StateMachine> ImportBlock<C, SM> for FullClient<C, SM> {
@@ -36,6 +39,10 @@ impl<C: Consensus, SM: StateMachine> ImportBlock<C, SM> for FullClient<C, SM> {
 
     fn is_leaf(&self, block_hash: u64) -> Option<bool> {
         todo!("Exercise 3")
+    }
+
+    fn all_leaves(&self) -> Vec<u64> {
+        todo!("Exercise 4")
     }
 }
 
@@ -57,3 +64,5 @@ impl<C: Consensus, SM: StateMachine> ImportBlock<C, SM> for FullClient<C, SM> {
 // Import a block then check whether genesis is a leaf
 // Import two blocks in a single chain and make sure the leaf statuses is right.
 // Import a forked chain and make sure both leaves' statuses are right.
+
+// Same previous 4 scenarios except with the `all_leaves` method.
