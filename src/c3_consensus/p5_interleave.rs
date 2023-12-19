@@ -4,6 +4,9 @@
 //! this approach as a way to transition away from PoW.
 
 /// A Consensus engine that alternates back and forth between PoW and PoA sealed blocks.
+/// 
+/// Odd blocks are PoW
+/// Even blocks are PoA
 struct AlternatingPowPoa;
 use super::{Consensus, ConsensusAuthority, Header};
 
