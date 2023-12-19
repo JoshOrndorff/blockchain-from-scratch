@@ -1,15 +1,21 @@
-/// Brain dump (TODO revise later):
-///
-/// We have a blockchain data structure featuring:
-/// 1. A built in addition accumulator state machine
-/// 2. A built-in pow consensus mechanism
-///
-/// We also have abstractions over:
-/// 1. State Machines
-/// 2. Consensus Engines
-///
-/// Let's refactor our blockchain to take advantage of these two abstractions
-/// In doing so, we create a blockchain framework
+//! Before we implement methods on our client, we must, create the `Block` and `Header`
+//! data structures one last time like we did in Chapter 1. the logic you wrote there
+//! will be useful here as well and can probably be reused to some extent.
+//! 
+//! Throughout the Blockchain chapter, we created a blockchain data structure that had:
+//! 1. a built-in addition accumulator state machine
+//! 2. A built-in pow consensus mechanism
+//! 
+//! In the State Machine and Consensus chapters, we designed abstractions over both
+//! the state machine and the consensus. We also implemented several examples of each
+//! trait.
+//! 
+//! This will be the last time we have to write this blockchain data structure,
+//! because this time it will be fully generic over both the state machine and consensus
+//! logic, thanks to our traits.
+//! 
+//! This abstraction is the key idea behind blockchain _frameworks_ like Substrate or the Cosmos SDK.
+
 use crate::c1_state_machine::StateMachine;
 use crate::c3_consensus::{Consensus, Header};
 type Hash = u64;
@@ -68,6 +74,3 @@ fn create_empty_chain<C: Consensus, SM: StateMachine>(
 }
 
 //TODO tests
-
-//TODO maybe this shouldn't be a whole chapter. Maybe it is the first
-// section in the chapter on building a client
