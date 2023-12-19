@@ -4,8 +4,7 @@ use std::hash::{Hash, Hasher};
 mod c1_state_machine;
 mod c2_blockchain;
 mod c3_consensus;
-//TODO rename to c4
-mod c5_client;
+mod c4_client;
 
 // Simple helper to do some hashing.
 fn hash<T: Hash>(t: &T) -> u64 {
