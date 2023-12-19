@@ -5,7 +5,7 @@
 
 /// A Consensus engine that alternates back and forth between PoW and PoA sealed blocks.
 struct AlternatingPowPoa;
-use super::{Consensus, Header, ConsensusAuthority};
+use super::{Consensus, ConsensusAuthority, Header};
 
 /// In order to implement a consensus that can be sealed with either work or a signature,
 /// we will need an enum that wraps the two individual digest types.
@@ -21,8 +21,10 @@ impl From<u64> for PowOrPoaDigest {
     }
 }
 
-impl From<PowOrPoaDigest> for u64 {
-    fn from(_: PowOrPoaDigest) -> Self {
+impl TryFrom<PowOrPoaDigest> for u64 {
+    type Error = ();
+
+    fn try_from(_: PowOrPoaDigest) -> Result<Self, Self::Error> {
         todo!("Exercise 2")
     }
 }
@@ -33,8 +35,10 @@ impl From<ConsensusAuthority> for PowOrPoaDigest {
     }
 }
 
-impl From<PowOrPoaDigest> for ConsensusAuthority {
-    fn from(_: PowOrPoaDigest) -> Self {
+impl TryFrom<PowOrPoaDigest> for ConsensusAuthority {
+    type Error = ();
+
+    fn try_from(_: PowOrPoaDigest) -> Result<Self, Self::Error>  {
         todo!("Exercise 4")
     }
 }

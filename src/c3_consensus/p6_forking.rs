@@ -75,7 +75,7 @@ fn even_after_given_height<Original: Consensus>(fork_height: u64) -> impl Consen
 /// switch in our consensus framework. It should go without saying that the real-world ethereum
 /// handoff was considerably more complex than it may appear in our simplified example, although
 /// the fundamentals are the same.
-/// 
+///
 /// For this task, you may use the PowOrPoaDigest type from the previous module if you like.
 fn pow_to_poa(
     fork_height: u64,
