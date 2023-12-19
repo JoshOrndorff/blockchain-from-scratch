@@ -12,8 +12,8 @@
 use super::{Consensus, ConsensusAuthority, Header};
 
 /// A Proof of Authority consensus engine. If any of the authorities have signed the block, it is valid.
-struct SimplePoa {
-    authorities: Vec<ConsensusAuthority>,
+pub struct SimplePoa {
+    pub authorities: Vec<ConsensusAuthority>,
 }
 
 impl Consensus for SimplePoa {
