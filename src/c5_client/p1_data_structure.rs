@@ -1,23 +1,22 @@
 //! Before we implement any serious  methods on our client, we must, create the `Block` and `Header`
 //! data structures one last time like we did in Chapter 1. the logic you wrote there
 //! will be useful here as well and can probably be reused to some extent.
-//! 
+//!
 //! Throughout the Blockchain chapter, we created a blockchain data structure that had:
 //! 1. a built-in addition accumulator state machine
 //! 2. A built-in pow consensus mechanism
-//! 
+//!
 //! In the State Machine and Consensus chapters, we designed abstractions over both
 //! the state machine and the consensus. We also implemented several examples of each
 //! trait.
-//! 
+//!
 //! This will be the last time we have to write this blockchain data structure,
 //! because this time it will be fully generic over both the state machine and consensus
 //! logic, thanks to our traits.
-//! 
+//!
 //! This abstraction is the key idea behind blockchain _frameworks_ like Substrate or the Cosmos SDK.
 
-use crate::c1_state_machine::StateMachine;
-pub use crate::c3_consensus::{Consensus, Header};
+use super::{Consensus, ForkChoice, Header, StateMachine};
 
 use super::FullClient;
 type Hash = u64;
@@ -78,7 +77,12 @@ fn create_empty_chain<C: Consensus, SM: StateMachine>(
 // To wrap this section up, we will implement the first two simple methods on our client.
 // These methods simply create a new instance of the client initialized with a proper
 // genesis block.
-impl<C: Consensus, SM: StateMachine> FullClient<C, SM> {
+impl<C, SM, FC> FullClient<C, SM, FC>
+where
+    C: Consensus,
+    SM: StateMachine,
+    FC: ForkChoice<C>,
+{
     fn new(genesis_state: SM::State) -> Self {
         todo!("Exercise 9")
     }
@@ -88,7 +92,12 @@ impl<C: Consensus, SM: StateMachine> FullClient<C, SM> {
 // Depending on the state machine definition there may not _be_ a default
 // genesis state. There is only a default client when there is also a
 // default genesis state.
-impl<C: Consensus, SM: StateMachine> Default for FullClient<C, SM> {
+impl<C, SM, FC> Default for FullClient<C, SM, FC>
+where
+    C: Consensus,
+    SM: StateMachine,
+    FC: ForkChoice<C>,
+{
     fn default() -> Self {
         todo!("Exerise 10")
     }

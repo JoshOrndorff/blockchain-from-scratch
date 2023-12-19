@@ -1,16 +1,13 @@
 //! We being implementing our client with the most fundamental task, which is importing
 //! blocks and headers. Full clients import entire blocks while light clients only import headers.
 
-use crate::{c3_consensus::Consensus, c1_state_machine::StateMachine};
-
-use super::{p1_data_structure::{Block, Header}, FullClient};
+use super::{Block, Consensus, FullClient, Header, StateMachine, ForkChoice};
 
 /// A trait that represents the ability to import complete blocks of the chain.
-/// 
+///
 /// The main method here is `import_block` but several other methods are provided
 /// to access data about imported blocks.
 pub trait ImportBlock<C: Consensus, SM: StateMachine> {
-
     /// Attempt to import a block.
     /// Returns whether the import was successful or not.
     fn import_block(&mut self, _: Block<C, SM>) -> bool;
@@ -28,7 +25,12 @@ pub trait ImportBlock<C: Consensus, SM: StateMachine> {
     fn all_leaves(&self) -> Vec<u64>;
 }
 
-impl<C: Consensus, SM: StateMachine> ImportBlock<C, SM> for FullClient<C, SM> {
+impl<C, SM, FC> ImportBlock<C, SM> for FullClient<C, SM, FC>
+    where
+    C: Consensus,
+    SM: StateMachine,
+    FC: ForkChoice<C>
+{
     fn import_block(&mut self, _: Block<C, SM>) -> bool {
         todo!("Exercise 1")
     }

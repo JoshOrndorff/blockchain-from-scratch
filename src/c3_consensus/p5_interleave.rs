@@ -4,7 +4,7 @@
 //! this approach as a way to transition away from PoW.
 
 /// A Consensus engine that alternates back and forth between PoW and PoA sealed blocks.
-/// 
+///
 /// Odd blocks are PoW
 /// Even blocks are PoA
 struct AlternatingPowPoa;
@@ -41,7 +41,7 @@ impl From<ConsensusAuthority> for PowOrPoaDigest {
 impl TryFrom<PowOrPoaDigest> for ConsensusAuthority {
     type Error = ();
 
-    fn try_from(_: PowOrPoaDigest) -> Result<Self, Self::Error>  {
+    fn try_from(_: PowOrPoaDigest) -> Result<Self, Self::Error> {
         todo!("Exercise 4")
     }
 }
