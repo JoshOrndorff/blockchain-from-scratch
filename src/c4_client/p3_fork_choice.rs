@@ -4,8 +4,8 @@
 //! The concepts are identical here, but now that we have a client tracking a proper block database,
 //! we can explore more advanced fork choice algorithms. In particular, we can now explore GHOST.
 
-use super::{Header, FullClient, StateMachine};
-use crate::c3_consensus::{Consensus, Pow, SimplePoa, ConsensusAuthority};
+use super::{Header, FullClient, StateMachine, Consensus};
+use crate::c3_consensus::{Pow, SimplePoa, ConsensusAuthority};
 
 /// A means for a blockchain client to decide which chain is best among the many
 /// that it potentially knows about.

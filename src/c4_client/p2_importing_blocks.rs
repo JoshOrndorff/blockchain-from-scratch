@@ -16,6 +16,10 @@ pub trait ImportBlock<C: Consensus, SM: StateMachine> {
     /// Returns None if the block is not known.
     fn get_block(&self, block_hash: u64) -> Option<Block<C, SM>>;
 
+    /// Retrieve the state associated with a given block.
+    /// Returns None if the block is not known.
+    fn get_state(&self, block_hash: u64) -> Option<SM::State>;
+
     /// Check whether a given block is a leaf (aka tip) of the chain.
     /// A leaf block has no known children.
     /// Returns None if the block is not known.
@@ -39,12 +43,16 @@ impl<C, SM, FC> ImportBlock<C, SM> for FullClient<C, SM, FC>
         todo!("Exercise 2")
     }
 
-    fn is_leaf(&self, block_hash: u64) -> Option<bool> {
+    fn get_state(&self, block_hash: u64) -> Option<<SM as StateMachine>::State> {
         todo!("Exercise 3")
     }
 
-    fn all_leaves(&self) -> Vec<u64> {
+    fn is_leaf(&self, block_hash: u64) -> Option<bool> {
         todo!("Exercise 4")
+    }
+
+    fn all_leaves(&self) -> Vec<u64> {
+        todo!("Exercise 5")
     }
 }
 

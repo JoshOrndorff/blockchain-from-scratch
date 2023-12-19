@@ -28,8 +28,7 @@ mod p2_importing_blocks;
 mod p3_fork_choice;
 mod p4_transaction_pool;
 mod p5_authoring_blocks;
-// TODO maybe add a section about providing RPC services like a state_at method.
-// mod p6_serving_data;
+mod p6_finality;
 
 type Hash = u64;
 
