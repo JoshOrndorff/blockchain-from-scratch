@@ -16,30 +16,36 @@ enum PowOrPoaDigest {
 }
 
 impl From<u64> for PowOrPoaDigest {
-    fn from(_: u64) -> Self {
-        todo!("Exercise 1")
+    fn from(nonce: u64) -> Self {
+        Self::Pow(nonce)
     }
 }
 
 impl TryFrom<PowOrPoaDigest> for u64 {
     type Error = ();
 
-    fn try_from(_: PowOrPoaDigest) -> Result<Self, Self::Error> {
-        todo!("Exercise 2")
+    fn try_from(d: PowOrPoaDigest) -> Result<Self, Self::Error> {
+        match d {
+            PowOrPoaDigest::Pow(nonce) => Ok(nonce),
+            PowOrPoaDigest::Poa(_) => Err(()),
+        }
     }
 }
 
 impl From<ConsensusAuthority> for PowOrPoaDigest {
-    fn from(_: ConsensusAuthority) -> Self {
-        todo!("Exercise 3")
+    fn from(authority: ConsensusAuthority) -> Self {
+        Self::Poa(authority)
     }
 }
 
 impl TryFrom<PowOrPoaDigest> for ConsensusAuthority {
     type Error = ();
 
-    fn try_from(_: PowOrPoaDigest) -> Result<Self, Self::Error>  {
-        todo!("Exercise 4")
+    fn try_from(d: PowOrPoaDigest) -> Result<Self, Self::Error>  {
+        match d {
+            PowOrPoaDigest::Pow(_) => Err(()),
+            PowOrPoaDigest::Poa(authority) => Ok(authority),
+        }
     }
 }
 
