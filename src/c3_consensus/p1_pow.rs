@@ -10,11 +10,11 @@ use crate::hash;
 /// A Proof of Work consensus engine. This is the same consensus logic that we
 /// implemented in the previous chapter. Here we simply re-implement it in the
 /// consensus framework that will be used throughout this chapter.
-pub struct PoW {
+pub struct Pow {
     pub threshold: u64,
 }
 
-impl Consensus for PoW {
+impl Consensus for Pow {
     type Digest = u64;
 
     /// Check that the provided header's hash is below the required threshold.
@@ -48,16 +48,16 @@ impl Consensus for PoW {
 
 /// Create a PoW consensus engine that has a difficulty threshold such that roughly 1 in 100 blocks
 /// with randomly drawn nonces will be valid. That is: the threshold should be u64::max_value() / 100.
-pub fn moderate_difficulty_pow() -> PoW {
-    PoW {
+pub fn moderate_difficulty_pow() -> Pow {
+    Pow {
         threshold: u64::MAX / 100,
     }
 }
 
 /// Create an instance of the PoW Consensus that behaves identically to the trivial
 /// consensus implementation for `()` from the module level.
-pub fn trivial_always_valid_pow() -> PoW {
-    PoW {
+pub fn trivial_always_valid_pow() -> Pow {
+    Pow {
         threshold: u64::MAX,
     }
 }
