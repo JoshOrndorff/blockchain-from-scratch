@@ -3,12 +3,30 @@
 //! we could consider interleaving PoW blocks with PoA blocks. Some very early designs of Ethereum considered
 //! this approach as a way to transition away from PoW.
 
+use super::{Consensus, ConsensusAuthority, Header, p1_pow::Pow, p3_poa::SimplePoa};
+
 /// A Consensus engine that alternates back and forth between PoW and PoA sealed blocks.
 /// 
 /// Odd blocks are PoW
 /// Even blocks are PoA
-struct AlternatingPowPoa;
-use super::{Consensus, ConsensusAuthority, Header};
+struct AlternatingPowPoa {
+    // One approach to the fields is to store the pow threshold and poa authorities directly.
+    // I think it is more elegant to store whole PoW instances that can be re-used.
+
+    /// An instance of a PoW consensus that will be used for the PoW blocks
+    pow: Pow,
+    /// An instance of a PoA consensus that will be used for the PoA blocks
+    poa: SimplePoa,
+}
+
+impl AlternatingPowPoa {
+    fn new(threshold: u64, authorities: Vec<ConsensusAuthority>) -> Self {
+        Self {
+            pow: Pow { threshold },
+            poa: SimplePoa { authorities },
+        }
+    }
+}
 
 /// In order to implement a consensus that can be sealed with either work or a signature,
 /// we will need an enum that wraps the two individual digest types.
@@ -56,7 +74,10 @@ impl Consensus for AlternatingPowPoa {
     type Digest = ConsensusAuthority;
 
     fn validate(&self, parent_digest: &Self::Digest, header: &Header<Self::Digest>) -> bool {
-        todo!("Exercise 5")
+        // The requirement is based on evenness or oddness of the block height.
+        if header.height % 2 == 0 {
+            self.poa.va
+        }
     }
 
     fn seal(
