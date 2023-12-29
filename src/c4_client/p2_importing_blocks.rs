@@ -1,7 +1,7 @@
 //! We being implementing our client with the most fundamental task, which is importing
 //! blocks and headers. Full clients import entire blocks while light clients only import headers.
 
-use super::{Block, Consensus, FullClient, Header, StateMachine, ForkChoice};
+use super::{Block, Consensus, FullClient, StateMachine};
 
 /// A trait that represents the ability to import complete blocks of the chain.
 ///
@@ -29,11 +29,10 @@ pub trait ImportBlock<C: Consensus, SM: StateMachine> {
     fn all_leaves(&self) -> Vec<u64>;
 }
 
-impl<C, SM, FC> ImportBlock<C, SM> for FullClient<C, SM, FC>
+impl<C, SM, FC, P> ImportBlock<C, SM> for FullClient<C, SM, FC, P>
     where
     C: Consensus,
     SM: StateMachine,
-    FC: ForkChoice<C>
 {
     fn import_block(&mut self, _: Block<C, SM>) -> bool {
         todo!("Exercise 1")

@@ -11,7 +11,7 @@
 
 use std::{collections::VecDeque, marker::PhantomData};
 
-use super::{ForkChoice, FullClient, StateMachine, Consensus};
+use super::{FullClient, StateMachine};
 
 /// An abstraction over the notion of transaction pool.
 pub trait TransactionPool<SM: StateMachine> {
@@ -39,26 +39,24 @@ pub trait TransactionPool<SM: StateMachine> {
 
 // First we add some new user-facing methods to the client.
 // These are basically wrappers around methods that the pool itself provides.
-impl<C, SM, FC> FullClient<C, SM, FC>           
+impl<C, SM, FC, P> FullClient<C, SM, FC, P>           
     where
-    C: Consensus,
     SM: StateMachine,
-    FC: ForkChoice<C>,
 {
     /// Submit a transaction to the client's transaction pool to hopefully
     /// be included in a future block.
-    fn submit_transaction(&mut self, t: SM::Transition) {
+    pub fn submit_transaction(&mut self, t: SM::Transition) {
         todo!("Exercise 1")
     }
 
     /// Get the total number of transactions in the node's
     /// transaction pool.
-    fn pool_size(&self) -> usize {
+    pub fn pool_size(&self) -> usize {
         todo!("Exercise 2")
     }
 
     /// Check whether a a given transaction is in the client's transaction pool.
-    fn pool_contains(&self, t: SM::Transition) -> bool {
+    pub fn pool_contains(&self, t: SM::Transition) -> bool {
         todo!("Exercise 3")
     }
 }

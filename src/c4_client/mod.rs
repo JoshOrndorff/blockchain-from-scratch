@@ -17,11 +17,7 @@ use crate::{
     c3_consensus::{Consensus, Header},
 };
 use p1_data_structure::Block;
-pub use p3_fork_choice::ForkChoice;
-use std::{
-    collections::{HashMap, HashSet},
-    marker::PhantomData,
-};
+use p3_fork_choice::ForkChoice;
 
 mod p1_data_structure;
 mod p2_importing_blocks;
@@ -36,27 +32,36 @@ type Hash = u64;
 /// forks, state, and it also pools transactions waiting to be included in upcoming blocks.
 /// It can import new blocks, author its own blocks.
 ///
-/// The client that we are writing is very reusable and is generic over multiple state machines
-/// and consensus systems. These are represented as generic parameters.
+/// The client that we are writing is very reusable and is generic in several ways including:
+/// * state machines - It can use any state machine that implements our trait.
+/// * consensus system - It can use any consensus engine that implements our trait.
+/// * Fork Choice - It can use any fork choice we discussed and more. This is explored shortly.
+/// * Transaction Pool - It can use any logic for queueing and prioritizing incoming future transactions.
 ///
 /// As you work through the sections in this chapter, you will add features to the client
-/// by implementing more and more traits on it. You may also need to revisit your struct definition
-/// to add more fields.
-pub struct FullClient<C, SM, FC>
-where
-    C: Consensus,
-    SM: StateMachine,
-    FC: ForkChoice<C>,
+/// by implementing more and more methods on it.
+/// 
+/// In practice the trait bounds here will always be the same:
+/// C: Client
+/// SM: StateMachine
+/// FC: ForkChoice<C>
+/// P: TransactionPool<SM>
+/// 
+/// But we leave them unconstrained here to avoid repeating many where clauses throughout the section.
+/// Instead we bind them on impl blocks.
+pub struct FullClient<C, SM, FC, P>
 {
-    // You are free to add fields here. Please document them as you add them.
-    _ph_data: PhantomData<(C, SM, FC)>,
+    /// The consensus engine used by this client.
+    consensus_engine: C,
+    /// The state machine used by this client.
+    state_machine: SM,
+    /// The fork choice strategy used by this client.
+    fork_choice: FC,
+    /// The transaction pool used by this client.
+    transaction_pool: P,
 
-    //TODO Probably don't want to include all of these right off the bat.
-    // For now it is more of a brain dump.
-    transaction_pool: Vec<SM::Transition>,
-    // block_database: HashMap<Hash, Block>,
-    // state_database: HashMap<Hash, State>,
-    leaves: HashSet<Hash>,
+    // TODO: You are free to add more fields here, and you will probably need to.
+    // Please document them as you add them.
 }
 
 //TODO Consider exploring LightClient as well. It may import headers but not blocks for example.

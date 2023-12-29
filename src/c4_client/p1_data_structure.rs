@@ -77,11 +77,9 @@ fn create_empty_chain<C: Consensus, SM: StateMachine>(
 // To wrap this section up, we will implement the first two simple methods on our client.
 // These methods simply create a new instance of the client initialized with a proper
 // genesis block.
-impl<C, SM, FC> FullClient<C, SM, FC>
+impl<C, SM, FC, P> FullClient<C, SM, FC, P>
 where
-    C: Consensus,
     SM: StateMachine,
-    FC: ForkChoice<C>,
 {
     fn new(genesis_state: SM::State) -> Self {
         todo!("Exercise 9")
@@ -92,7 +90,7 @@ where
 // Depending on the state machine definition there may not _be_ a default
 // genesis state. There is only a default client when there is also a
 // default genesis state.
-impl<C, SM, FC> Default for FullClient<C, SM, FC>
+impl<C, SM, FC, P> Default for FullClient<C, SM, FC, P>
 where
     C: Consensus,
     SM: StateMachine,

@@ -5,17 +5,12 @@
 //! Although we elide the details of the game itself, this model still allows us to explore
 //! the consequences of having some blocks that are never reverted.
 
-use super::{ForkChoice, FullClient, StateMachine, Consensus};
+use super::FullClient;
 
-impl<C, SM, FC> FullClient<C, SM, FC>           
-    where
-    C: Consensus,
-    SM: StateMachine,
-    FC: ForkChoice<C>,
-{
+impl<C, SM, FC, P> FullClient<C, SM, FC, P> {
     /// Mark the given block as final so that it will never be reverted.
     /// Returns whether or not the block was known and marked successfully.
-    fn manually_finalize_block(&mut self, block_hash: u64) -> bool {
+    pub fn manually_finalize_block(&mut self, block_hash: u64) -> bool {
         todo!("Exercise 1")
     }
 }
