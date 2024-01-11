@@ -191,6 +191,14 @@ fn bc_2_cant_verify_invalid_state() {
 }
 
 #[test]
+fn bc_2_invalid_chain_is_really_invalid() {
+    // This test chooses to use the student's own verify function.
+    // This should be relatively safe given that we have already tested that function.
+    let invalid_chain = build_an_invalid_chain();
+    assert!(!invalid_chain[0].verify_sub_chain(&invalid_chain[1..]))
+}
+
+#[test]
 fn bc_2_verify_forked_chain() {
     let g = Header::genesis();
     let (c1, c2) = build_forked_chain();
