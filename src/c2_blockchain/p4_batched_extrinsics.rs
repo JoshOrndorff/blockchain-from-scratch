@@ -110,7 +110,7 @@ fn bc_4_genesis_header() {
     let g = Header::genesis();
     assert_eq!(g.height, 0);
     assert_eq!(g.parent, 0);
-    assert_eq!(g.extrinsics_root, 0);
+    assert_eq!(g.extrinsics_root, hash(&Vec::<u64>::new()));
     assert_eq!(g.state, 0);
 }
 
