@@ -35,6 +35,10 @@ impl Header {
     /// Without the extrinsics themselves, we cannot calculate the final state
     /// so that information is passed in.
     pub fn child(&self, extrinsics_root: Hash, state: u64) -> Self {
+        // TODO I'm pretty sure this line is incorrect.
+        // You are setting the consensus_digest always to zero.
+        // But you need to mine here.
+        // You need to try out different consensus digests until you find one that satisfies the threshold.
         Self { parent: hash(&self), height: self.height + 1, extrinsics_root, state, consensus_digest: 0 }
     }
 
