@@ -98,10 +98,21 @@ fn mine_extra_hard(block: &mut Block, threshold: u64) {
 impl ForkChoice for HeaviestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
     
-        let work_1: i64 = chain_1.to_vec().into_iter().map(|x| THRESHOLD as i64 - hash(&x) as i64).sum();
+        let work_1 = chain_1.to_vec().into_iter().map(|x| {
+            println!("SDSSSSSSSSSSSSSSSSSSSS");
+            let y = THRESHOLD - hash(&x);
+            println!("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            y
+        }
+        ).sum::<u64>();
         println!("{:?}", work_1);
 
-        let work_2: i64 = chain_2.to_vec().into_iter().map(|x| THRESHOLD as i64 - hash(&x) as i64).sum();
+        let work_2 = chain_2.to_vec().into_iter().map(|x| {
+            println!("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            let y = THRESHOLD - hash(&x);
+            println!("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+            y
+        }).sum();
         println!("{:?}", work_2);
         
 
@@ -188,9 +199,15 @@ fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>
 
     let mut b3_prime = b2.child(hash(&vec![7]), 7);
     let custom_threshold = u64::max_value() / 1000;
+
+    println!("The main threshold is   {:?}", THRESHOLD);
+    println!("The custom threshold is {:?}", custom_threshold);
+
+    println!("The original hash is {:?}", hash(&b3_prime));
     while hash(&b3_prime) >= custom_threshold{
         b3_prime.consensus_digest += 1;
     }
+    println!("The new      hash is {:?}", hash(&b3_prime));
 
     (vec![g, b1, b2], vec![b3, b4], vec![b3_prime])
 
