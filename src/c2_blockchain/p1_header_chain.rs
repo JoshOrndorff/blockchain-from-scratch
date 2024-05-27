@@ -3,6 +3,8 @@
 //! start with that.
 //!
 
+use std::collections::btree_map::Range;
+
 use crate::hash;
 
 // We will use Rust's built-in hashing where the output type is u64. I'll make an alias
@@ -25,12 +27,12 @@ pub struct Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
-        todo!("Exercise 1")
+        Self { parent: 0, height: 0, extrinsics_root: (), state_root: (), consensus_digest: () }
     }
 
     /// Create and return a valid child header.
     fn child(&self) -> Self {
-        todo!("Exercise 2")
+        Self { parent: hash(&self), height: self.height + 1, extrinsics_root: (), state_root: (), consensus_digest: () }
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -38,7 +40,15 @@ impl Header {
     /// This method may assume that the block on which it is called is valid, but it
     /// must verify all of the blocks in the slice;
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 3")
+        let mut first = self.clone();
+        
+        for header in chain.into_iter(){
+            if header.parent != hash(&first) || header.height != first.height + 1 {
+                return false;
+            }
+            first = header.clone();
+        }
+        true
     }
 }
 
@@ -46,14 +56,33 @@ impl Header {
 
 /// Build and return a valid chain with exactly five blocks including the genesis block.
 fn build_valid_chain_length_5() -> Vec<Header> {
-    todo!("Exercise 4")
+    let mut first = Header::genesis();
+    let mut chain = Vec::<Header>::new();
+    chain.push(first.clone());
+
+    for _ in 1..=5{
+        first = first.child();
+        chain.push(first.clone());
+    }
+    chain
 }
 
 /// Build and return a chain with at least three headers.
 /// The chain should start with a proper genesis header,
 /// but the entire chain should NOT be valid.
 fn build_an_invalid_chain() -> Vec<Header> {
-    todo!("Exercise 5")
+    let first = Header::genesis();
+    let mut chain = Vec::<Header>::new();
+    let mut child = first.child();
+
+    chain.push(first);
+    chain.push(Header { parent: child.parent, height: 5000, extrinsics_root: (), state_root: (), consensus_digest: () });
+    child.height = 10;
+    child.parent = hash(&chain[1]);
+    chain.push(Header { parent: hash(&child), height: 0, extrinsics_root: (), state_root: (), consensus_digest: () });
+    chain.push(child);
+
+    chain
 }
 
 // To run these tests: `cargo test bc_1

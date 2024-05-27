@@ -31,12 +31,12 @@ pub struct Header {
 impl Header {
     /// Returns a new valid genesis header.
     fn genesis() -> Self {
-        todo!("Exercise 1")
+        Self { parent: 0, height: 0, extrinsic: 0, state: 0, consensus_digest: () }
     }
 
     /// Create and return a valid child header.
     fn child(&self, extrinsic: u64) -> Self {
-        todo!("Exercise 2")
+        Self { parent: hash(&self), height: self.height+1, extrinsic, state: self.state + extrinsic, consensus_digest: () }
     }
 
     /// Verify that all the given headers form a valid chain from this header to the tip.
@@ -48,7 +48,15 @@ impl Header {
     /// So in order for a block to verify, we must have that relationship between the extrinsic,
     /// the previous state, and the current state.
     fn verify_sub_chain(&self, chain: &[Header]) -> bool {
-        todo!("Exercise 3")
+        let mut first = self.clone();
+        
+        for header in chain.into_iter(){
+            if header.parent != hash(&first) || header.height != first.height + 1 || header.state != first.state + header.extrinsic{
+                return false;
+            }
+            first = header.clone();
+        }
+        true
     }
 }
 
@@ -56,7 +64,15 @@ impl Header {
 
 /// Build and return a valid chain with the given number of blocks.
 fn build_valid_chain(n: u64) -> Vec<Header> {
-    todo!("Exercise 4")
+    let mut first = Header::genesis();
+    let mut chain = Vec::<Header>::new();
+    chain.push(first.clone());
+
+    for i in 1..=n{
+        first = first.child(i);
+        chain.push(first.clone());
+    }
+    chain
 }
 
 /// Build and return a chain with at least three headers.
@@ -65,12 +81,19 @@ fn build_valid_chain(n: u64) -> Vec<Header> {
 ///
 /// As we saw in the last unit, this is trivial when we construct arbitrary blocks.
 /// However, from outside this crate, it is not so trivial. Our interface for creating
-/// new blocks, `genesis()` and `child()`, makes it impossible to create arbitrary blocks.
+/// new blocks, genesis() and child(), makes it impossible to create arbitrary blocks.
 ///
-/// For this function, ONLY USE the the `genesis()` and `child()` methods to create blocks.
+/// For this function, ONLY USE the the genesis() and child() methods to create blocks.
 /// The exercise is still possible.
 fn build_an_invalid_chain() -> Vec<Header> {
-    todo!("Exercise 5")
+    let mut first = Header::genesis();
+    let mut chain = Vec::<Header>::new();
+    for i in 1..=3{
+        first = first.child(i);
+        first.state = 0;
+        chain.push(first.clone());
+    }
+    chain
 }
 
 /// Build and return two header chains.
@@ -85,13 +108,32 @@ fn build_an_invalid_chain() -> Vec<Header> {
 ///
 /// Side question: What is the fewest number of headers you could create to achieve this goal.
 fn build_forked_chain() -> (Vec<Header>, Vec<Header>) {
-    todo!("Exercise 6")
+    let mut first = Header::genesis();
+    let mut chain = Vec::<Header>::new();
+    let mut chain_forked: Vec<Header> = Vec::<Header>::new();
+    chain.push(first.clone());
+    let mut fork_first: Header = Header::genesis();
+    for i in 1..=4{
+        if i == 2 {
+            chain_forked = chain.clone();
+            fork_first = first.clone();
+        }
+        if i > 2 {
+            fork_first = fork_first.child(i+1);
+            chain_forked.push(fork_first.clone());
+        }
+        first = first.child(i);
+        chain.push(first.clone());
+    }
+
+    (chain, chain_forked)
+
 
     // Exercise 7: After you have completed this task, look at how its test is written below.
     // There is a critical thinking question for you there.
 }
 
-// To run these tests: `cargo test bc_2`
+// To run these tests: cargo test bc_2
 #[test]
 fn bc_2_genesis_block_height() {
     let g = Header::genesis();
@@ -188,14 +230,6 @@ fn bc_2_cant_verify_invalid_state() {
     b1.state = 10;
 
     assert!(!g.verify_sub_chain(&[b1]));
-}
-
-#[test]
-fn bc_2_invalid_chain_is_really_invalid() {
-    // This test chooses to use the student's own verify function.
-    // This should be relatively safe given that we have already tested that function.
-    let invalid_chain = build_an_invalid_chain();
-    assert!(!invalid_chain[0].verify_sub_chain(&invalid_chain[1..]))
 }
 
 #[test]

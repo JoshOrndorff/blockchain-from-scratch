@@ -7,6 +7,8 @@
 //! Since we have nothing to add to the Block or Header data structures in this lesson,
 //! we will import them from the previous lesson.
 
+use std::borrow::BorrowMut;
+
 use super::p4_batched_extrinsics::{Block, Header};
 use crate::hash;
 
@@ -20,7 +22,7 @@ pub trait ForkChoice {
     ///
     /// The chains are not assumed to start from the same genesis block, or even a
     /// genesis block at all. This makes it possible to compare entirely disjoint
-    /// histories. It also makes it possible to compare _only_ the divergent part
+    /// histories. It also makes it possible to compare only the divergent part
     /// of sibling chains back to the last common ancestor.
     ///
     /// The chains are assumed to be valid, so it is up to the caller to check
@@ -33,7 +35,13 @@ pub trait ForkChoice {
     /// two chains. Therefore this method has a provided implementation. However,
     /// it may be much more performant to write a fork-choice-specific implementation.
     fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
-        todo!("Exercise 1")
+        let mut first = candidate_chains[0];
+        for chain in candidate_chains[1..].iter(){
+            if !Self::first_chain_is_better(first, chain){
+                first = chain;
+            }
+        }
+        first
     }
 }
 
@@ -42,15 +50,26 @@ pub struct LongestChainRule;
 
 impl ForkChoice for LongestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 1")
+        if chain_1.len() >= chain_2.len(){
+            return true;
+        }
+        false
     }
 
-    fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
-        // Remember, this method is provided. You _can_ solve the exercise by
-        // simply deleting this block. It is up to you to decide whether this fork
-        // choice warrants a custom implementation.
-        todo!("Exercise 3")
-    }
+    // fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
+    //     // Remember, this method is provided. You can solve the exercise by
+    //     // simply deleting this block. It is up to you to decide whether this fork
+    //     // choice warrants a custom implementation.
+    //     let mut curr_len = candidate_chains[0].len();
+    //     let mut curr_best_chain = candidate_chains[0];
+    //     for chain in candidate_chains[1..].iter(){
+    //         if chain.len()> curr_len{
+    //             curr_len = chain.len();
+    //             curr_best_chain = chain;
+    //         }  
+    //     }
+    //     curr_best_chain
+    // }
 }
 
 /// The best chain is the one with the most accumulated work.
@@ -60,26 +79,48 @@ impl ForkChoice for LongestChainRule {
 /// because finding a block with a low hash requires, on average, trying more
 /// nonces. Modeling the amount of work required to achieve a particular hash
 /// is out of scope for this exercise, so we will use the not-really-right-but
-/// conceptually-good-enough formula `work = THRESHOLD - block_hash`
+/// conceptually-good-enough formula work = THRESHOLD - block_hash
 pub struct HeaviestChainRule;
 
 /// Mutates a block (and its embedded header) to contain more PoW difficulty.
 /// This will be useful for exploring the heaviest chain rule. The expected
-/// usage is that you create a block using the normal `Block.child()` method
+/// usage is that you create a block using the normal Block.child() method
 /// and then pass the block to this helper for additional mining.
 fn mine_extra_hard(block: &mut Block, threshold: u64) {
-    todo!("Exercise 4")
-}
+    let mut trial = block.header.clone();
+    while hash(&trial) >= threshold{
+        trial.consensus_digest += 1;
+        }
+        block.header = trial;
+            
+    }
 
 impl ForkChoice for HeaviestChainRule {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 5")
+    
+        let work_1: i64 = chain_1.to_vec().into_iter().map(|x| THRESHOLD as i64 - hash(&x) as i64).sum();
+        println!("{:?}", work_1);
+
+        let work_2: i64 = chain_2.to_vec().into_iter().map(|x| THRESHOLD as i64 - hash(&x) as i64).sum();
+        println!("{:?}", work_2);
+        
+
+        if work_1 >= work_2{
+            return true;
+        }
+        false
     }
 
-    fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
-        // Remember, this method is provided.
-        todo!("Exercise 6")
-    }
+    // fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
+    //     // Remember, this method is provided.
+    //     let mut first = candidate_chains[0];
+    //     for chain in candidate_chains[1..].iter(){
+    //         if !Self::first_chain_is_better(first, chain){
+    //             first = chain;
+    //         }
+    //     }
+    //     first
+    // }
 }
 /// The best chain is the one with the most blocks that have even hashes.
 ///
@@ -99,20 +140,26 @@ pub struct MostBlocksWithEvenHash;
 
 impl ForkChoice for MostBlocksWithEvenHash {
     fn first_chain_is_better(chain_1: &[Header], chain_2: &[Header]) -> bool {
-        todo!("Exercise 7")
+        let even_blocks_1: Vec<Header> = chain_1.to_vec().into_iter().filter(|x| hash(x) % 2 == 0).collect();
+        let even_blocks_2: Vec<Header> = chain_2.to_vec().into_iter().filter(|x| hash(x) % 2 == 0).collect();
+
+        if even_blocks_1.len()>=even_blocks_2.len(){
+            return true;
+        }
+        false
     }
 
-    fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
-        // Remember, this method is provided.
-        todo!("Exercise 8")
-    }
+    // fn best_chain<'a>(candidate_chains: &[&'a [Header]]) -> &'a [Header] {
+    //     // Remember, this method is provided.
+    //     todo!("Exercise 8")
+    // }
 }
 
 // This lesson has omitted one popular fork choice rule:
 // GHOST - Greedy Heaviest Observed SubTree
 //
 // I've omitted GHOST from here because it requires information about blocks that
-// are _not_ in the chain to decide which chain is best. Therefore it does't work
+// are not in the chain to decide which chain is best. Therefore it does't work
 // well with this relatively simple trait definition. We will return to the GHOST
 // rule later when we have written a full blockchain client
 //
@@ -131,7 +178,22 @@ impl ForkChoice for MostBlocksWithEvenHash {
 /// 2. The suffix chain which is longer (non-overlapping with the common prefix)
 /// 3. The suffix chain with more work (non-overlapping with the common prefix)
 fn create_fork_one_side_longer_other_side_heavier() -> (Vec<Header>, Vec<Header>, Vec<Header>) {
-    todo!("Exercise 9")
+    let g = Header::genesis();
+    let b1 = g.child(hash(&vec![2, 3]), 5);
+    let b2 = b1.child(hash(&vec![4,5,6]), 15);
+
+    // first chain
+    let b3 = b2.child(hash(&vec![7]), 7);
+    let b4 = b3.child(hash(&vec![8,9]), 17);
+
+    let mut b3_prime = b2.child(hash(&vec![7]), 7);
+    let custom_threshold = u64::max_value() / 1000;
+    while hash(&b3_prime) >= custom_threshold{
+        b3_prime.consensus_digest += 1;
+    }
+
+    (vec![g, b1, b2], vec![b3, b4], vec![b3_prime])
+
 }
 
 #[test]
