@@ -13,7 +13,7 @@ type Hash = u64;
 /// In this lesson we are introducing proof of work onto our blocks. We need a hash threshold.
 /// You may change this as you see fit, and I encourage you to experiment. Probably best to start
 /// high so we aren't wasting time mining. I'll start with 1 in 100 blocks being valid.
-const THRESHOLD: u64 = u64::max_value() / 100;
+pub const THRESHOLD: u64 = u64::max_value() / 100;
 
 /// In this lesson we introduce the concept of a contentious hard fork. The fork will happen at
 /// this block height.

@@ -1,11 +1,16 @@
 //! Until now, each block has contained just a single extrinsic. Really we would prefer to batch them.
 //! Now, we stop relying solely on headers, and instead, create complete blocks.
 
+
 use crate::hash;
 type Hash = u64;
+use super::p3_consensus::THRESHOLD;
 
 /// The header no longer contains an extrinsic directly. Rather a vector of extrinsics will be stored in
-/// the block body. We are still storing the state in the header for now. This will change in an upcoming
+/// the block body. 
+/// We apply previous learnings in consensus but move away from Political or Arbitrary rules and focus on proof of work.
+/// Recall: for Proof of Work the consensus digest is a nonce which gets the block hash below a certain threshold.
+/// We are still storing the state in the header for now. This will change in an upcoming
 /// lesson as well.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Header {
