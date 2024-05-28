@@ -117,7 +117,7 @@ fn bc_4_genesis_header() {
     assert_eq!(g.parent, 0);
     assert_eq!(g.extrinsics_root, hash(&Vec::<u64>::new()));
     assert_eq!(g.state, 0);
-    assert!(g.consensus_digest == 0);
+    assert_eq!(g.consensus_digest, 0);
 }
 
 #[test]
