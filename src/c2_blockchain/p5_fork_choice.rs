@@ -9,8 +9,7 @@
 
 use super::p4_batched_extrinsics::{Block, Header};
 use crate::hash;
-
-const THRESHOLD: u64 = u64::max_value() / 100;
+use super::p3_consensus::THRESHOLD;
 
 /// Judge which blockchain is "best" when there are multiple candidates. There are several
 /// meaningful notions of "best" which is why this is a trait instead of just a

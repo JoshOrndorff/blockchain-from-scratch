@@ -1,11 +1,16 @@
 //! Until now, each block has contained just a single extrinsic. Really we would prefer to batch them.
 //! Now, we stop relying solely on headers, and instead, create complete blocks.
 
+
 use crate::hash;
 type Hash = u64;
+use super::p3_consensus::THRESHOLD;
 
 /// The header no longer contains an extrinsic directly. Rather a vector of extrinsics will be stored in
-/// the block body. We are still storing the state in the header for now. This will change in an upcoming
+/// the block body. 
+/// We apply previous learnings in consensus but move away from Political or Arbitrary rules and focus on proof of work.
+/// Recall: for Proof of Work the consensus digest is a nonce which gets the block hash below a certain threshold.
+/// We are still storing the state in the header for now. This will change in an upcoming
 /// lesson as well.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Header {
@@ -112,6 +117,7 @@ fn bc_4_genesis_header() {
     assert_eq!(g.parent, 0);
     assert_eq!(g.extrinsics_root, hash(&Vec::<u64>::new()));
     assert_eq!(g.state, 0);
+    assert_eq!(g.consensus_digest, 0);
 }
 
 #[test]
@@ -164,6 +170,7 @@ fn bc_4_child_header() {
     assert_eq!(h1.parent, hash(&g));
     assert_eq!(h1.extrinsics_root, hash(&[1, 2, 3]));
     assert_eq!(h1.state, 6);
+    assert!(hash(&h1) < THRESHOLD);
 
     let h2 = h1.child(hash(&[10, 20]), 36);
 
@@ -171,6 +178,7 @@ fn bc_4_child_header() {
     assert_eq!(h2.parent, hash(&h1));
     assert_eq!(h2.extrinsics_root, hash(&[10, 20]));
     assert_eq!(h2.state, 36);
+    assert!(hash(&h2) < THRESHOLD);
 }
 
 #[test]
